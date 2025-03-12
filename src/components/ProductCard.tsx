@@ -3,6 +3,8 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useCart } from '@/contexts/CartContext';
+import { toast } from "@/hooks/use-toast";
 
 interface ProductCardProps {
   id: string;
@@ -27,6 +29,39 @@ const ProductCard: React.FC<ProductCardProps> = ({
   rating = 0,
   discount = 0
 }) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    addToCart({
+      id,
+      name,
+      price,
+      image,
+      category,
+      discount: isSale ? discount : undefined
+    });
+    
+    toast({
+      title: "Adăugat în coș",
+      description: `${name} a fost adăugat în coșul tău.`,
+      variant: "default",
+    });
+  };
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    toast({
+      title: "Adăugat la favorite",
+      description: `${name} a fost adăugat la lista ta de favorite.`,
+      variant: "default",
+    });
+  };
+
   return (
     <div className="product-card group">
       {/* Product image */}
@@ -53,11 +88,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {/* Quick actions */}
         <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <div className="flex gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-            <Button size="sm" className="bg-white text-black hover:bg-white/90 rounded-full">
+            <Button 
+              size="sm" 
+              className="bg-white text-black hover:bg-white/90 rounded-full"
+              onClick={handleAddToCart}
+            >
               <ShoppingBag className="h-4 w-4 mr-1" />
               Adaugă
             </Button>
-            <Button size="icon" variant="ghost" className="bg-white text-black hover:bg-white/90 rounded-full">
+            <Button 
+              size="icon" 
+              variant="ghost" 
+              className="bg-white text-black hover:bg-white/90 rounded-full"
+              onClick={handleWishlist}
+            >
               <Heart className="h-4 w-4" />
             </Button>
           </div>

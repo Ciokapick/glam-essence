@@ -4,10 +4,12 @@ import { Link } from 'react-router-dom';
 import { ShoppingBag, Search, Heart, User, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useCart } from '@/contexts/CartContext';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { openCart, totalItems } = useCart();
   
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -53,9 +55,11 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="rounded-full">
               <User className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full relative">
+            <Button variant="ghost" size="icon" className="rounded-full relative" onClick={openCart}>
               <ShoppingBag className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 bg-primary text-xs h-5 w-5 flex items-center justify-center">3</Badge>
+              {totalItems > 0 && (
+                <Badge className="absolute -top-1 -right-1 bg-primary text-xs h-5 w-5 flex items-center justify-center">{totalItems}</Badge>
+              )}
             </Button>
           </div>
           
@@ -85,9 +89,11 @@ export function Navbar() {
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={openCart}>
               <ShoppingBag className="h-5 w-5" />
-              <Badge className="absolute -top-1 -right-1 bg-primary text-xs h-5 w-5 flex items-center justify-center">3</Badge>
+              {totalItems > 0 && (
+                <Badge className="absolute -top-1 -right-1 bg-primary text-xs h-5 w-5 flex items-center justify-center">{totalItems}</Badge>
+              )}
             </Button>
           </div>
         </div>

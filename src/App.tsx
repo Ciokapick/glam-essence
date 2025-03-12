@@ -9,24 +9,29 @@ import Parfumuri from "./pages/Parfumuri";
 import Creme from "./pages/Creme";
 import Ingrijire from "./pages/Ingrijire";
 import NotFound from "./pages/NotFound";
+import { CartProvider } from "./contexts/CartContext";
+import Cart from "./components/Cart";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/parfumuri" element={<Parfumuri />} />
-          <Route path="/creme" element={<Creme />} />
-          <Route path="/ingrijire" element={<Ingrijire />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <CartProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Cart />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/parfumuri" element={<Parfumuri />} />
+            <Route path="/creme" element={<Creme />} />
+            <Route path="/ingrijire" element={<Ingrijire />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
