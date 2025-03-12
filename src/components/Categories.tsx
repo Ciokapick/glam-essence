@@ -8,21 +8,21 @@ const Categories = () => {
       id: "parfumuri",
       name: "Parfumuri",
       description: "Esențe care spun povestea ta",
-      image: "https://images.unsplash.com/photo-1615354348926-4cf0ad5b139f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       color: "from-beauty-magenta/80 to-beauty-magenta/40"
     },
     {
       id: "creme",
       name: "Creme",
       description: "Hidratare profundă pentru pielea ta",
-      image: "https://images.unsplash.com/photo-1571781418606-d85221b74097?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       color: "from-beauty-coral/80 to-beauty-coral/40"
     },
     {
       id: "ingrijire",
       name: "Îngrijire",
       description: "Rutina completă pentru strălucire",
-      image: "https://images.unsplash.com/photo-1624454002302-52288331a5da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1570194065650-d99fb4d8a609?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       color: "from-beauty-hotpink/80 to-beauty-hotpink/40"
     }
   ];

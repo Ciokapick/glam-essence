@@ -33,7 +33,7 @@ const Ingrijire = () => {
       id: "3",
       name: "Spumă de curățare",
       price: 69.99,
-      image: "https://images.unsplash.com/photo-1556229170-7e141b18f224?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Curățare",
       rating: 4
     },
@@ -49,7 +49,7 @@ const Ingrijire = () => {
       id: "5",
       name: "Ulei de față nutritiv",
       price: 129.99,
-      image: "https://images.unsplash.com/photo-1601049541247-f3730af4a026?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1617075062639-5c9ae153b45f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Ulei",
       isSale: true,
       discount: 20,

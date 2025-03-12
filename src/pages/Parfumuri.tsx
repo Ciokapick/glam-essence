@@ -35,7 +35,7 @@ const Parfumuri = () => {
       id: "3",
       name: "Parfum Fresh Citrus",
       price: 299.99,
-      image: "https://images.unsplash.com/photo-1557170334-a9086d21c4b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Parfum Citric",
       rating: 4
     },
@@ -51,7 +51,7 @@ const Parfumuri = () => {
       id: "5",
       name: "Parfum Aquatic Breeze",
       price: 329.99,
-      image: "https://images.unsplash.com/photo-1610461888570-7883bff3275d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Parfum Acvatic",
       isSale: true,
       discount: 15,

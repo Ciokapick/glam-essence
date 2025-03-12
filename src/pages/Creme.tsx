@@ -26,7 +26,7 @@ const Creme = () => {
       id: "2",
       name: "Cremă contur ochi Anti-Age",
       price: 149.99,
-      image: "https://images.unsplash.com/photo-1600428877878-1a0ff561d8b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă ochi",
       rating: 5
     },
@@ -42,7 +42,7 @@ const Creme = () => {
       id: "4",
       name: "Cremă de corp Intense",
       price: 89.99,
-      image: "https://images.unsplash.com/photo-1599481238519-83061eb1c85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1607006483515-d57f572952c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă corp",
       isNew: true,
       rating: 4
@@ -51,7 +51,7 @@ const Creme = () => {
       id: "5",
       name: "Cremă nutritivă de noapte",
       price: 139.99,
-      image: "https://images.unsplash.com/photo-1628614251821-5cebe23704e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1599446794254-d2b9df6dba99?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă față",
       rating: 5
     },
