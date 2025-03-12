@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 
 const Newsletter = () => {
   return (
-    <section className="py-20 bg-gradient-to-r from-primary/20 to-beauty-mint/20">
+    <section className="py-20 bg-gradient-to-r from-beauty-rose/20 to-beauty-hotpink/10">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Abonează-te la newsletter</h2>
@@ -17,9 +17,9 @@ const Newsletter = () => {
             <Input 
               type="email" 
               placeholder="Adresa ta de email" 
-              className="flex-grow bg-white/80 backdrop-blur-sm focus-visible:ring-primary"
+              className="flex-grow bg-white/80 backdrop-blur-sm focus-visible:ring-beauty-magenta"
             />
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground whitespace-nowrap">
+            <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white whitespace-nowrap">
               Abonează-te
             </Button>
           </div>

@@ -9,7 +9,7 @@ const FeaturedProducts = () => {
       id: "1",
       name: "Parfum Floral Extravagance",
       price: 349.99,
-      image: "https://images.unsplash.com/photo-1546030869-e4b4c3e37aaa?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Parfum",
       isNew: true,
       rating: 5
@@ -18,7 +18,7 @@ const FeaturedProducts = () => {
       id: "2",
       name: "Cremă hidratantă Luxury",
       price: 129.99,
-      image: "https://images.unsplash.com/photo-1571875257727-256c39da42af?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă",
       isSale: true,
       discount: 15,
@@ -28,7 +28,7 @@ const FeaturedProducts = () => {
       id: "3",
       name: "Ser facial Radiance",
       price: 189.99,
-      image: "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1570194065650-d99fb4d8a609?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Îngrijire",
       rating: 5
     },
@@ -36,7 +36,7 @@ const FeaturedProducts = () => {
       id: "4",
       name: "Parfum Oriental Mystique",
       price: 399.99,
-      image: "https://images.unsplash.com/photo-1592945403407-9edf9a51ad8b?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Parfum",
       isSale: true,
       discount: 10,
@@ -45,7 +45,7 @@ const FeaturedProducts = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-beauty-mint/10">
+    <section className="py-20 bg-gradient-to-b from-white to-beauty-rose/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Produse populare</h2>
@@ -63,7 +63,7 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
             Vezi toate produsele
           </Button>
         </div>

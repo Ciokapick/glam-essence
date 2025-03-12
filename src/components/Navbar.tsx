@@ -40,7 +40,6 @@ export function Navbar() {
             <Link to="/parfumuri" className="font-medium relative animated-border pb-1">Parfumuri</Link>
             <Link to="/creme" className="font-medium relative animated-border pb-1">Creme</Link>
             <Link to="/ingrijire" className="font-medium relative animated-border pb-1">Îngrijire</Link>
-            <Link to="/noutati" className="font-medium relative animated-border pb-1">Noutăți</Link>
           </nav>
           
           {/* Icons */}
@@ -75,7 +74,6 @@ export function Navbar() {
             <Link to="/parfumuri" className="font-medium p-2" onClick={toggleMobileMenu}>Parfumuri</Link>
             <Link to="/creme" className="font-medium p-2" onClick={toggleMobileMenu}>Creme</Link>
             <Link to="/ingrijire" className="font-medium p-2" onClick={toggleMobileMenu}>Îngrijire</Link>
-            <Link to="/noutati" className="font-medium p-2" onClick={toggleMobileMenu}>Noutăți</Link>
           </nav>
           <div className="flex justify-around py-4 border-t">
             <Button variant="ghost" size="icon">

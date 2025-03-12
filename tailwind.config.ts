@@ -65,10 +65,13 @@ export default {
 				},
 				beauty: {
 					lavender: "#D6BCFA",
-					rose: "#FEC6A1",
+					rose: "#FFDEE2",
 					mint: "#F2FCE2",
 					gold: "#FEDC5A",
-					blush: "#FFDEE2"
+					blush: "#FFDEE2",
+					magenta: "#D946EF",
+					hotpink: "#FF6B9B",
+					coral: "#FF7979"
 				}
 			},
 			borderRadius: {
@@ -115,6 +118,14 @@ export default {
 					'100%': {
 						transform: 'translateX(100%)'
 					}
+				},
+				'pulse': {
+					'0%, 100%': {
+						opacity: '1'
+					},
+					'50%': {
+						opacity: '0.5'
+					}
 				}
 			},
 			animation: {
@@ -122,7 +133,8 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'float': 'float 3s ease-in-out infinite',
-				'shimmer': 'shimmer 2s infinite'
+				'shimmer': 'shimmer 2s infinite',
+				'pulse': 'pulse 2s infinite'
 			}
 		}
 	},

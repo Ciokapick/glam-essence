@@ -16,7 +16,7 @@ const Creme = () => {
       id: "1",
       name: "Cremă hidratantă Luxury",
       price: 129.99,
-      image: "https://images.unsplash.com/photo-1571875257727-256c39da42af?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă față",
       isSale: true,
       discount: 15,
@@ -26,7 +26,7 @@ const Creme = () => {
       id: "2",
       name: "Cremă contur ochi Anti-Age",
       price: 149.99,
-      image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1600428877878-1a0ff561d8b6?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă ochi",
       rating: 5
     },
@@ -34,7 +34,7 @@ const Creme = () => {
       id: "3",
       name: "Cremă de mâini Silk",
       price: 59.99,
-      image: "https://images.unsplash.com/photo-1611375732020-7caaf6a42bbd?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă mâini",
       rating: 4
     },
@@ -42,7 +42,7 @@ const Creme = () => {
       id: "4",
       name: "Cremă de corp Intense",
       price: 89.99,
-      image: "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1599481238519-83061eb1c85b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă corp",
       isNew: true,
       rating: 4
@@ -51,7 +51,7 @@ const Creme = () => {
       id: "5",
       name: "Cremă nutritivă de noapte",
       price: 139.99,
-      image: "https://images.unsplash.com/photo-1627384113858-cdbec425ee94?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1628614251821-5cebe23704e3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă față",
       rating: 5
     },
@@ -59,7 +59,7 @@ const Creme = () => {
       id: "6",
       name: "Cremă anticelulitică",
       price: 109.99,
-      image: "https://images.unsplash.com/photo-1616691600042-31027b01af8c?q=80&w=774&auto=format&fit=crop",
+      image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Cremă corp",
       isSale: true,
       discount: 10,
@@ -74,13 +74,13 @@ const Creme = () => {
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Banner */}
-          <div className="rounded-2xl bg-gradient-to-r from-beauty-rose/30 to-beauty-rose/10 p-8 md:p-12 mb-12 animate-fade-in">
+          <div className="rounded-2xl bg-gradient-to-r from-beauty-coral/30 to-beauty-coral/10 p-8 md:p-12 mb-12 animate-fade-in">
             <div className="max-w-2xl">
               <h1 className="text-3xl md:text-4xl font-bold mb-4">Creme pentru îngrijire perfectă</h1>
               <p className="text-lg text-gray-700 mb-6">
                 Formula noastră unică oferă hidratare intensă și protecție pentru toate tipurile de piele.
               </p>
-              <Button className="bg-beauty-rose text-white hover:bg-beauty-rose/90">
+              <Button className="bg-beauty-coral text-white hover:bg-beauty-coral/90">
                 Descoperă colecția
               </Button>
             </div>
@@ -116,7 +116,7 @@ const Creme = () => {
           
           {/* Load more button */}
           <div className="text-center">
-            <Button variant="outline" className="border-beauty-rose/30 hover:bg-beauty-rose/5 hover:border-beauty-rose/50">
+            <Button variant="outline" className="border-beauty-coral/30 hover:bg-beauty-coral/5 hover:border-beauty-coral/50">
               Încarcă mai multe
             </Button>
           </div>

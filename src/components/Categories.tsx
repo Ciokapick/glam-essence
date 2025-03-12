@@ -8,22 +8,22 @@ const Categories = () => {
       id: "parfumuri",
       name: "Parfumuri",
       description: "Esențe care spun povestea ta",
-      image: "https://images.unsplash.com/photo-1585386959984-a4a9d49cf0b3?q=80&w=774&auto=format&fit=crop",
-      color: "from-beauty-lavender/80 to-beauty-lavender/40"
+      image: "https://images.unsplash.com/photo-1615354348926-4cf0ad5b139f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      color: "from-beauty-magenta/80 to-beauty-magenta/40"
     },
     {
       id: "creme",
       name: "Creme",
       description: "Hidratare profundă pentru pielea ta",
-      image: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?q=80&w=774&auto=format&fit=crop",
-      color: "from-beauty-rose/80 to-beauty-rose/40"
+      image: "https://images.unsplash.com/photo-1571781418606-d85221b74097?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      color: "from-beauty-coral/80 to-beauty-coral/40"
     },
     {
       id: "ingrijire",
       name: "Îngrijire",
       description: "Rutina completă pentru strălucire",
-      image: "https://images.unsplash.com/photo-1619451334252-757522c3a1f4?q=80&w=774&auto=format&fit=crop",
-      color: "from-beauty-mint/80 to-beauty-mint/40"
+      image: "https://images.unsplash.com/photo-1624454002302-52288331a5da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      color: "from-beauty-hotpink/80 to-beauty-hotpink/40"
     }
   ];
 
@@ -42,7 +42,7 @@ const Categories = () => {
             <Link 
               to={`/${category.id}`} 
               key={category.id}
-              className="relative group overflow-hidden rounded-xl h-96 flex items-end animate-fade-in"
+              className="relative group overflow-hidden rounded-xl h-96 flex items-end card-hover animate-fade-in"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
               {/* Image */}

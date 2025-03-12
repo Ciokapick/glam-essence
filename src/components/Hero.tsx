@@ -8,9 +8,9 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
       {/* Background decoration */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-beauty-lavender/30 blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-beauty-mint/30 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-beauty-rose/30 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-beauty-magenta/20 blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-beauty-coral/20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-beauty-hotpink/20 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
       </div>
 
       <div className="container mx-auto px-4">
@@ -24,27 +24,27 @@ const Hero = () => {
               Colecția noastră exclusivă de parfumuri și produse de îngrijire te ajută să strălucești în fiecare zi.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground group">
+              <Button size="lg" className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white group">
                 Explorează colecția
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="outline" className="border-beauty-gold/50 hover:border-beauty-gold hover:bg-beauty-gold/5">
+              <Button size="lg" variant="outline" className="border-beauty-hotpink/50 hover:border-beauty-hotpink hover:bg-beauty-hotpink/5">
                 Oferte speciale
               </Button>
             </div>
           </div>
           <div className="order-1 md:order-2 relative">
             <div className="relative flex justify-center">
-              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-rose/30 rounded-full absolute top-10 -left-5 animate-float"></div>
-              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-lavender/40 rounded-full absolute -top-10 -right-5 animate-float" style={{ animationDelay: '1.5s' }}></div>
+              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-hotpink/30 rounded-full absolute top-10 -left-5 animate-float"></div>
+              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-magenta/40 rounded-full absolute -top-10 -right-5 animate-float" style={{ animationDelay: '1.5s' }}></div>
               <img 
-                src="https://images.unsplash.com/photo-1611293388250-580b08c4a145?q=80&w=1440&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                 alt="Luxury perfume bottles" 
                 className="relative z-10 max-w-full h-auto rounded-2xl shadow-xl animate-fade-in"
                 style={{ animationDelay: "0.5s" }}
               />
             </div>
-            <div className="absolute -bottom-10 right-0 md:right-10 bg-white rounded-xl p-4 shadow-lg max-w-xs animate-fade-in" style={{ animationDelay: "0.8s" }}>
+            <div className="absolute -bottom-10 right-0 md:right-10 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg max-w-xs animate-fade-in glass-morphism" style={{ animationDelay: "0.8s" }}>
               <p className="font-medium text-sm">
                 "Esențe care îți transformă întreaga zi într-o experiență senzorială deosebită."
               </p>
