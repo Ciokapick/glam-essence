@@ -42,7 +42,7 @@ const Creme = () => {
       id: "4",
       name: "Cremă de corp Intense",
       price: 89.99,
-      image: "https://images.unsplash.com/photo-1607006483515-d57f572952c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
       category: "Cremă corp",
       isNew: true,
       rating: 4
@@ -51,7 +51,7 @@ const Creme = () => {
       id: "5",
       name: "Cremă nutritivă de noapte",
       price: 139.99,
-      image: "https://images.unsplash.com/photo-1599446794254-d2b9df6dba99?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
       category: "Cremă față",
       rating: 5
     },
