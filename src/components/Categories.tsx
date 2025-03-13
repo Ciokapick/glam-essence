@@ -22,7 +22,7 @@ const Categories = () => {
       id: "ingrijire",
       name: "Îngrijire",
       description: "Rutina completă pentru strălucire",
-      image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1585652757141-8837d676fac8?w=800&auto=format&fit=crop&q=80",
       color: "from-beauty-hotpink/80 to-beauty-hotpink/40"
     }
   ];

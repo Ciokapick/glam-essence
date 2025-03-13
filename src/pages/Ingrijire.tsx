@@ -16,7 +16,7 @@ const Ingrijire = () => {
       id: "1",
       name: "Ser facial Radiance",
       price: 189.99,
-      image: "https://images.unsplash.com/photo-1570194065650-d99fb4d8a609?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1619451427882-6aaaded0cc61?w=800&auto=format&fit=crop&q=80",
       category: "Ser",
       rating: 5
     },
@@ -33,7 +33,7 @@ const Ingrijire = () => {
       id: "3",
       name: "Spumă de curățare",
       price: 69.99,
-      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
       category: "Curățare",
       rating: 4
     },
@@ -49,7 +49,7 @@ const Ingrijire = () => {
       id: "5",
       name: "Ulei de față nutritiv",
       price: 129.99,
-      image: "https://images.unsplash.com/photo-1617075062639-5c9ae153b45f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1532413992378-f169ac26fff0?w=800&auto=format&fit=crop&q=80",
       category: "Ulei",
       isSale: true,
       discount: 20,
@@ -57,10 +57,10 @@ const Ingrijire = () => {
     },
     {
       id: "6",
-      name: "Exfoliant enzimatic",
+      name: "Cremă nutritivă de noapte",
       price: 89.99,
-      image: "https://images.unsplash.com/photo-1567721913486-6585f069b332?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Exfoliant",
+      image: "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
+      category: "Cremă",
       rating: 4
     }
   ];

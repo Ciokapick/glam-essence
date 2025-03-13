@@ -28,16 +28,16 @@ const FeaturedProducts = () => {
       id: "3",
       name: "Ser facial Radiance",
       price: 189.99,
-      image: "https://images.unsplash.com/photo-1570194065650-d99fb4d8a609?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=800&auto=format&fit=crop&q=80",
       category: "Îngrijire",
       rating: 5
     },
     {
       id: "4",
-      name: "Parfum Oriental Mystique",
+      name: "Cremă de corp Intense",
       price: 399.99,
-      image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum",
+      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+      category: "Cremă",
       isSale: true,
       discount: 10,
       rating: 4
