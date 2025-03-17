@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Parfumuri from "./pages/Parfumuri";
 import Creme from "./pages/Creme";
 import Ingrijire from "./pages/Ingrijire";
+import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./components/Cart";
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/parfumuri" element={<Parfumuri />} />
             <Route path="/creme" element={<Creme />} />
             <Route path="/ingrijire" element={<Ingrijire />} />
+            <Route path="/product/:slug" element={<ProductDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -5,6 +5,7 @@ import { ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from "@/hooks/use-toast";
+import { Link } from 'react-router-dom';
 
 interface ProductCardProps {
   id: string;
@@ -30,6 +31,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   discount = 0
 }) => {
   const { addToCart } = useCart();
+
+  // Generate a URL-friendly slug from the product name
+  const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -63,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="product-card group">
+    <Link to={`/product/${slug}`} className="product-card group block">
       {/* Product image */}
       <div className="relative overflow-hidden rounded-t-xl h-64">
         <img 
@@ -143,7 +147,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
