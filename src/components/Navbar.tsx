@@ -51,11 +51,13 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full relative" as={Link} to="/wishlist">
-              <Heart className="h-5 w-5" />
-              {wishlistItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
-              )}
+            <Button variant="ghost" size="icon" className="rounded-full relative" asChild>
+              <Link to="/wishlist">
+                <Heart className="h-5 w-5" />
+                {wishlistItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
+                )}
+              </Link>
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full">
               <User className="h-5 w-5" />
@@ -89,11 +91,13 @@ export function Navbar() {
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="relative" as={Link} to="/wishlist" onClick={toggleMobileMenu}>
-              <Heart className="h-5 w-5" />
-              {wishlistItems > 0 && (
-                <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
-              )}
+            <Button variant="ghost" size="icon" className="relative" asChild>
+              <Link to="/wishlist" onClick={toggleMobileMenu}>
+                <Heart className="h-5 w-5" />
+                {wishlistItems > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
+                )}
+              </Link>
             </Button>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />
