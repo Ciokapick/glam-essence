@@ -5,11 +5,13 @@ import { ShoppingBag, Search, Heart, User, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { openCart, totalItems } = useCart();
+  const { totalItems: wishlistItems } = useWishlist();
   
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -49,8 +51,11 @@ export function Navbar() {
             <Button variant="ghost" size="icon" className="rounded-full">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon" className="rounded-full">
+            <Button variant="ghost" size="icon" className="rounded-full relative" as={Link} to="/wishlist">
               <Heart className="h-5 w-5" />
+              {wishlistItems > 0 && (
+                <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
+              )}
             </Button>
             <Button variant="ghost" size="icon" className="rounded-full">
               <User className="h-5 w-5" />
@@ -78,13 +83,17 @@ export function Navbar() {
             <Link to="/parfumuri" className="font-medium p-2" onClick={toggleMobileMenu}>Parfumuri</Link>
             <Link to="/creme" className="font-medium p-2" onClick={toggleMobileMenu}>Creme</Link>
             <Link to="/ingrijire" className="font-medium p-2" onClick={toggleMobileMenu}>Îngrijire</Link>
+            <Link to="/wishlist" className="font-medium p-2" onClick={toggleMobileMenu}>Favorite</Link>
           </nav>
           <div className="flex justify-around py-4 border-t">
             <Button variant="ghost" size="icon">
               <Search className="h-5 w-5" />
             </Button>
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" className="relative" as={Link} to="/wishlist" onClick={toggleMobileMenu}>
               <Heart className="h-5 w-5" />
+              {wishlistItems > 0 && (
+                <Badge className="absolute -top-1 -right-1 bg-beauty-rose text-white text-xs h-5 w-5 flex items-center justify-center">{wishlistItems}</Badge>
+              )}
             </Button>
             <Button variant="ghost" size="icon">
               <User className="h-5 w-5" />

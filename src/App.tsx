@@ -14,6 +14,7 @@ import { CartProvider } from "./contexts/CartContext";
 import { WishlistProvider } from "./contexts/WishlistContext";
 import Cart from "./components/Cart";
 import SeturiPage from "./pages/SeturiPage";
+import WishlistPage from "./pages/WishlistPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/creme" element={<Creme />} />
               <Route path="/ingrijire" element={<Ingrijire />} />
               <Route path="/seturi" element={<SeturiPage />} />
+              <Route path="/wishlist" element={<WishlistPage />} />
               <Route path="/product/:slug" element={<ProductDetail />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
