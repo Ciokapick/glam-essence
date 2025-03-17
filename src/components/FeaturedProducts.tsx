@@ -2,6 +2,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 const FeaturedProducts = () => {
   const products = [
@@ -63,9 +64,11 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="text-center mt-12">
-          <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
-            Vezi toate produsele
-          </Button>
+          <Link to="/parfumuri">
+            <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
+              Vezi toate produsele
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

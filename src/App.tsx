@@ -11,7 +11,9 @@ import Ingrijire from "./pages/Ingrijire";
 import ProductDetail from "./pages/ProductDetail";
 import NotFound from "./pages/NotFound";
 import { CartProvider } from "./contexts/CartContext";
+import { WishlistProvider } from "./contexts/WishlistContext";
 import Cart from "./components/Cart";
+import SeturiPage from "./pages/SeturiPage";
 
 const queryClient = new QueryClient();
 
@@ -19,20 +21,23 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <CartProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Cart />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/parfumuri" element={<Parfumuri />} />
-            <Route path="/creme" element={<Creme />} />
-            <Route path="/ingrijire" element={<Ingrijire />} />
-            <Route path="/product/:slug" element={<ProductDetail />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <WishlistProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Cart />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/parfumuri" element={<Parfumuri />} />
+              <Route path="/creme" element={<Creme />} />
+              <Route path="/ingrijire" element={<Ingrijire />} />
+              <Route path="/seturi" element={<SeturiPage />} />
+              <Route path="/product/:slug" element={<ProductDetail />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </WishlistProvider>
       </CartProvider>
     </TooltipProvider>
   </QueryClientProvider>

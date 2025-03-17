@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import { Link } from 'react-router-dom';
 
@@ -31,6 +32,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   discount = 0
 }) => {
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isFavorite = isInWishlist(id);
 
   // Generate a URL-friendly slug from the product name
   const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, '');
@@ -59,11 +62,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
     e.preventDefault();
     e.stopPropagation();
     
-    toast({
-      title: "Adăugat la favorite",
-      description: `${name} a fost adăugat la lista ta de favorite.`,
-      variant: "default",
-    });
+    if (isFavorite) {
+      removeFromWishlist(id);
+      toast({
+        title: "Eliminat de la favorite",
+        description: `${name} a fost eliminat din lista ta de favorite.`,
+        variant: "default",
+      });
+    } else {
+      addToWishlist({
+        id,
+        name,
+        price,
+        image,
+        category,
+        discount: isSale ? discount : undefined
+      });
+      toast({
+        title: "Adăugat la favorite",
+        description: `${name} a fost adăugat la lista ta de favorite.`,
+        variant: "default",
+      });
+    }
   };
 
   return (
@@ -103,10 +123,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <Button 
               size="icon" 
               variant="ghost" 
-              className="bg-white text-black hover:bg-white/90 rounded-full"
+              className={`${isFavorite ? 'bg-beauty-rose text-white' : 'bg-white text-black'} hover:bg-white/90 rounded-full`}
               onClick={handleWishlist}
             >
-              <Heart className="h-4 w-4" />
+              <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
             </Button>
           </div>
         </div>

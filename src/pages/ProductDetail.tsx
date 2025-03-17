@@ -19,87 +19,16 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from '@/contexts/CartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
-
-// Mock product data
-const productsData = {
-  "parfum-floral-extravagance": {
-    id: "1",
-    slug: "parfum-floral-extravagance",
-    name: "Parfum Floral Extravagance",
-    price: 349.99,
-    oldPrice: 399.99,
-    image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    gallery: [
-      "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&auto=format&fit=crop&q=80"
-    ],
-    category: "Parfum",
-    isNew: true,
-    rating: 5,
-    reviewCount: 47,
-    description: "Parfumul Floral Extravagance este o capodoperă olfactivă ce combină note florale prețioase cu accente orientale subtile. Un parfum sofisticat și elegant, perfect pentru ocazii speciale sau pentru utilizare zilnică atunci când doriți să ieșiți în evidență. Persistența îndelungată și siajul remarcabil vă vor înconjura într-un văl de rafinament pe tot parcursul zilei.",
-    details: "Un parfum floral elegant cu note de vârf de trandafir de Damasc și iasomie, urmate de note de mijloc de iris și ylang-ylang. Bazele calde de mosc, ambră și vanilie oferă profunzime și persistență parfumului.",
-    features: [
-      "Note de vârf: Trandafir de Damasc, Iasomie",
-      "Note de mijloc: Iris, Ylang-Ylang",
-      "Note de bază: Mosc, Ambră, Vanilie",
-      "Concentrație: Parfum (25%)",
-      "Persistență îndelungată: 8-10 ore",
-      "Fabricat în Franța",
-      "Ingrediente de cea mai înaltă calitate"
-    ],
-    sku: "PFE-001",
-    stock: 15
-  }
-};
-
-// Similar products for recommendations
-const similarProducts = [
-  {
-    id: "2",
-    name: "Parfum Oriental Mystique",
-    price: 399.99,
-    image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Oriental",
-    isSale: true,
-    discount: 10,
-    rating: 4
-  },
-  {
-    id: "3",
-    name: "Parfum Fresh Citrus",
-    price: 299.99,
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Citric",
-    rating: 4
-  },
-  {
-    id: "6",
-    name: "Parfum Spicy Noir",
-    price: 449.99,
-    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Condimentat",
-    isNew: true,
-    rating: 5
-  },
-  {
-    id: "4",
-    name: "Parfum Woody Elegance",
-    price: 419.99,
-    image: "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Lemnos",
-    rating: 5
-  }
-];
+import { products, similarProducts } from '@/data/products';
 
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -109,9 +38,8 @@ const ProductDetail = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     
-    // In a real app, you would fetch the product by slug from an API
-    // Here we're using mock data
-    const fetchedProduct = productsData[slug as keyof typeof productsData];
+    // Using our product data from the data file
+    const fetchedProduct = products[slug as keyof typeof products];
     
     if (fetchedProduct) {
       setProduct(fetchedProduct);
@@ -130,7 +58,7 @@ const ProductDetail = () => {
         price: product.price,
         image: product.image,
         category: product.category,
-        quantity
+        discount: product.isSale ? product.discount : undefined
       });
       
       toast({
@@ -154,11 +82,30 @@ const ProductDetail = () => {
   };
   
   const handleAddToWishlist = () => {
-    toast({
-      title: "Adăugat la favorite",
-      description: `${product.name} a fost adăugat la lista ta de favorite.`,
-      variant: "default",
-    });
+    if (product) {
+      if (isInWishlist(product.id)) {
+        removeFromWishlist(product.id);
+        toast({
+          title: "Eliminat de la favorite",
+          description: `${product.name} a fost eliminat din lista ta de favorite.`,
+          variant: "default",
+        });
+      } else {
+        addToWishlist({
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          image: product.image,
+          category: product.category,
+          discount: product.isSale ? product.discount : undefined
+        });
+        toast({
+          title: "Adăugat la favorite",
+          description: `${product.name} a fost adăugat la lista ta de favorite.`,
+          variant: "default",
+        });
+      }
+    }
   };
   
   if (loading) {
@@ -189,6 +136,8 @@ const ProductDetail = () => {
   }
   
   if (!product) return null;
+  
+  const isFavorite = isInWishlist(product.id);
   
   return (
     <div className="min-h-screen">
@@ -221,6 +170,12 @@ const ProductDetail = () => {
                 {product.isNew && (
                   <Badge className="absolute top-4 left-4 bg-beauty-mint text-beauty-mint-foreground border-0">
                     Nou
+                  </Badge>
+                )}
+                
+                {product.isSale && (
+                  <Badge className="absolute top-4 left-4 bg-beauty-rose text-beauty-rose-foreground border-0">
+                    -{product.discount}%
                   </Badge>
                 )}
               </div>
@@ -260,11 +215,17 @@ const ProductDetail = () => {
               
               {/* Price */}
               <div className="flex items-center mb-6">
-                <span className="text-2xl font-bold mr-3">{product.price.toFixed(2)} lei</span>
-                {product.oldPrice && (
-                  <span className="text-lg text-muted-foreground line-through">
-                    {product.oldPrice.toFixed(2)} lei
-                  </span>
+                {product.isSale ? (
+                  <>
+                    <span className="text-2xl font-bold mr-3">
+                      {(product.price * (1 - product.discount! / 100)).toFixed(2)} lei
+                    </span>
+                    <span className="text-lg text-muted-foreground line-through">
+                      {product.price.toFixed(2)} lei
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-2xl font-bold mr-3">{product.price.toFixed(2)} lei</span>
                 )}
               </div>
               
@@ -309,11 +270,15 @@ const ProductDetail = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
+                  className={`${
+                    isFavorite 
+                      ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
+                      : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
+                  }`}
                   onClick={handleAddToWishlist}
                 >
-                  <Heart className="h-5 w-5 mr-2" />
-                  Adaugă la favorite
+                  <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
+                  {isFavorite ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
                 </Button>
               </div>
               
@@ -348,16 +313,16 @@ const ProductDetail = () => {
               <TabsList className="w-full grid grid-cols-3 mb-6">
                 <TabsTrigger value="details">Detalii produs</TabsTrigger>
                 <TabsTrigger value="features">Caracteristici</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews (47)</TabsTrigger>
+                <TabsTrigger value="reviews">Reviews ({product.reviewCount})</TabsTrigger>
               </TabsList>
               <TabsContent value="details" className="p-6 rounded-lg bg-gray-50/50">
                 <h3 className="text-xl font-semibold mb-4">Descriere</h3>
                 <p className="mb-4">{product.details}</p>
                 <p className="mb-4">
-                  Floral Extravagance este un parfum vibrant, o explozie de note florale delicate și sofisticate. Inițial, veți fi întâmpinați de prospețimea trandafirului de Damasc și de dulceața iasomiei, urmate de eleganta combinație de iris și ylang-ylang. Bazele de mosc, ambră și vanilie adaugă căldură și persistență, completând această creație olfactivă cu o semnătură distinctivă și memorabilă.
+                  {product.name} este un produs premium, creat cu cele mai bune ingrediente pentru a oferi o experiență de utilizare deosebită. Calitatea sa excepțională se reflectă în fiecare detaliu, de la compoziție la ambalaj.
                 </p>
                 <p>
-                  Acest parfum este perfect pentru ocazii speciale, dar versatil și pentru utilizare zilnică. Caracterul său rafinat se potrivește unei persoane încrezătoare, care apreciază luxul și calitatea premium.
+                  Acest produs este perfect pentru utilizare zilnică, oferind rezultate remarcabile și satisfacție garantată. Fiecare utilizare vă va convinge de calitatea sa superioară și de valoarea investiției în frumusețea și încrederea personală.
                 </p>
               </TabsContent>
               <TabsContent value="features" className="p-6 rounded-lg bg-gray-50/50">
@@ -377,7 +342,7 @@ const ProductDetail = () => {
               </TabsContent>
               <TabsContent value="reviews" className="p-6 rounded-lg bg-gray-50/50">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold">Reviews (47)</h3>
+                  <h3 className="text-xl font-semibold">Reviews ({product.reviewCount})</h3>
                   <Button>Adaugă un review</Button>
                 </div>
                 {/* This would be a list of reviews in a real app */}
@@ -397,7 +362,7 @@ const ProductDetail = () => {
                       </div>
                       <span className="text-sm text-muted-foreground">12 Mai 2023</span>
                     </div>
-                    <p className="mt-2">Parfum absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl port. Ambalajul este elegant și luxos. Recomand cu încredere!</p>
+                    <p className="mt-2">Produs absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl folosesc. Ambalajul este elegant și luxos. Recomand cu încredere!</p>
                   </div>
                   
                   <div className="border-b pb-6">
@@ -415,7 +380,7 @@ const ProductDetail = () => {
                       </div>
                       <span className="text-sm text-muted-foreground">3 Aprilie 2023</span>
                     </div>
-                    <p className="mt-2">Un parfum deosebit, cu note florale bine echilibrate. Persistența este foarte bună, însă ar fi putut fi puțin mai intensă spre sfârșitul zilei. În rest, sunt foarte mulțumit de achiziție.</p>
+                    <p className="mt-2">Un produs deosebit, cu calitate excelentă. Sunt foarte mulțumit de achiziție și îl voi recomanda cu siguranță și prietenilor mei.</p>
                   </div>
                   
                   <div>
@@ -433,7 +398,7 @@ const ProductDetail = () => {
                       </div>
                       <span className="text-sm text-muted-foreground">17 Martie 2023</span>
                     </div>
-                    <p className="mt-2">Am comandat acest parfum pentru soțul meu și este încântat! Notele florale sunt subtile și elegante, potrivite pentru un bărbat rafinat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte. Cu siguranță vom mai comanda de la GlamEssence!</p>
+                    <p className="mt-2">Am comandat acest produs și sunt încântată! Calitatea este incredibilă și rezultatele sunt vizibile imediat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte. Cu siguranță voi mai comanda de la GlamEssence!</p>
                   </div>
                 </div>
               </TabsContent>
