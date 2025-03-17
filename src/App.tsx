@@ -15,34 +15,52 @@ import { WishlistProvider } from "./contexts/WishlistContext";
 import Cart from "./components/Cart";
 import SeturiPage from "./pages/SeturiPage";
 import WishlistPage from "./pages/WishlistPage";
+import { products } from "./data/products";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Cart />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/parfumuri" element={<Parfumuri />} />
-              <Route path="/creme" element={<Creme />} />
-              <Route path="/ingrijire" element={<Ingrijire />} />
-              <Route path="/seturi" element={<SeturiPage />} />
-              <Route path="/wishlist" element={<WishlistPage />} />
-              <Route path="/product/:slug" element={<ProductDetail />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </WishlistProvider>
-      </CartProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  // Create an array of product slugs from the products object
+  const productSlugs = Object.keys(products);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Cart />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/parfumuri" element={<Parfumuri />} />
+                <Route path="/creme" element={<Creme />} />
+                <Route path="/ingrijire" element={<Ingrijire />} />
+                <Route path="/seturi" element={<SeturiPage />} />
+                <Route path="/wishlist" element={<WishlistPage />} />
+                
+                {/* Dynamic routes for each product */}
+                {productSlugs.map((slug) => (
+                  <Route 
+                    key={slug}
+                    path={`/product/${slug}`} 
+                    element={<ProductDetail />} 
+                  />
+                ))}
+                
+                {/* Generic product route that will use the slug parameter */}
+                <Route path="/product/:slug" element={<ProductDetail />} />
+                
+                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </WishlistProvider>
+        </CartProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
