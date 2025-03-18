@@ -16,8 +16,26 @@ import Cart from "./components/Cart";
 import SeturiPage from "./pages/SeturiPage";
 import WishlistPage from "./pages/WishlistPage";
 import { products } from "./data/products";
+
+// Import product pages
 import ParfumOrientalMystique from "./pages/product/ParfumOrientalMystique";
 import ParfumFreshCitrus from "./pages/product/ParfumFreshCitrus";
+import ParfumFloralExtravagance from "./pages/product/ParfumFloralExtravagance";
+import ParfumWoodyElegance from "./pages/product/ParfumWoodyElegance";
+import ParfumAquaticBreeze from "./pages/product/ParfumAquaticBreeze";
+import ParfumSpicyNoir from "./pages/product/ParfumSpicyNoir";
+import CremaHidratantaLuxury from "./pages/product/CremaHidratantaLuxury";
+import CremaConturOchiAntiAge from "./pages/product/CremaConturOchiAntiAge";
+import CremaDeMainiSilk from "./pages/product/CremaDeMainiSilk";
+import CremaDeCorpIntense from "./pages/product/CremaDeCorpIntense";
+import CremaNutritivaDeNoapte from "./pages/product/CremaNutritivaDeNoapte";
+import CremaAnticelulitică from "./pages/product/CremaAnticelulitică";
+import SerFacialRadiance from "./pages/product/SerFacialRadiance";
+import MascaFacialaDetox from "./pages/product/MascaFacialaDetox";
+import SpumaDeCuratare from "./pages/product/SpumaDeCuratare";
+import TonicPurificator from "./pages/product/TonicPurificator";
+import UleiDeFataNutritiv from "./pages/product/UleiDeFataNutritiv";
+import CremaNutritivaDeNoapteIngrijire from "./pages/product/CremaNutritivaDeNoapteIngrijire";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +63,24 @@ const App = () => {
                 {/* Specific product pages */}
                 <Route path="/parfum-oriental-mystique" element={<ParfumOrientalMystique />} />
                 <Route path="/parfum-fresh-citrus" element={<ParfumFreshCitrus />} />
+                <Route path="/parfum-floral-extravagance" element={<ParfumFloralExtravagance />} />
+                <Route path="/parfum-woody-elegance" element={<ParfumWoodyElegance />} />
+                <Route path="/parfum-aquatic-breeze" element={<ParfumAquaticBreeze />} />
+                <Route path="/parfum-spicy-noir" element={<ParfumSpicyNoir />} />
+                
+                <Route path="/crema-hidratanta-luxury" element={<CremaHidratantaLuxury />} />
+                <Route path="/crema-contur-ochi-anti-age" element={<CremaConturOchiAntiAge />} />
+                <Route path="/crema-de-maini-silk" element={<CremaDeMainiSilk />} />
+                <Route path="/crema-de-corp-intense" element={<CremaDeCorpIntense />} />
+                <Route path="/crema-nutritiva-de-noapte" element={<CremaNutritivaDeNoapte />} />
+                <Route path="/crema-anticelulitică" element={<CremaAnticelulitică />} />
+                
+                <Route path="/ser-facial-radiance" element={<SerFacialRadiance />} />
+                <Route path="/masca-faciala-detox" element={<MascaFacialaDetox />} />
+                <Route path="/spuma-de-curatare" element={<SpumaDeCuratare />} />
+                <Route path="/tonic-purificator" element={<TonicPurificator />} />
+                <Route path="/ulei-de-fata-nutritiv" element={<UleiDeFataNutritiv />} />
+                <Route path="/crema-nutritiva-de-noapte-ingrjire" element={<CremaNutritivaDeNoapteIngrijire />} />
                 
                 {/* Dynamic routes for each product */}
                 {productSlugs.map((slug) => (
