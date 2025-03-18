@@ -38,38 +38,6 @@ import TonicPurificator from "./pages/product/TonicPurificator";
 import UleiDeFataNutritiv from "./pages/product/UleiDeFataNutritiv";
 import CremaNutritivaDeNoapteIngrijire from "./pages/product/CremaNutritivaDeNoapteIngrijire";
 
-// Custom cursor component
-const CustomCursor = () => {
-  useEffect(() => {
-    const cursorDot = document.createElement('div');
-    const cursorOutline = document.createElement('div');
-    
-    cursorDot.className = 'cursor-dot';
-    cursorOutline.className = 'cursor-outline';
-    
-    document.body.appendChild(cursorDot);
-    document.body.appendChild(cursorOutline);
-    
-    const moveCursor = (e) => {
-      const mouseY = e.clientY;
-      const mouseX = e.clientX;
-      
-      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-      cursorOutline.style.transform = `translate3d(${mouseX - 20}px, ${mouseY - 20}px, 0)`;
-    };
-    
-    document.addEventListener('mousemove', moveCursor);
-    
-    return () => {
-      document.removeEventListener('mousemove', moveCursor);
-      document.body.removeChild(cursorDot);
-      document.body.removeChild(cursorOutline);
-    };
-  }, []);
-  
-  return null;
-};
-
 // Page transition wrapper
 const PageTransition = ({ children }) => {
   const location = useLocation();
@@ -99,7 +67,6 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <CustomCursor />
               <Cart />
               <Routes>
                 <Route path="/" element={<PageTransition><Index /></PageTransition>} />
