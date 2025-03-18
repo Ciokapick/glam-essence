@@ -113,13 +113,6 @@ const Creme = () => {
               </div>
             ))}
           </div>
-          
-          {/* Load more button */}
-          <div className="text-center">
-            <Button variant="outline" className="border-beauty-coral/30 hover:bg-beauty-coral/5 hover:border-beauty-coral/50">
-              Încarcă mai multe
-            </Button>
-          </div>
         </div>
       </main>
       

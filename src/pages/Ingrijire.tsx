@@ -111,13 +111,6 @@ const Ingrijire = () => {
               </div>
             ))}
           </div>
-          
-          {/* Load more button */}
-          <div className="text-center">
-            <Button variant="outline" className="border-beauty-hotpink/30 hover:bg-beauty-hotpink/5 hover:border-beauty-hotpink/50">
-              Încarcă mai multe
-            </Button>
-          </div>
         </div>
       </main>
       

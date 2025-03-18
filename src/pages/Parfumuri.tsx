@@ -114,13 +114,6 @@ const Parfumuri = () => {
               </div>
             ))}
           </div>
-          
-          {/* Load more button */}
-          <div className="text-center">
-            <Button variant="outline" className="border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50">
-              Încarcă mai multe
-            </Button>
-          </div>
         </div>
       </main>
       

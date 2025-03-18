@@ -16,6 +16,8 @@ import Cart from "./components/Cart";
 import SeturiPage from "./pages/SeturiPage";
 import WishlistPage from "./pages/WishlistPage";
 import { products } from "./data/products";
+import ParfumOrientalMystique from "./pages/product/ParfumOrientalMystique";
+import ParfumFreshCitrus from "./pages/product/ParfumFreshCitrus";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,10 @@ const App = () => {
                 <Route path="/ingrijire" element={<Ingrijire />} />
                 <Route path="/seturi" element={<SeturiPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
+                
+                {/* Specific product pages */}
+                <Route path="/parfum-oriental-mystique" element={<ParfumOrientalMystique />} />
+                <Route path="/parfum-fresh-citrus" element={<ParfumFreshCitrus />} />
                 
                 {/* Dynamic routes for each product */}
                 {productSlugs.map((slug) => (
