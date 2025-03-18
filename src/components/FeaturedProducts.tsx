@@ -13,7 +13,16 @@ const FeaturedProducts = () => {
       image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       category: "Parfum",
       isNew: true,
-      rating: 5
+      rating: 5,
+      reviewCount: 12,
+      description: "Un parfum floral extraordinar cu note de trandafir, iasomie și lăcrămioară. Perfect pentru ocazii speciale și pentru a face o impresie memorabilă.",
+      features: [
+        "Note de vârf: bergamotă, lămâie",
+        "Note de mijloc: trandafir, iasomie, lăcrămioară",
+        "Note de bază: mosc, ambră",
+        "Concentrație: Eau de Parfum",
+        "Persistență: 8-10 ore"
+      ]
     },
     {
       id: "2",
@@ -23,7 +32,16 @@ const FeaturedProducts = () => {
       category: "Cremă",
       isSale: true,
       discount: 15,
-      rating: 4
+      rating: 4,
+      reviewCount: 28,
+      description: "Cremă de lux cu o formulă intens hidratantă, îmbogățită cu acid hialuronic și ceramide. Ideală pentru toate tipurile de piele, inclusiv cea sensibilă.",
+      features: [
+        "Hidratare intensă de lungă durată",
+        "Formulă non-grasă, ușor absorbabilă",
+        "Conține acid hialuronic și ceramide",
+        "Protejează bariera naturală a pielii",
+        "Testată dermatologic"
+      ]
     },
     {
       id: "3",
@@ -31,7 +49,16 @@ const FeaturedProducts = () => {
       price: 189.99,
       image: "https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=800&auto=format&fit=crop&q=80",
       category: "Îngrijire",
-      rating: 5
+      rating: 5,
+      reviewCount: 19,
+      description: "Ser facial inovator care iluminează tenul, uniformizează tonul pielii și reduce vizibil petele pigmentare. Rezultate vizibile după doar câteva utilizări.",
+      features: [
+        "Conține vitamina C stabilizată",
+        "Reduce petele pigmentare și uniformizează tonul pielii",
+        "Oferă luminozitate și strălucire tenului",
+        "Formulă antioxidantă, combate radicalii liberi",
+        "Textură ușoară, potrivită pentru utilizare zilnică"
+      ]
     },
     {
       id: "4",
@@ -41,7 +68,16 @@ const FeaturedProducts = () => {
       category: "Cremă",
       isSale: true,
       discount: 10,
-      rating: 4
+      rating: 4,
+      reviewCount: 16,
+      description: "Cremă de corp luxuriantă cu o textură bogată ce hrănește intens pielea. Formulă cu unt de shea și ulei de argan pentru o hidratare profundă.",
+      features: [
+        "Hidratare intensivă pentru piele uscată",
+        "Conține unt de shea și ulei de argan",
+        "Parfum delicat, de lungă durată",
+        "Absorbție rapidă, nu lasă reziduuri grase",
+        "Ambalaj premium, reutilizabil"
+      ]
     }
   ];
 
