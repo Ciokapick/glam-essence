@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
   return (
@@ -23,6 +24,10 @@ const Hero = () => {
               Colecția noastră exclusivă de parfumuri și produse de îngrijire te ajută să strălucești în fiecare zi.
             </p>
             <div className="flex flex-wrap gap-4">
+              <Button size="lg" className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white group">
+                Explorează colecția
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
               <Button size="lg" variant="outline" className="border-beauty-hotpink/50 hover:border-beauty-hotpink hover:bg-beauty-hotpink/5">
                 Oferte speciale
               </Button>
