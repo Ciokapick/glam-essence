@@ -3,7 +3,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Parfumuri from "./pages/Parfumuri";
 import Creme from "./pages/Creme";
@@ -37,6 +38,53 @@ import TonicPurificator from "./pages/product/TonicPurificator";
 import UleiDeFataNutritiv from "./pages/product/UleiDeFataNutritiv";
 import CremaNutritivaDeNoapteIngrijire from "./pages/product/CremaNutritivaDeNoapteIngrijire";
 
+// Custom cursor component
+const CustomCursor = () => {
+  useEffect(() => {
+    const cursorDot = document.createElement('div');
+    const cursorOutline = document.createElement('div');
+    
+    cursorDot.className = 'cursor-dot';
+    cursorOutline.className = 'cursor-outline';
+    
+    document.body.appendChild(cursorDot);
+    document.body.appendChild(cursorOutline);
+    
+    const moveCursor = (e) => {
+      const mouseY = e.clientY;
+      const mouseX = e.clientX;
+      
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+      cursorOutline.style.transform = `translate3d(${mouseX - 20}px, ${mouseY - 20}px, 0)`;
+    };
+    
+    document.addEventListener('mousemove', moveCursor);
+    
+    return () => {
+      document.removeEventListener('mousemove', moveCursor);
+      document.body.removeChild(cursorDot);
+      document.body.removeChild(cursorOutline);
+    };
+  }, []);
+  
+  return null;
+};
+
+// Page transition wrapper
+const PageTransition = ({ children }) => {
+  const location = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  
+  return (
+    <div className="page-transition-enter-active">
+      {children}
+    </div>
+  );
+};
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -51,51 +99,52 @@ const App = () => {
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <CustomCursor />
               <Cart />
               <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/parfumuri" element={<Parfumuri />} />
-                <Route path="/creme" element={<Creme />} />
-                <Route path="/ingrijire" element={<Ingrijire />} />
-                <Route path="/seturi" element={<SeturiPage />} />
-                <Route path="/wishlist" element={<WishlistPage />} />
+                <Route path="/" element={<PageTransition><Index /></PageTransition>} />
+                <Route path="/parfumuri" element={<PageTransition><Parfumuri /></PageTransition>} />
+                <Route path="/creme" element={<PageTransition><Creme /></PageTransition>} />
+                <Route path="/ingrijire" element={<PageTransition><Ingrijire /></PageTransition>} />
+                <Route path="/seturi" element={<PageTransition><SeturiPage /></PageTransition>} />
+                <Route path="/wishlist" element={<PageTransition><WishlistPage /></PageTransition>} />
                 
                 {/* Specific product pages */}
-                <Route path="/parfum-oriental-mystique" element={<ParfumOrientalMystique />} />
-                <Route path="/parfum-fresh-citrus" element={<ParfumFreshCitrus />} />
-                <Route path="/parfum-floral-extravagance" element={<ParfumFloralExtravagance />} />
-                <Route path="/parfum-woody-elegance" element={<ParfumWoodyElegance />} />
-                <Route path="/parfum-aquatic-breeze" element={<ParfumAquaticBreeze />} />
-                <Route path="/parfum-spicy-noir" element={<ParfumSpicyNoir />} />
+                <Route path="/parfum-oriental-mystique" element={<PageTransition><ParfumOrientalMystique /></PageTransition>} />
+                <Route path="/parfum-fresh-citrus" element={<PageTransition><ParfumFreshCitrus /></PageTransition>} />
+                <Route path="/parfum-floral-extravagance" element={<PageTransition><ParfumFloralExtravagance /></PageTransition>} />
+                <Route path="/parfum-woody-elegance" element={<PageTransition><ParfumWoodyElegance /></PageTransition>} />
+                <Route path="/parfum-aquatic-breeze" element={<PageTransition><ParfumAquaticBreeze /></PageTransition>} />
+                <Route path="/parfum-spicy-noir" element={<PageTransition><ParfumSpicyNoir /></PageTransition>} />
                 
-                <Route path="/crema-hidratanta-luxury" element={<CremaHidratantaLuxury />} />
-                <Route path="/crema-contur-ochi-anti-age" element={<CremaConturOchiAntiAge />} />
-                <Route path="/crema-de-maini-silk" element={<CremaDeMainiSilk />} />
-                <Route path="/crema-de-corp-intense" element={<CremaDeCorpIntense />} />
-                <Route path="/crema-nutritiva-de-noapte" element={<CremaNutritivaDeNoapte />} />
-                <Route path="/crema-anticelulitică" element={<CremaAnticelulitică />} />
+                <Route path="/crema-hidratanta-luxury" element={<PageTransition><CremaHidratantaLuxury /></PageTransition>} />
+                <Route path="/crema-contur-ochi-anti-age" element={<PageTransition><CremaConturOchiAntiAge /></PageTransition>} />
+                <Route path="/crema-de-maini-silk" element={<PageTransition><CremaDeMainiSilk /></PageTransition>} />
+                <Route path="/crema-de-corp-intense" element={<PageTransition><CremaDeCorpIntense /></PageTransition>} />
+                <Route path="/crema-nutritiva-de-noapte" element={<PageTransition><CremaNutritivaDeNoapte /></PageTransition>} />
+                <Route path="/crema-anticelulitică" element={<PageTransition><CremaAnticelulitică /></PageTransition>} />
                 
-                <Route path="/ser-facial-radiance" element={<SerFacialRadiance />} />
-                <Route path="/masca-faciala-detox" element={<MascaFacialaDetox />} />
-                <Route path="/spuma-de-curatare" element={<SpumaDeCuratare />} />
-                <Route path="/tonic-purificator" element={<TonicPurificator />} />
-                <Route path="/ulei-de-fata-nutritiv" element={<UleiDeFataNutritiv />} />
-                <Route path="/crema-nutritiva-de-noapte-ingrjire" element={<CremaNutritivaDeNoapteIngrijire />} />
+                <Route path="/ser-facial-radiance" element={<PageTransition><SerFacialRadiance /></PageTransition>} />
+                <Route path="/masca-faciala-detox" element={<PageTransition><MascaFacialaDetox /></PageTransition>} />
+                <Route path="/spuma-de-curatare" element={<PageTransition><SpumaDeCuratare /></PageTransition>} />
+                <Route path="/tonic-purificator" element={<PageTransition><TonicPurificator /></PageTransition>} />
+                <Route path="/ulei-de-fata-nutritiv" element={<PageTransition><UleiDeFataNutritiv /></PageTransition>} />
+                <Route path="/crema-nutritiva-de-noapte-ingrjire" element={<PageTransition><CremaNutritivaDeNoapteIngrijire /></PageTransition>} />
                 
                 {/* Dynamic routes for each product */}
                 {productSlugs.map((slug) => (
                   <Route 
                     key={slug}
                     path={`/product/${slug}`} 
-                    element={<ProductDetail />} 
+                    element={<PageTransition><ProductDetail /></PageTransition>} 
                   />
                 ))}
                 
                 {/* Generic product route that will use the slug parameter */}
-                <Route path="/product/:slug" element={<ProductDetail />} />
+                <Route path="/product/:slug" element={<PageTransition><ProductDetail /></PageTransition>} />
                 
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
+                <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </Routes>
             </BrowserRouter>
           </WishlistProvider>

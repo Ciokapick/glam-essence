@@ -94,10 +94,68 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
+    cursor: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
+  }
+  
+  /* Custom cursor styles */
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #D946EF;
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 999999;
+    transition: transform 0.1s ease;
+  }
+  
+  .cursor-outline {
+    width: 40px;
+    height: 40px;
+    border: 2px solid rgba(217, 70, 239, 0.3);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 999998;
+    transition: all 0.2s ease;
+  }
+  
+  a:hover ~ .cursor-dot,
+  button:hover ~ .cursor-dot {
+    transform: scale(1.5);
+  }
+  
+  a:hover ~ .cursor-outline,
+  button:hover ~ .cursor-outline {
+    transform: scale(1.2);
+    border-color: rgba(217, 70, 239, 0.5);
+  }
+  
+  /* Page transition effect */
+  .page-transition-enter {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  
+  .page-transition-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 400ms, transform 400ms;
+  }
+  
+  .page-transition-exit {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .page-transition-exit-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 300ms, transform 300ms;
   }
 }
 
@@ -160,4 +218,24 @@
   .card-hover {
     @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg;
   }
+}
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(217, 70, 239, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(217, 70, 239, 0.3);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(217, 70, 239, 0.5);
 }

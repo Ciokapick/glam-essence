@@ -84,7 +84,7 @@ const FeaturedProducts = () => {
   return (
     <section className="py-20 bg-gradient-to-b from-white to-beauty-rose/10">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
+        <div className="text-center mb-12 animate-fade-in">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Produse populare</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             Descoperă selecția noastră de produse premium, create pentru a-ți îmbunătăți rutina zilnică de frumusețe.
@@ -92,16 +92,16 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
+          {products.map((product, index) => (
+            <div key={product.id} className="animate-fade-in hover:scale-[1.02] transition-all duration-300" style={{ animationDelay: `${index * 0.15}s` }}>
               <ProductCard {...product} />
             </div>
           ))}
         </div>
         
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: "0.8s" }}>
           <Link to="/parfumuri">
-            <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
+            <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white transition-all duration-300 transform hover:scale-105">
               Vezi toate produsele
             </Button>
           </Link>
