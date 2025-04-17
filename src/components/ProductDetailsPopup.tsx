@@ -7,6 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Star, Heart, ShoppingBag, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
+import { products } from '@/data/products';
 
 interface ProductDetailsPopupProps {
   isOpen: boolean;
@@ -36,7 +37,11 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(product.id);
-  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
+  
+  // Get the actual stock from products data to ensure synchronization
+  const productSlug = Object.keys(products).find(key => products[key].id === product.id);
+  const actualStock = productSlug ? products[productSlug].stock : product.stock || 0;
+  const isOutOfStock = actualStock <= 0;
 
   const handleAddToCart = () => {
     if (isOutOfStock) {
@@ -168,7 +173,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
           
           {/* Stock Information */}
           <div className={`text-sm ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
-            {isOutOfStock ? 'Indisponibil' : `În stoc: ${product.stock} buc`}
+            {isOutOfStock ? 'Indisponibil' : `În stoc: ${actualStock} buc`}
           </div>
           
           {/* Description */}

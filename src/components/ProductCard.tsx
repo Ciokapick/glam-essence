@@ -7,6 +7,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import ProductDetailsPopup from './ProductDetailsPopup';
+import { products } from '@/data/products';
 
 interface ProductCardProps {
   id: string;
@@ -43,7 +44,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(id);
   const [showDetails, setShowDetails] = useState(false);
-  const isOutOfStock = stock <= 0;
+  
+  // Get the actual stock from products data to ensure synchronization
+  const productSlug = Object.keys(products).find(key => products[key].id === id);
+  const actualStock = productSlug ? products[productSlug].stock : stock;
+  const isOutOfStock = actualStock <= 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -194,7 +199,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
               )}
             </div>
             <div className={`text-sm ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
-              {isOutOfStock ? 'Indisponibil' : `În stoc: ${stock} buc`}
+              {isOutOfStock ? 'Indisponibil' : `În stoc: ${actualStock} buc`}
             </div>
           </div>
         </div>
@@ -216,7 +221,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           reviewCount,
           description,
           features,
-          stock
+          stock: actualStock
         }}
       />
     </>

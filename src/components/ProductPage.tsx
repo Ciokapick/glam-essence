@@ -8,7 +8,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import { Star, Heart, ShoppingBag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Product } from '@/data/products';
+import { Product, products } from '@/data/products';
 
 interface ProductPageProps {
   product: Product;
@@ -22,7 +22,20 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
     window.scrollTo(0, 0);
   }, []);
 
+  // Get the actual stock directly from the products object
+  const actualStock = product ? product.stock : 0;
+  const isOutOfStock = actualStock <= 0;
+
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast({
+        title: "Produs indisponibil",
+        description: "Ne pare rău, acest produs nu este momentan în stoc.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     addToCart({
       id: product.id,
       name: product.name,
@@ -127,6 +140,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                 )}
               </div>
               
+              {/* Stock Information */}
+              <div className={`text-sm mb-4 ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
+                {isOutOfStock ? 'Indisponibil' : `În stoc: ${actualStock} buc`}
+              </div>
+              
               {/* Description */}
               <p className="text-muted-foreground mb-8">
                 {product.description}
@@ -137,9 +155,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                 <Button 
                   className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1"
                   onClick={handleAddToCart}
+                  disabled={isOutOfStock}
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
-                  Adaugă în coș
+                  {isOutOfStock ? 'Indisponibil' : 'Adaugă în coș'}
                 </Button>
                 <Button 
                   variant="outline" 
