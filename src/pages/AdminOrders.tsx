@@ -1,11 +1,10 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, Eye } from 'lucide-react';
+import { Search, Eye, Trash2 } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -119,10 +118,17 @@ const mockOrders: Order[] = [
 ];
 
 const AdminOrders = () => {
-  const [orders, setOrders] = useState<Order[]>(mockOrders);
+  const [orders, setOrders] = useState<Order[]>(() => {
+    const savedOrders = localStorage.getItem('adminOrders');
+    return savedOrders ? JSON.parse(savedOrders) : mockOrders;
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { toast } = useToast();
+
+  useEffect(() => {
+    localStorage.setItem('adminOrders', JSON.stringify(orders));
+  }, [orders]);
 
   const filteredOrders = orders.filter(
     order => 
@@ -146,6 +152,18 @@ const AdminOrders = () => {
       title: "Status actualizat",
       description: `Comanda #${orderId} a fost marcată ca ${getStatusLabel(newStatus)}.`,
     });
+  };
+
+  const handleDeleteOrder = (orderId: string) => {
+    if (window.confirm('Ești sigur că vrei să ștergi această comandă?')) {
+      const updatedOrders = orders.filter(order => order.id !== orderId);
+      setOrders(updatedOrders);
+      
+      toast({
+        title: "Comandă ștearsă",
+        description: `Comanda #${orderId} a fost ștearsă cu succes.`,
+      });
+    }
   };
 
   const getStatusLabel = (status: OrderStatus): string => {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -7,10 +6,7 @@ import {
   LayoutDashboard, 
   ShoppingBag, 
   Package, 
-  Settings, 
-  LogOut, 
-  Users, 
-  BarChart
+  LogOut
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -78,24 +74,6 @@ const AdminSidebar: React.FC = () => {
             label="Produse" 
             to="/admin/products" 
             active={isActive('/admin/products')} 
-          />
-          <SidebarItem 
-            icon={<Users size={18} />} 
-            label="Clienți" 
-            to="/admin/customers" 
-            active={isActive('/admin/customers')} 
-          />
-          <SidebarItem 
-            icon={<BarChart size={18} />} 
-            label="Statistici" 
-            to="/admin/analytics" 
-            active={isActive('/admin/analytics')} 
-          />
-          <SidebarItem 
-            icon={<Settings size={18} />} 
-            label="Setări" 
-            to="/admin/settings" 
-            active={isActive('/admin/settings')} 
           />
         </div>
       </div>

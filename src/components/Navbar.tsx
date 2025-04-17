@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Heart, Menu, X } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, UserCog } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
@@ -62,6 +62,11 @@ export function Navbar() {
                 <Badge className="absolute -top-1 -right-1 bg-primary text-xs h-5 w-5 flex items-center justify-center">{totalItems}</Badge>
               )}
             </Button>
+            <Button variant="ghost" size="icon" className="rounded-full" asChild>
+              <Link to="/admin">
+                <UserCog className="h-5 w-5" />
+              </Link>
+            </Button>
           </div>
           
           {/* Mobile Menu Button */}
@@ -80,6 +85,7 @@ export function Navbar() {
             <Link to="/creme" className="font-medium p-2" onClick={toggleMobileMenu}>Creme</Link>
             <Link to="/ingrijire" className="font-medium p-2" onClick={toggleMobileMenu}>Îngrijire</Link>
             <Link to="/wishlist" className="font-medium p-2" onClick={toggleMobileMenu}>Favorite</Link>
+            <Link to="/admin" className="font-medium p-2" onClick={toggleMobileMenu}>Admin</Link>
           </nav>
           <div className="flex justify-around py-4 border-t">
             <Button variant="ghost" size="icon" className="relative" asChild>
