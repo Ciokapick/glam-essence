@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LockKeyhole, User } from 'lucide-react';
+import { LockKeyhole, User, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -42,7 +42,16 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-beauty-rose/10 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-white to-beauty-rose/10 flex items-center justify-center p-4 relative">
+      <Button 
+        variant="ghost" 
+        className="absolute top-4 left-4 flex items-center gap-2"
+        onClick={() => navigate('/')}
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Înapoi la magazin
+      </Button>
+      
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-beauty-magenta/20 blur-3xl animate-float"></div>
         <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-beauty-coral/20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>

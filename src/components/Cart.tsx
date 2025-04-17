@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCart, CartItem } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
 import { toast } from "@/hooks/use-toast";
+import { useNavigate } from 'react-router-dom';
 
 const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
@@ -68,16 +68,12 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 };
 
 const Cart: React.FC = () => {
-  const { items, isOpen, closeCart, clearCart, totalItems, subtotal } = useCart();
+  const { items, isOpen, closeCart, totalItems, subtotal } = useCart();
+  const navigate = useNavigate();
 
   const handleCheckout = () => {
-    toast({
-      title: "Comandă finalizată",
-      description: "Mulțumim pentru comanda ta!",
-      variant: "default",
-    });
-    clearCart();
     closeCart();
+    navigate('/checkout');
   };
 
   if (!isOpen) return null;
