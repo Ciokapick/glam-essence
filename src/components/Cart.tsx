@@ -24,12 +24,10 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 
   return (
     <div className="flex py-4 border-b">
-      {/* Product image */}
       <div className="w-20 h-20 rounded-md overflow-hidden mr-4">
         <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
       </div>
       
-      {/* Product details */}
       <div className="flex-1">
         <div className="flex justify-between">
           <h4 className="font-medium">{item.name}</h4>
@@ -68,7 +66,7 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 };
 
 const Cart: React.FC = () => {
-  const { items, isOpen, closeCart, totalItems, subtotal } = useCart();
+  const { items, isOpen, closeCart, totalItems, subtotal, clearCart } = useCart();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -80,13 +78,11 @@ const Cart: React.FC = () => {
 
   return (
     <div>
-      {/* Backdrop */}
       <div 
         className="fixed inset-0 bg-black/40 z-40"
         onClick={closeCart}
       ></div>
       
-      {/* Cart drawer */}
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-xl transform transition-transform duration-300 overflow-auto">
         <div className="p-4 border-b sticky top-0 bg-white z-10 flex justify-between items-center">
           <h2 className="text-xl font-bold flex items-center">
