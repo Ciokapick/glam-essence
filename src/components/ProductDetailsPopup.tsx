@@ -24,6 +24,7 @@ interface ProductDetailsPopupProps {
     discount?: number;
     rating?: number;
     reviewCount?: number;
+    stock?: number;
   };
 }
 
@@ -35,8 +36,18 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(product.id);
+  const isOutOfStock = product.stock !== undefined && product.stock <= 0;
 
   const handleAddToCart = () => {
+    if (isOutOfStock) {
+      toast({
+        title: "Produs indisponibil",
+        description: "Ne pare rău, acest produs nu este momentan în stoc.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     addToCart({
       id: product.id,
       name: product.name,
@@ -155,6 +166,11 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
             )}
           </div>
           
+          {/* Stock Information */}
+          <div className={`text-sm ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
+            {isOutOfStock ? 'Indisponibil' : `În stoc: ${product.stock} buc`}
+          </div>
+          
           {/* Description */}
           <p className="text-muted-foreground">
             {product.description || defaultDescription}
@@ -165,9 +181,10 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
             <Button 
               className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1"
               onClick={handleAddToCart}
+              disabled={isOutOfStock}
             >
               <ShoppingBag className="h-5 w-5 mr-2" />
-              Adaugă în coș
+              {isOutOfStock ? 'Indisponibil' : 'Adaugă în coș'}
             </Button>
             <Button 
               variant="outline" 

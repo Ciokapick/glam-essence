@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Heart, Eye } from 'lucide-react';
@@ -134,9 +135,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 size="sm" 
                 className="bg-white text-black hover:bg-white/90 rounded-full"
                 onClick={handleAddToCart}
+                disabled={isOutOfStock}
               >
                 <ShoppingBag className="h-4 w-4 mr-1" />
-                Adaugă
+                {isOutOfStock ? 'Indisponibil' : 'Adaugă'}
               </Button>
               <Button 
                 size="icon" 
