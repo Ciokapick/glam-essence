@@ -37,6 +37,12 @@ import TonicPurificator from "./pages/product/TonicPurificator";
 import UleiDeFataNutritiv from "./pages/product/UleiDeFataNutritiv";
 import CremaNutritivaDeNoapteIngrijire from "./pages/product/CremaNutritivaDeNoapteIngrijire";
 
+// Import admin pages
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -81,6 +87,12 @@ const App = () => {
                 <Route path="/tonic-purificator" element={<TonicPurificator />} />
                 <Route path="/ulei-de-fata-nutritiv" element={<UleiDeFataNutritiv />} />
                 <Route path="/crema-nutritiva-de-noapte-ingrjire" element={<CremaNutritivaDeNoapteIngrijire />} />
+                
+                {/* Admin routes */}
+                <Route path="/admin" element={<AdminLogin />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/products" element={<AdminProducts />} />
+                <Route path="/admin/orders" element={<AdminOrders />} />
                 
                 {/* Dynamic routes for each product */}
                 {productSlugs.map((slug) => (
