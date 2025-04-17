@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,9 +8,8 @@ import { Edit, Plus, Search, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
-import { products } from '@/data/products';
+import { getFromDb, saveToDb, updateProductStock } from '@/utils/jsonDb';
 
-// Create a product type based on the existing products
 type Product = {
   id: string;
   name: string;
@@ -22,17 +20,7 @@ type Product = {
 };
 
 const AdminProducts = () => {
-  // Convert products object to array
-  const initialProducts = Object.entries(products).map(([slug, product]) => ({
-    id: slug,
-    name: product.name,
-    price: product.price,
-    category: product.category,
-    stock: Math.floor(Math.random() * 50), // Random stock for demo
-    image: product.image
-  }));
-
-  const [productsList, setProductsList] = useState<Product[]>(initialProducts);
+  const [productsList, setProductsList] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
     name: '',
@@ -46,6 +34,31 @@ const AdminProducts = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   const { toast } = useToast();
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      let storedProducts = getFromDb<Record<string, any>>('products', {});
+      
+      if (Object.keys(storedProducts).length === 0) {
+        const { products } = await import('@/data/products');
+        storedProducts = products;
+        saveToDb('products', products);
+      }
+      
+      const productsArray = Object.entries(storedProducts).map(([slug, product]) => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        category: product.category,
+        stock: product.stock || 0,
+        image: product.image
+      }));
+      
+      setProductsList(productsArray);
+    };
+    
+    loadProducts();
+  }, []);
 
   const filteredProducts = productsList.filter(
     product => 
@@ -74,6 +87,31 @@ const AdminProducts = () => {
     };
 
     setProductsList([...productsList, productToAdd]);
+    
+    import('@/data/products').then(({ products }) => {
+      const productsCopy = { ...products };
+      const newSlug = newProduct.name.toLowerCase().replace(/\s+/g, '-');
+      
+      productsCopy[newSlug] = {
+        id: newId,
+        slug: newSlug,
+        name: newProduct.name,
+        price: Number(newProduct.price),
+        image: newProduct.image || 'https://placehold.co/400x400/png',
+        gallery: [newProduct.image || 'https://placehold.co/400x400/png'],
+        category: newProduct.category,
+        rating: 0,
+        reviewCount: 0,
+        description: "Un produs nou adăugat în catalog.",
+        details: "Detalii despre acest produs vor fi adăugate în curând.",
+        features: ["Caracteristică 1", "Caracteristică 2"],
+        sku: `SKU-${newId}`,
+        stock: Number(newProduct.stock)
+      };
+      
+      saveToDb('products', productsCopy);
+    });
+    
     setNewProduct({
       name: '',
       price: 0,
@@ -97,6 +135,25 @@ const AdminProducts = () => {
     );
     
     setProductsList(updatedProducts);
+    
+    import('@/data/products').then(async () => {
+      const storedProducts = getFromDb<Record<string, any>>('products', {});
+      
+      const productKey = Object.keys(storedProducts).find(
+        key => storedProducts[key].id === editingProduct.id
+      );
+      
+      if (productKey) {
+        storedProducts[productKey].name = editingProduct.name;
+        storedProducts[productKey].price = editingProduct.price;
+        storedProducts[productKey].category = editingProduct.category;
+        storedProducts[productKey].stock = editingProduct.stock;
+        storedProducts[productKey].image = editingProduct.image;
+        
+        saveToDb('products', storedProducts);
+      }
+    });
+    
     setIsEditDialogOpen(false);
     
     toast({
@@ -109,6 +166,20 @@ const AdminProducts = () => {
     if (window.confirm('Ești sigur că vrei să ștergi acest produs?')) {
       const updatedProducts = productsList.filter(product => product.id !== id);
       setProductsList(updatedProducts);
+      
+      import('@/data/products').then(async () => {
+        const storedProducts = getFromDb<Record<string, any>>('products', {});
+        
+        const productKey = Object.keys(storedProducts).find(
+          key => storedProducts[key].id === id
+        );
+        
+        if (productKey) {
+          delete storedProducts[productKey];
+          
+          saveToDb('products', storedProducts);
+        }
+      });
       
       toast({
         title: "Succes",
@@ -123,6 +194,8 @@ const AdminProducts = () => {
     );
     
     setProductsList(updatedProducts);
+    
+    updateProductStock(id, newStock);
     
     toast({
       title: "Stoc actualizat",

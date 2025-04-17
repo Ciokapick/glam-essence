@@ -6,16 +6,29 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
+import { getFromDb, saveToDb, updateProductStock } from '@/utils/jsonDb';
 
-interface OrderData {
-  id: string;
-  items: any[];
-  total: number;
-  customerName: string;
+interface CustomerInfo {
+  name: string;
   email: string;
   address: string;
   phone: string;
-  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+}
+
+export interface Order {
+  id: string;
+  items: Array<{
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+    category: string;
+    discount?: number;
+  }>;
+  total: number;
+  customer: CustomerInfo;
+  status: 'pending' | 'processing' | 'completed' | 'canceled';
   date: string;
 }
 
@@ -25,7 +38,7 @@ const Checkout = () => {
   const { toast } = useToast();
   
   const [formData, setFormData] = useState({
-    customerName: '',
+    name: '',
     email: '',
     address: '',
     phone: ''
@@ -35,23 +48,31 @@ const Checkout = () => {
     e.preventDefault();
     
     // Create order object
-    const order: OrderData = {
-      id: `ORD-${Date.now()}`,
+    const order: Order = {
+      id: generateOrderId(),
       items: items,
       total: subtotal + 15, // Including shipping
-      customerName: formData.customerName,
-      email: formData.email,
-      address: formData.address,
-      phone: formData.phone,
+      customer: {
+        name: formData.name,
+        email: formData.email,
+        address: formData.address,
+        phone: formData.phone
+      },
       status: 'pending',
-      date: new Date().toISOString()
+      date: new Date().toLocaleDateString('ro-RO')
     };
 
-    // Get existing orders from localStorage or initialize empty array
-    const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
+    // Get existing orders from our JSON db
+    const existingOrders = getFromDb<Order[]>('orders', []);
     
     // Add new order
-    localStorage.setItem('orders', JSON.stringify([...existingOrders, order]));
+    saveToDb('orders', [...existingOrders, order]);
+    
+    // Update stock for each product in the order
+    items.forEach(item => {
+      // Get current product stock and decrease it by the order quantity
+      updateProductStockForOrder(item.id, item.quantity);
+    });
     
     // Clear cart and show success message
     clearCart();
@@ -62,6 +83,29 @@ const Checkout = () => {
     
     // Redirect to home
     navigate('/');
+  };
+
+  const updateProductStockForOrder = (productId: string, quantity: number) => {
+    // Get all products from our "database"
+    import('@/data/products').then(({ products }) => {
+      // Find the product by id to get its current stock
+      const productKey = Object.keys(products).find(
+        key => products[key].id === productId
+      );
+      
+      if (productKey) {
+        const currentStock = products[productKey].stock;
+        const newStock = Math.max(0, currentStock - quantity);
+        
+        // Update the stock in our JSON db
+        updateProductStock(productId, newStock);
+      }
+    });
+  };
+
+  const generateOrderId = (): string => {
+    // Generate a 4 digit order ID
+    return String(1000 + Math.floor(Math.random() * 9000));
   };
 
   if (items.length === 0) {
@@ -102,12 +146,12 @@ const Checkout = () => {
           <h2 className="text-xl font-semibold mb-4">Informații livrare</h2>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="customerName">Nume complet</Label>
+              <Label htmlFor="name">Nume complet</Label>
               <Input
-                id="customerName"
+                id="name"
                 required
-                value={formData.customerName}
-                onChange={(e) => setFormData({...formData, customerName: e.target.value})}
+                value={formData.name}
+                onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </div>
             <div>

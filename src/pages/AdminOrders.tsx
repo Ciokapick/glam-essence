@@ -13,31 +13,12 @@ import {
   DialogTrigger 
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
+import { Order } from '@/pages/Checkout';
+import { getFromDb, saveToDb } from '@/utils/jsonDb';
 
 type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
-interface OrderItem {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-}
-
-interface Order {
-  id: string;
-  customer: {
-    name: string;
-    email: string;
-    phone: string;
-    address: string;
-  };
-  items: OrderItem[];
-  total: number;
-  status: OrderStatus;
-  date: string;
-}
-
-const mockOrders: Order[] = [
+const mockOrders = [
   {
     id: '1081',
     customer: {
@@ -118,17 +99,21 @@ const mockOrders: Order[] = [
 ];
 
 const AdminOrders = () => {
-  const [orders, setOrders] = useState<Order[]>(() => {
-    const savedOrders = localStorage.getItem('adminOrders');
-    return savedOrders ? JSON.parse(savedOrders) : mockOrders;
-  });
+  const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    localStorage.setItem('adminOrders', JSON.stringify(orders));
-  }, [orders]);
+    const savedOrders = getFromDb<Order[]>('orders', []);
+    
+    if (savedOrders.length === 0) {
+      setOrders(mockOrders);
+      saveToDb('orders', mockOrders);
+    } else {
+      setOrders(savedOrders);
+    }
+  }, []);
 
   const filteredOrders = orders.filter(
     order => 
@@ -144,6 +129,8 @@ const AdminOrders = () => {
     
     setOrders(updatedOrders);
     
+    saveToDb('orders', updatedOrders);
+    
     if (selectedOrder && selectedOrder.id === orderId) {
       setSelectedOrder({ ...selectedOrder, status: newStatus });
     }
@@ -158,6 +145,8 @@ const AdminOrders = () => {
     if (window.confirm('Ești sigur că vrei să ștergi această comandă?')) {
       const updatedOrders = orders.filter(order => order.id !== orderId);
       setOrders(updatedOrders);
+      
+      saveToDb('orders', updatedOrders);
       
       toast({
         title: "Comandă ștearsă",
@@ -335,6 +324,14 @@ const AdminOrders = () => {
                             )}
                           </DialogContent>
                         </Dialog>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="ml-2 text-red-500 hover:text-red-700"
+                          onClick={() => handleDeleteOrder(order.id)}
+                        >
+                          <Trash2 size={16} />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}

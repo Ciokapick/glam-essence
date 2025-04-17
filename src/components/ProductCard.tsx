@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Heart, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import ProductDetailsPopup from './ProductDetailsPopup';
-import { products } from '@/data/products';
+import { getFromDb } from '@/utils/jsonDb';
 
 interface ProductCardProps {
   id: string;
@@ -44,10 +43,26 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(id);
   const [showDetails, setShowDetails] = useState(false);
+  const [actualStock, setActualStock] = useState(stock);
   
-  // Get the actual stock from products data to ensure synchronization
-  const productSlug = Object.keys(products).find(key => products[key].id === id);
-  const actualStock = productSlug ? products[productSlug].stock : stock;
+  useEffect(() => {
+    const fetchStock = async () => {
+      const storedProducts = getFromDb<Record<string, any>>('products', {});
+      
+      if (Object.keys(storedProducts).length > 0) {
+        const productKey = Object.keys(storedProducts).find(
+          key => storedProducts[key].id === id
+        );
+        
+        if (productKey) {
+          setActualStock(storedProducts[productKey].stock);
+        }
+      }
+    };
+    
+    fetchStock();
+  }, [id]);
+  
   const isOutOfStock = actualStock <= 0;
 
   const handleAddToCart = (e: React.MouseEvent) => {

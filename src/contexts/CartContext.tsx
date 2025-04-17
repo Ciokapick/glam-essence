@@ -1,5 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { updateProductStock } from '@/utils/jsonDb';
 
 export interface CartItem {
   id: string;
