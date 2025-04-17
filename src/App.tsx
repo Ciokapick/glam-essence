@@ -1,3 +1,5 @@
+
+import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -16,6 +18,32 @@ import SeturiPage from "./pages/SeturiPage";
 import WishlistPage from "./pages/WishlistPage";
 import { products } from "./data/products";
 import Checkout from "./pages/Checkout";
+
+// Import all individual product pages
+import ParfumOrientalMystique from "./pages/product/ParfumOrientalMystique";
+import ParfumFreshCitrus from "./pages/product/ParfumFreshCitrus";
+import ParfumFloralExtravagance from "./pages/product/ParfumFloralExtravagance";
+import ParfumWoodyElegance from "./pages/product/ParfumWoodyElegance";
+import ParfumAquaticBreeze from "./pages/product/ParfumAquaticBreeze";
+import ParfumSpicyNoir from "./pages/product/ParfumSpicyNoir";
+import CremaHidratantaLuxury from "./pages/product/CremaHidratantaLuxury";
+import CremaConturOchiAntiAge from "./pages/product/CremaConturOchiAntiAge";
+import CremaDeMainiSilk from "./pages/product/CremaDeMainiSilk";
+import CremaDeCorpIntense from "./pages/product/CremaDeCorpIntense";
+import CremaNutritivaDeNoapte from "./pages/product/CremaNutritivaDeNoapte";
+import CremaAnticelulitică from "./pages/product/CremaAnticelulitică";
+import SerFacialRadiance from "./pages/product/SerFacialRadiance";
+import MascaFacialaDetox from "./pages/product/MascaFacialaDetox";
+import SpumaDeCuratare from "./pages/product/SpumaDeCuratare";
+import TonicPurificator from "./pages/product/TonicPurificator";
+import UleiDeFataNutritiv from "./pages/product/UleiDeFataNutritiv";
+import CremaNutritivaDeNoapteIngrijire from "./pages/product/CremaNutritivaDeNoapteIngrijire";
+
+// Import admin pages
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminProducts from "./pages/AdminProducts";
+import AdminOrders from "./pages/AdminOrders";
 
 const queryClient = new QueryClient();
 
@@ -60,7 +88,7 @@ const App = () => {
                 <Route path="/spuma-de-curatare" element={<SpumaDeCuratare />} />
                 <Route path="/tonic-purificator" element={<TonicPurificator />} />
                 <Route path="/ulei-de-fata-nutritiv" element={<UleiDeFataNutritiv />} />
-                <Route path="/crema-nutritiva-de-noapte-ingrjire" element={<CremaNutritivaDeNoapteIngrijire />} />
+                <Route path="/crema-nutritiva-de-noapte-ingrijire" element={<CremaNutritivaDeNoapteIngrijire />} />
                 
                 {/* Admin routes */}
                 <Route path="/admin" element={<AdminLogin />} />
@@ -95,3 +123,4 @@ const App = () => {
 };
 
 export default App;
+
