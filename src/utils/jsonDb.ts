@@ -20,6 +20,7 @@ export const getFromDb = <T>(key: string, defaultValue: T): T => {
 export const saveToDb = <T>(key: string, data: T): void => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
+    console.log(`Data saved successfully for key: ${key}`);
   } catch (e) {
     console.error(`Error saving data to localStorage for key: ${key}`, e);
   }
@@ -104,8 +105,9 @@ export const getAllProducts = async (): Promise<Record<string, any>> => {
   const storedProducts = getFromDb<Record<string, any>>('products', {});
   
   if (Object.keys(storedProducts).length === 0) {
-    const { products } = await import('@/data/products');
-    return products;
+    // If no products in localStorage, initialize from data
+    await initializeProductsDb();
+    return getFromDb<Record<string, any>>('products', {});
   }
   
   return storedProducts;
@@ -114,8 +116,64 @@ export const getAllProducts = async (): Promise<Record<string, any>> => {
 // Get all orders from database and sort by date (newest first)
 export const getAllOrders = (): any[] => {
   const orders = getFromDb<any[]>('orders', []);
+  console.log('Retrieved orders from localStorage:', orders);
   return orders.sort((a, b) => {
     // Convert date strings to Date objects for sorting
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+};
+
+// Save a new order and update product stocks
+export const saveOrder = (order: any): void => {
+  // Get existing orders
+  const existingOrders = getAllOrders();
+  
+  // Add new order to the list
+  const updatedOrders = [...existingOrders, order];
+  
+  // Save updated orders
+  saveToDb('orders', updatedOrders);
+  console.log('Order saved successfully:', order);
+  
+  // Update product stock for each item in the order
+  order.items.forEach((item: any) => {
+    updateProductStockAfterOrder(item.id, item.quantity);
+  });
+};
+
+// Helper function to update stock after an order
+const updateProductStockAfterOrder = (productId: string, quantity: number): void => {
+  // Get current product
+  const allProducts = getFromDb<Record<string, any>>('products', {});
+  
+  if (Object.keys(allProducts).length > 0) {
+    // Find the product by ID
+    const productKey = Object.keys(allProducts).find(key => allProducts[key].id === productId);
+    
+    if (productKey) {
+      // Calculate new stock by subtracting the ordered quantity
+      const currentStock = allProducts[productKey].stock || 0;
+      const newStock = Math.max(0, currentStock - quantity);
+      
+      // Update the stock
+      allProducts[productKey].stock = newStock;
+      saveToDb('products', allProducts);
+      console.log(`Product ${productId} stock updated to ${newStock} after order`);
+    }
+  } else {
+    // If products not in localStorage yet, import and update
+    import('@/data/products').then(({ products }) => {
+      const productsCopy = { ...products };
+      const productKey = Object.keys(productsCopy).find(key => productsCopy[key].id === productId);
+      
+      if (productKey) {
+        const currentStock = productsCopy[productKey].stock || 0;
+        const newStock = Math.max(0, currentStock - quantity);
+        
+        productsCopy[productKey].stock = newStock;
+        saveToDb('products', productsCopy);
+        console.log(`Product ${productId} stock updated to ${newStock} after order (from imported data)`);
+      }
+    });
+  }
 };

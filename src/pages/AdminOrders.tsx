@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, Eye, Trash2 } from 'lucide-react';
+import { Search, Eye, Trash2, RefreshCw } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -23,6 +23,7 @@ const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   // Load orders from database on component mount and set up a polling interval
@@ -30,10 +31,10 @@ const AdminOrders = () => {
     // Initial load
     loadOrders();
     
-    // Set up polling to check for new orders every 30 seconds
+    // Set up polling to check for new orders every 15 seconds
     const intervalId = setInterval(() => {
       loadOrders();
-    }, 30000);
+    }, 15000);
     
     // Clean up interval on component unmount
     return () => clearInterval(intervalId);
@@ -41,9 +42,22 @@ const AdminOrders = () => {
   
   // Function to load orders from the database
   const loadOrders = () => {
-    const savedOrders = getAllOrders();
-    console.log('Loaded orders:', savedOrders);
-    setOrders(savedOrders);
+    setIsLoading(true);
+    
+    try {
+      const savedOrders = getAllOrders();
+      console.log('Loaded orders:', savedOrders);
+      setOrders(savedOrders);
+    } catch (error) {
+      console.error('Error loading orders:', error);
+      toast({
+        title: "Eroare",
+        description: "Nu s-au putut încărca comenzile. Încearcă din nou.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const filteredOrders = orders.filter(
@@ -128,7 +142,13 @@ const AdminOrders = () => {
           <Button 
             variant="outline" 
             onClick={loadOrders}
+            disabled={isLoading}
           >
+            {isLoading ? (
+              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <RefreshCw className="h-4 w-4 mr-2" />
+            )}
             Reîmprospătează
           </Button>
         </div>
@@ -191,87 +211,10 @@ const AdminOrders = () => {
                                 <DialogTitle>Detalii comandă #{selectedOrder?.id}</DialogTitle>
                               </DialogHeader>
                               {selectedOrder && (
-                                <div className="space-y-6 py-4">
-                                  <div className="space-y-2">
-                                    <h4 className="font-medium">Informații client</h4>
-                                    <div className="rounded-md bg-muted p-4 text-sm">
-                                      <p><strong>Nume:</strong> {selectedOrder.customer.name}</p>
-                                      <p><strong>Email:</strong> {selectedOrder.customer.email}</p>
-                                      <p><strong>Telefon:</strong> {selectedOrder.customer.phone}</p>
-                                      <p><strong>Adresă:</strong> {selectedOrder.customer.address}</p>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="space-y-2">
-                                    <h4 className="font-medium">Produse comandate</h4>
-                                    <div className="rounded-md border">
-                                      <Table>
-                                        <TableHeader>
-                                          <TableRow>
-                                            <TableHead>Produs</TableHead>
-                                            <TableHead className="text-right">Preț</TableHead>
-                                            <TableHead className="text-right">Cant.</TableHead>
-                                            <TableHead className="text-right">Total</TableHead>
-                                          </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                          {selectedOrder.items.map((item) => (
-                                            <TableRow key={item.id}>
-                                              <TableCell>{item.name}</TableCell>
-                                              <TableCell className="text-right">{item.price.toFixed(2)} lei</TableCell>
-                                              <TableCell className="text-right">{item.quantity}</TableCell>
-                                              <TableCell className="text-right">
-                                                {(item.price * item.quantity).toFixed(2)} lei
-                                              </TableCell>
-                                            </TableRow>
-                                          ))}
-                                          <TableRow>
-                                            <TableCell colSpan={3} className="text-right font-medium">Total comandă:</TableCell>
-                                            <TableCell className="text-right font-bold">{selectedOrder.total.toFixed(2)} lei</TableCell>
-                                          </TableRow>
-                                        </TableBody>
-                                      </Table>
-                                    </div>
-                                  </div>
-                                  
-                                  <div className="space-y-2">
-                                    <h4 className="font-medium">Actualizează status</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                      <Button 
-                                        variant={selectedOrder.status === 'pending' ? 'default' : 'outline'}
-                                        size="sm"
-                                        className={selectedOrder.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
-                                        onClick={() => handleStatusChange(selectedOrder.id, 'pending')}
-                                      >
-                                        În așteptare
-                                      </Button>
-                                      <Button 
-                                        variant={selectedOrder.status === 'processing' ? 'default' : 'outline'}
-                                        size="sm"
-                                        className={selectedOrder.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
-                                        onClick={() => handleStatusChange(selectedOrder.id, 'processing')}
-                                      >
-                                        În procesare
-                                      </Button>
-                                      <Button 
-                                        variant={selectedOrder.status === 'completed' ? 'default' : 'outline'}
-                                        size="sm"
-                                        className={selectedOrder.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
-                                        onClick={() => handleStatusChange(selectedOrder.id, 'completed')}
-                                      >
-                                        Finalizată
-                                      </Button>
-                                      <Button 
-                                        variant={selectedOrder.status === 'canceled' ? 'default' : 'outline'}
-                                        size="sm"
-                                        className={selectedOrder.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
-                                        onClick={() => handleStatusChange(selectedOrder.id, 'canceled')}
-                                      >
-                                        Anulată
-                                      </Button>
-                                    </div>
-                                  </div>
-                                </div>
+                                <OrderDetails 
+                                  order={selectedOrder}
+                                  onStatusChange={handleStatusChange}
+                                />
                               )}
                             </DialogContent>
                           </Dialog>
@@ -289,7 +232,7 @@ const AdminOrders = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
-                        Nu există comenzi de afișat.
+                        {isLoading ? 'Se încarcă comenzile...' : 'Nu există comenzi de afișat.'}
                       </TableCell>
                     </TableRow>
                   )}
@@ -300,6 +243,99 @@ const AdminOrders = () => {
         </Card>
       </div>
     </AdminLayout>
+  );
+};
+
+// Component for showing order details in the modal
+const OrderDetails = ({ 
+  order, 
+  onStatusChange 
+}: { 
+  order: Order; 
+  onStatusChange: (orderId: string, status: OrderStatus) => void;
+}) => {
+  return (
+    <div className="space-y-6 py-4">
+      <div className="space-y-2">
+        <h4 className="font-medium">Informații client</h4>
+        <div className="rounded-md bg-muted p-4 text-sm">
+          <p><strong>Nume:</strong> {order.customer.name}</p>
+          <p><strong>Email:</strong> {order.customer.email}</p>
+          <p><strong>Telefon:</strong> {order.customer.phone}</p>
+          <p><strong>Adresă:</strong> {order.customer.address}</p>
+        </div>
+      </div>
+      
+      <div className="space-y-2">
+        <h4 className="font-medium">Produse comandate</h4>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Produs</TableHead>
+                <TableHead className="text-right">Preț</TableHead>
+                <TableHead className="text-right">Cant.</TableHead>
+                <TableHead className="text-right">Total</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {order.items.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>{item.name}</TableCell>
+                  <TableCell className="text-right">{item.price.toFixed(2)} lei</TableCell>
+                  <TableCell className="text-right">{item.quantity}</TableCell>
+                  <TableCell className="text-right">
+                    {(item.price * item.quantity).toFixed(2)} lei
+                  </TableCell>
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell colSpan={3} className="text-right font-medium">Total comandă:</TableCell>
+                <TableCell className="text-right font-bold">{order.total.toFixed(2)} lei</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+      
+      <div className="space-y-2">
+        <h4 className="font-medium">Actualizează status</h4>
+        <div className="flex flex-wrap gap-2">
+          <Button 
+            variant={order.status === 'pending' ? 'default' : 'outline'}
+            size="sm"
+            className={order.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+            onClick={() => onStatusChange(order.id, 'pending')}
+          >
+            În așteptare
+          </Button>
+          <Button 
+            variant={order.status === 'processing' ? 'default' : 'outline'}
+            size="sm"
+            className={order.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
+            onClick={() => onStatusChange(order.id, 'processing')}
+          >
+            În procesare
+          </Button>
+          <Button 
+            variant={order.status === 'completed' ? 'default' : 'outline'}
+            size="sm"
+            className={order.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
+            onClick={() => onStatusChange(order.id, 'completed')}
+          >
+            Finalizată
+          </Button>
+          <Button 
+            variant={order.status === 'canceled' ? 'default' : 'outline'}
+            size="sm"
+            className={order.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
+            onClick={() => onStatusChange(order.id, 'canceled')}
+          >
+            Anulată
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

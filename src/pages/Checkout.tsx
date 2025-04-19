@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
-import { getFromDb, saveToDb, updateProductStock } from '@/utils/jsonDb';
+import { getFromDb, saveToDb, updateProductStock, saveOrder } from '@/utils/jsonDb';
 
 interface CustomerInfo {
   name: string;
@@ -43,64 +43,51 @@ const Checkout = () => {
     address: '',
     phone: ''
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
     
-    // Create order object
-    const order: Order = {
-      id: generateOrderId(),
-      items: items,
-      total: subtotal + 15, // Including shipping
-      customer: {
-        name: formData.name,
-        email: formData.email,
-        address: formData.address,
-        phone: formData.phone
-      },
-      status: 'pending',
-      date: new Date().toLocaleDateString('ro-RO')
-    };
-
-    // Get existing orders from our JSON db
-    const existingOrders = getFromDb<Order[]>('orders', []);
-    
-    // Add new order
-    saveToDb('orders', [...existingOrders, order]);
-    
-    // Update stock for each product in the order
-    items.forEach(item => {
-      // Get current product stock and decrease it by the order quantity
-      updateProductStockForOrder(item.id, item.quantity);
-    });
-    
-    // Clear cart and show success message
-    clearCart();
-    toast({
-      title: "Comandă plasată cu succes!",
-      description: "Vă mulțumim pentru comandă. Veți primi un email de confirmare în curând.",
-    });
-    
-    // Redirect to home
-    navigate('/');
-  };
-
-  const updateProductStockForOrder = (productId: string, quantity: number) => {
-    // Get all products from our "database"
-    import('@/data/products').then(({ products }) => {
-      // Find the product by id to get its current stock
-      const productKey = Object.keys(products).find(
-        key => products[key].id === productId
-      );
+    try {
+      // Create order object
+      const order: Order = {
+        id: generateOrderId(),
+        items: items,
+        total: subtotal + 15, // Including shipping
+        customer: {
+          name: formData.name,
+          email: formData.email,
+          address: formData.address,
+          phone: formData.phone
+        },
+        status: 'pending',
+        date: new Date().toLocaleDateString('ro-RO')
+      };
+  
+      // Save the order using our utility function
+      saveOrder(order);
       
-      if (productKey) {
-        const currentStock = products[productKey].stock;
-        const newStock = Math.max(0, currentStock - quantity);
-        
-        // Update the stock in our JSON db
-        updateProductStock(productId, newStock);
-      }
-    });
+      // Clear cart and show success message
+      clearCart();
+      toast({
+        title: "Comandă plasată cu succes!",
+        description: "Vă mulțumim pentru comandă. Veți primi un email de confirmare în curând.",
+      });
+      
+      // Redirect to home
+      navigate('/');
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      toast({
+        title: "Eroare",
+        description: "A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const generateOrderId = (): string => {
@@ -182,8 +169,12 @@ const Checkout = () => {
                 onChange={(e) => setFormData({...formData, phone: e.target.value})}
               />
             </div>
-            <Button type="submit" className="w-full bg-beauty-magenta hover:bg-beauty-magenta/90">
-              Plasează comanda
+            <Button 
+              type="submit" 
+              className="w-full bg-beauty-magenta hover:bg-beauty-magenta/90"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Se procesează...' : 'Plasează comanda'}
             </Button>
           </div>
         </form>

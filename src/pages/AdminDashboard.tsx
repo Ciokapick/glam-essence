@@ -1,155 +1,275 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/AdminLayout';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ShoppingBag, Package, Users, TrendingUp } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/components/ui/use-toast';
+import { ShoppingBag, Package, BarChart } from 'lucide-react';
+import { getAllOrders, getAllProducts } from '@/utils/jsonDb';
 
-const StatCard = ({ title, value, icon, color }: { title: string, value: string, icon: React.ReactNode, color: string }) => (
-  <Card>
-    <CardContent className="p-6 flex items-center justify-between">
-      <div>
-        <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <h3 className="text-2xl font-bold mt-1">{value}</h3>
-      </div>
-      <div className={`p-3 rounded-full ${color}`}>
-        {icon}
-      </div>
-    </CardContent>
-  </Card>
-);
+const LoginForm = ({ onLogin }: { onLogin: () => void }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const { toast } = useToast();
 
-const RecentOrderCard = ({ 
-  id, 
-  customer, 
-  date, 
-  amount, 
-  status 
-}: { 
-  id: string, 
-  customer: string, 
-  date: string, 
-  amount: string, 
-  status: 'pending' | 'processing' | 'completed' | 'canceled' 
-}) => {
-  const statusColors = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    processing: 'bg-blue-100 text-blue-800',
-    completed: 'bg-green-100 text-green-800',
-    canceled: 'bg-red-100 text-red-800'
-  };
-
-  const statusLabels = {
-    pending: 'În așteptare',
-    processing: 'În procesare',
-    completed: 'Finalizată',
-    canceled: 'Anulată'
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Simple hardcoded authentication
+    if (username === 'admin' && password === 'admin') {
+      localStorage.setItem('adminAuth', 'true');
+      toast({
+        title: "Autentificare reușită",
+        description: "Bine ai venit în panoul de administrare.",
+      });
+      onLogin();
+    } else {
+      toast({
+        title: "Autentificare eșuată",
+        description: "Credențiale incorecte. Încearcă din nou.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
-    <div className="flex items-center justify-between p-4 border-b last:border-0">
-      <div>
-        <p className="font-medium">#{id}</p>
-        <p className="text-sm text-muted-foreground">{customer}</p>
-      </div>
-      <div className="text-right">
-        <p className="text-sm text-muted-foreground">{date}</p>
-        <p className="font-medium">{amount} lei</p>
-      </div>
-      <div className={`px-3 py-1 rounded-full text-xs font-medium ${statusColors[status]}`}>
-        {statusLabels[status]}
-      </div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl">Autentificare Admin</CardTitle>
+          <CardDescription>
+            Conectează-te pentru a accesa panoul de administrare
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="username">Utilizator</Label>
+              <Input 
+                id="username" 
+                value={username} 
+                onChange={(e) => setUsername(e.target.value)} 
+                placeholder="admin"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Parolă</Label>
+              <Input 
+                id="password" 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)} 
+                placeholder="******"
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Conectare
+            </Button>
+          </form>
+          <div className="mt-4 text-sm text-gray-500 text-center">
+            <p>Pentru demo: utilizator "admin" parolă "admin"</p>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
 
-const AdminDashboard = () => {
-  const recentOrders = [
-    { id: '1081', customer: 'Ana Popescu', date: '20 Apr 2025', amount: '329.99', status: 'completed' as const },
-    { id: '1080', customer: 'Mihai Ionescu', date: '19 Apr 2025', amount: '199.95', status: 'processing' as const },
-    { id: '1079', customer: 'Elena Dumitrescu', date: '18 Apr 2025', amount: '145.50', status: 'pending' as const },
-    { id: '1078', customer: 'George Vasile', date: '17 Apr 2025', amount: '89.99', status: 'completed' as const },
-    { id: '1077', customer: 'Maria Constantin', date: '16 Apr 2025', amount: '229.99', status: 'canceled' as const },
-  ];
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const [orderCount, setOrderCount] = useState(0);
+  const [productCount, setProductCount] = useState(0);
+  const [revenue, setRevenue] = useState(0);
+  
+  useEffect(() => {
+    const loadStats = async () => {
+      const orders = getAllOrders();
+      const products = await getAllProducts();
+      
+      // Calculate stats
+      setOrderCount(orders.length);
+      setProductCount(Object.keys(products).length);
+      
+      // Calculate total revenue
+      const totalRevenue = orders.reduce((total, order) => total + order.total, 0);
+      setRevenue(totalRevenue);
+    };
+    
+    loadStats();
+    
+    // Refresh stats every 30 seconds
+    const intervalId = setInterval(loadStats, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <AdminLayout>
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">O privire de ansamblu asupra activității magazinului tău</p>
+          <p className="text-gray-500 mt-1">Privire generală asupra magazinului tău</p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard
-            title="Total Comenzi"
-            value="145"
-            icon={<ShoppingBag className="h-6 w-6 text-white" />}
-            color="bg-beauty-magenta"
-          />
-          <StatCard
-            title="Total Produse"
-            value="68"
-            icon={<Package className="h-6 w-6 text-white" />}
-            color="bg-beauty-hotpink"
-          />
-          <StatCard
-            title="Total Clienți"
-            value="1,253"
-            icon={<Users className="h-6 w-6 text-white" />}
-            color="bg-beauty-coral"
-          />
-          <StatCard
-            title="Venituri"
-            value="23,456 lei"
-            icon={<TrendingUp className="h-6 w-6 text-white" />}
-            color="bg-green-500"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Card>
-            <CardHeader>
-              <CardTitle>Comenzi Recente</CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              {recentOrders.map((order) => (
-                <RecentOrderCard key={order.id} {...order} />
-              ))}
+            <CardContent className="pt-6">
+              <div className="flex items-center">
+                <div className="p-2 bg-blue-100 rounded-md mr-4">
+                  <ShoppingBag className="h-8 w-8 text-blue-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Comenzi</p>
+                  <h3 className="text-2xl font-bold">{orderCount}</h3>
+                </div>
+              </div>
+              <Button 
+                variant="link" 
+                className="w-full mt-4 justify-start p-0 text-blue-600"
+                onClick={() => navigate('/admin/orders')}
+              >
+                Vezi comenzile →
+              </Button>
             </CardContent>
           </Card>
-
+          
           <Card>
-            <CardHeader>
-              <CardTitle>Stoc Produse</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Parfum Oriental Mystique</span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">În stoc (23)</span>
+            <CardContent className="pt-6">
+              <div className="flex items-center">
+                <div className="p-2 bg-green-100 rounded-md mr-4">
+                  <Package className="h-8 w-8 text-green-600" />
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Cremă hidratantă Luxury</span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Stoc limitat (5)</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Produse</p>
+                  <h3 className="text-2xl font-bold">{productCount}</h3>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Ser facial Radiance</span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">În stoc (17)</span>
+              </div>
+              <Button 
+                variant="link" 
+                className="w-full mt-4 justify-start p-0 text-green-600"
+                onClick={() => navigate('/admin/products')}
+              >
+                Vezi produsele →
+              </Button>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center">
+                <div className="p-2 bg-purple-100 rounded-md mr-4">
+                  <BarChart className="h-8 w-8 text-purple-600" />
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Parfum Woody Elegance</span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">Stoc epuizat (0)</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Spumă de curățare</span>
-                  <span className="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">În stoc (32)</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Venituri</p>
+                  <h3 className="text-2xl font-bold">{revenue.toFixed(2)} lei</h3>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
+        
+        {/* Recent orders preview */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Comenzi recente</CardTitle>
+            <CardDescription>Ultimele 5 comenzi plasate</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <RecentOrders />
+          </CardContent>
+        </Card>
       </div>
     </AdminLayout>
+  );
+};
+
+// Component for showing recent orders
+const RecentOrders = () => {
+  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const loadOrders = () => {
+      const orders = getAllOrders();
+      // Take only the first 5 orders (they're already sorted by date)
+      setRecentOrders(orders.slice(0, 5));
+    };
+    
+    loadOrders();
+    
+    // Refresh orders every 15 seconds
+    const intervalId = setInterval(loadOrders, 15000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+  
+  if (recentOrders.length === 0) {
+    return (
+      <p className="text-center py-4 text-muted-foreground">
+        Nu există comenzi recente.
+      </p>
+    );
+  }
+  
+  return (
+    <>
+      <div className="space-y-4">
+        {recentOrders.map(order => (
+          <div key={order.id} className="flex justify-between items-center border-b pb-4">
+            <div>
+              <p className="font-medium">Comanda #{order.id}</p>
+              <p className="text-sm text-muted-foreground">
+                {order.customer.name} • {order.date}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className={`px-2 py-1 text-xs rounded-full ${
+                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
+                order.status === 'completed' ? 'bg-green-100 text-green-800' :
+                'bg-red-100 text-red-800'
+              }`}>
+                {order.status === 'pending' ? 'În așteptare' : 
+                 order.status === 'processing' ? 'În procesare' :
+                 order.status === 'completed' ? 'Finalizată' : 'Anulată'}
+              </span>
+              <span className="font-semibold">{order.total.toFixed(2)} lei</span>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      {recentOrders.length > 0 && (
+        <Button 
+          variant="outline" 
+          className="w-full mt-4"
+          onClick={() => navigate('/admin/orders')}
+        >
+          Vezi toate comenzile
+        </Button>
+      )}
+    </>
+  );
+};
+
+// Main component that conditionally renders login or dashboard
+const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  
+  useEffect(() => {
+    const authStatus = localStorage.getItem('adminAuth') === 'true';
+    setIsAuthenticated(authStatus);
+  }, []);
+  
+  return isAuthenticated ? (
+    <Dashboard />
+  ) : (
+    <LoginForm onLogin={() => setIsAuthenticated(true)} />
   );
 };
 

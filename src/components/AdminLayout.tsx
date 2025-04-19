@@ -1,7 +1,8 @@
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import AdminSidebar from './AdminSidebar';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -9,14 +10,25 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
+    // Initialize products database on admin page load
+    const initDatabase = async () => {
+      const { initializeProductsDb } = await import('@/utils/jsonDb');
+      await initializeProductsDb();
+    };
+    
+    initDatabase();
+    
     // Check if admin is authenticated
     const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
-    if (!isAuthenticated) {
+    
+    // If not authenticated and not on login page, redirect to login
+    if (!isAuthenticated && location.pathname !== '/admin') {
       navigate('/admin');
     }
-  }, [navigate]);
+  }, [navigate, location.pathname]);
 
   return (
     <div className="flex min-h-screen bg-gray-50">
