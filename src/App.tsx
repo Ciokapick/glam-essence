@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import HomePage from '@/pages/Home';
-import ProductsPage from '@/pages/Products';
+import HomePage from '@/pages/Index';
+import ProductsPage from '@/pages/Parfumuri';
 import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
 import AccountPage from '@/pages/Account';

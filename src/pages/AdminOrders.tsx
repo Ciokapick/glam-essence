@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
@@ -18,7 +19,7 @@ import { getFromDb, saveToDb } from '@/utils/jsonDb';
 
 type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
-const mockOrders = [
+const mockOrders: Order[] = [
   {
     id: '1081',
     customer: {
@@ -28,8 +29,8 @@ const mockOrders = [
       address: 'Str. Primăverii 15, București'
     },
     items: [
-      { id: '1', name: 'Parfum Oriental Mystique', price: 249.99, quantity: 1 },
-      { id: '2', name: 'Cremă hidratantă Luxury', price: 79.99, quantity: 1 }
+      { id: '1', name: 'Parfum Oriental Mystique', price: 249.99, quantity: 1, image: '/placeholder.svg', category: 'parfumuri' },
+      { id: '2', name: 'Cremă hidratantă Luxury', price: 79.99, quantity: 1, image: '/placeholder.svg', category: 'creme' }
     ],
     total: 329.98,
     status: 'completed',
@@ -44,7 +45,7 @@ const mockOrders = [
       address: 'Str. Florilor 7, Cluj-Napoca'
     },
     items: [
-      { id: '3', name: 'Ser facial Radiance', price: 199.95, quantity: 1 }
+      { id: '3', name: 'Ser facial Radiance', price: 199.95, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' }
     ],
     total: 199.95,
     status: 'processing',
@@ -59,7 +60,7 @@ const mockOrders = [
       address: 'Str. Teilor 22, Iași'
     },
     items: [
-      { id: '4', name: 'Parfum Woody Elegance', price: 145.50, quantity: 1 }
+      { id: '4', name: 'Parfum Woody Elegance', price: 145.50, quantity: 1, image: '/placeholder.svg', category: 'parfumuri' }
     ],
     total: 145.50,
     status: 'pending',
@@ -74,8 +75,8 @@ const mockOrders = [
       address: 'Bvd. Unirii 10, Timișoara'
     },
     items: [
-      { id: '5', name: 'Tonic Purificator', price: 45.99, quantity: 1 },
-      { id: '6', name: 'Spumă de curățare', price: 43.99, quantity: 1 }
+      { id: '5', name: 'Tonic Purificator', price: 45.99, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' },
+      { id: '6', name: 'Spumă de curățare', price: 43.99, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' }
     ],
     total: 89.98,
     status: 'completed',
@@ -90,7 +91,7 @@ const mockOrders = [
       address: 'Str. Crinilor 5, Brașov'
     },
     items: [
-      { id: '7', name: 'Cremă de corp Intense', price: 229.99, quantity: 1 }
+      { id: '7', name: 'Cremă de corp Intense', price: 229.99, quantity: 1, image: '/placeholder.svg', category: 'creme' }
     ],
     total: 229.99,
     status: 'canceled',
