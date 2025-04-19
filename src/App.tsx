@@ -1,8 +1,9 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from '@/pages/Index';
-import ProductsPage from '@/pages/Parfumuri';
+import ParfumuriPage from '@/pages/Parfumuri';
+import CremePage from '@/pages/Creme';
+import IngrijirePage from '@/pages/Ingrijire';
 import AboutPage from '@/pages/About';
 import ContactPage from '@/pages/Contact';
 import AccountPage from '@/pages/Account';
@@ -28,7 +29,9 @@ function App() {
           <Cart />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/parfumuri" element={<ParfumuriPage />} />
+            <Route path="/creme" element={<CremePage />} />
+            <Route path="/ingrijire" element={<IngrijirePage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/account" element={<AccountPage />} />
