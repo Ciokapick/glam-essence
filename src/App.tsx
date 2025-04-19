@@ -17,6 +17,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { products } from '@/data/products';
 import ProductPage from '@/components/ProductPage';
 import InitApp from '@/components/InitApp';
+import NotFound from '@/pages/NotFound';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
             
             {/* Admin routes */}
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/orders" element={<AdminOrders />} />
             
@@ -113,6 +115,9 @@ function App() {
               path="/product/crema-nutritiva-de-noapte-ingrjire" 
               element={<ProductPage product={products["crema-nutritiva-de-noapte-ingrjire"]} />} 
             />
+            
+            {/* Catch-all route for 404 */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
         </WishlistProvider>

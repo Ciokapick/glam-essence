@@ -40,6 +40,9 @@ export const updateProductStock = (productId: string, newStock: number): void =>
       if (productKey) {
         productsCopy[productKey].stock = newStock;
         saveToDb('products', productsCopy);
+        console.log(`Product ${productId} stock updated to ${newStock}`);
+      } else {
+        console.error(`Product with ID ${productId} not found`);
       }
     });
   } else {
@@ -48,6 +51,9 @@ export const updateProductStock = (productId: string, newStock: number): void =>
     if (productKey) {
       allProducts[productKey].stock = newStock;
       saveToDb('products', allProducts);
+      console.log(`Product ${productId} stock updated to ${newStock} (from existing DB)`);
+    } else {
+      console.error(`Product with ID ${productId} not found in existing DB`);
     }
   }
 };
@@ -88,6 +94,8 @@ export const initializeProductsDb = async (): Promise<void> => {
     const { products } = await import('@/data/products');
     saveToDb('products', products);
     console.log('Products database initialized');
+  } else {
+    console.log('Products database already initialized');
   }
 };
 
@@ -101,4 +109,13 @@ export const getAllProducts = async (): Promise<Record<string, any>> => {
   }
   
   return storedProducts;
+};
+
+// Get all orders from database and sort by date (newest first)
+export const getAllOrders = (): any[] => {
+  const orders = getFromDb<any[]>('orders', []);
+  return orders.sort((a, b) => {
+    // Convert date strings to Date objects for sorting
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
 };

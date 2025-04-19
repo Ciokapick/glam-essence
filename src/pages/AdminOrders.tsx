@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { Order } from '@/pages/Checkout';
-import { getFromDb, saveToDb } from '@/utils/jsonDb';
+import { getFromDb, saveToDb, getAllOrders } from '@/utils/jsonDb';
 
 type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
@@ -41,7 +41,8 @@ const AdminOrders = () => {
   
   // Function to load orders from the database
   const loadOrders = () => {
-    const savedOrders = getFromDb<Order[]>('orders', []);
+    const savedOrders = getAllOrders();
+    console.log('Loaded orders:', savedOrders);
     setOrders(savedOrders);
   };
 
@@ -121,7 +122,7 @@ const AdminOrders = () => {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Comenzi</h1>
-            <p className="text-gray-500 mt-1">Gestionează comenzile clienților</p>
+            <p className="text-gray-500 mt-1">Gestionează comenzile clienților ({orders.length} comenzi)</p>
           </div>
           
           <Button 
