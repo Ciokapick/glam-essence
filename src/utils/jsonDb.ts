@@ -52,6 +52,33 @@ export const updateProductStock = (productId: string, newStock: number): void =>
   }
 };
 
+// Get product stock level
+export const getProductStock = (productId: string): Promise<number> => {
+  return new Promise((resolve) => {
+    const allProducts = getFromDb<Record<string, any>>('products', {});
+    
+    if (Object.keys(allProducts).length === 0) {
+      // If no products in localStorage, get from data module
+      import('@/data/products').then(({ products }) => {
+        const productKey = Object.keys(products).find(key => products[key].id === productId);
+        if (productKey && products[productKey].stock !== undefined) {
+          resolve(products[productKey].stock);
+        } else {
+          resolve(0); // Default to 0 if stock not found
+        }
+      });
+    } else {
+      // Get from localStorage
+      const productKey = Object.keys(allProducts).find(key => allProducts[key].id === productId);
+      if (productKey && allProducts[productKey].stock !== undefined) {
+        resolve(allProducts[productKey].stock);
+      } else {
+        resolve(0); // Default to 0 if stock not found
+      }
+    }
+  });
+};
+
 // Initialize products database on application start
 export const initializeProductsDb = async (): Promise<void> => {
   const storedProducts = getFromDb<Record<string, any>>('products', {});
@@ -60,5 +87,18 @@ export const initializeProductsDb = async (): Promise<void> => {
   if (Object.keys(storedProducts).length === 0) {
     const { products } = await import('@/data/products');
     saveToDb('products', products);
+    console.log('Products database initialized');
   }
+};
+
+// Get all products from database
+export const getAllProducts = async (): Promise<Record<string, any>> => {
+  const storedProducts = getFromDb<Record<string, any>>('products', {});
+  
+  if (Object.keys(storedProducts).length === 0) {
+    const { products } = await import('@/data/products');
+    return products;
+  }
+  
+  return storedProducts;
 };

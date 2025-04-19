@@ -19,102 +19,31 @@ import { getFromDb, saveToDb } from '@/utils/jsonDb';
 
 type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
-const mockOrders: Order[] = [
-  {
-    id: '1081',
-    customer: {
-      name: 'Ana Popescu',
-      email: 'ana.popescu@example.com',
-      phone: '0722 123 456',
-      address: 'Str. Primăverii 15, București'
-    },
-    items: [
-      { id: '1', name: 'Parfum Oriental Mystique', price: 249.99, quantity: 1, image: '/placeholder.svg', category: 'parfumuri' },
-      { id: '2', name: 'Cremă hidratantă Luxury', price: 79.99, quantity: 1, image: '/placeholder.svg', category: 'creme' }
-    ],
-    total: 329.98,
-    status: 'completed',
-    date: '20 Apr 2025'
-  },
-  {
-    id: '1080',
-    customer: {
-      name: 'Mihai Ionescu',
-      email: 'mihai.ionescu@example.com',
-      phone: '0733 456 789',
-      address: 'Str. Florilor 7, Cluj-Napoca'
-    },
-    items: [
-      { id: '3', name: 'Ser facial Radiance', price: 199.95, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' }
-    ],
-    total: 199.95,
-    status: 'processing',
-    date: '19 Apr 2025'
-  },
-  {
-    id: '1079',
-    customer: {
-      name: 'Elena Dumitrescu',
-      email: 'elena.dumitrescu@example.com',
-      phone: '0744 789 123',
-      address: 'Str. Teilor 22, Iași'
-    },
-    items: [
-      { id: '4', name: 'Parfum Woody Elegance', price: 145.50, quantity: 1, image: '/placeholder.svg', category: 'parfumuri' }
-    ],
-    total: 145.50,
-    status: 'pending',
-    date: '18 Apr 2025'
-  },
-  {
-    id: '1078',
-    customer: {
-      name: 'George Vasile',
-      email: 'george.vasile@example.com',
-      phone: '0755 321 654',
-      address: 'Bvd. Unirii 10, Timișoara'
-    },
-    items: [
-      { id: '5', name: 'Tonic Purificator', price: 45.99, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' },
-      { id: '6', name: 'Spumă de curățare', price: 43.99, quantity: 1, image: '/placeholder.svg', category: 'ingrijire' }
-    ],
-    total: 89.98,
-    status: 'completed',
-    date: '17 Apr 2025'
-  },
-  {
-    id: '1077',
-    customer: {
-      name: 'Maria Constantin',
-      email: 'maria.constantin@example.com',
-      phone: '0766 987 654',
-      address: 'Str. Crinilor 5, Brașov'
-    },
-    items: [
-      { id: '7', name: 'Cremă de corp Intense', price: 229.99, quantity: 1, image: '/placeholder.svg', category: 'creme' }
-    ],
-    total: 229.99,
-    status: 'canceled',
-    date: '16 Apr 2025'
-  }
-];
-
 const AdminOrders = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { toast } = useToast();
 
+  // Load orders from database on component mount and set up a polling interval
   useEffect(() => {
-    const savedOrders = getFromDb<Order[]>('orders', []);
+    // Initial load
+    loadOrders();
     
-    if (savedOrders.length === 0) {
-      setOrders(mockOrders);
-      saveToDb('orders', mockOrders);
-    } else {
-      setOrders(savedOrders);
-    }
+    // Set up polling to check for new orders every 30 seconds
+    const intervalId = setInterval(() => {
+      loadOrders();
+    }, 30000);
+    
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
+  
+  // Function to load orders from the database
+  const loadOrders = () => {
+    const savedOrders = getFromDb<Order[]>('orders', []);
+    setOrders(savedOrders);
+  };
 
   const filteredOrders = orders.filter(
     order => 
@@ -176,12 +105,31 @@ const AdminOrders = () => {
     return statusClasses[status];
   };
 
+  // Format date to display more user-friendly
+  const formatDate = (dateString: string) => {
+    return dateString;
+  };
+
+  // Sort orders by date (newest first)
+  const sortedOrders = [...filteredOrders].sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+
   return (
     <AdminLayout>
       <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Comenzi</h1>
-          <p className="text-gray-500 mt-1">Gestionează comenzile clienților</p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Comenzi</h1>
+            <p className="text-gray-500 mt-1">Gestionează comenzile clienților</p>
+          </div>
+          
+          <Button 
+            variant="outline" 
+            onClick={loadOrders}
+          >
+            Reîmprospătează
+          </Button>
         </div>
 
         <Card>
@@ -209,133 +157,141 @@ const AdminOrders = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {filteredOrders.map((order) => (
-                    <TableRow key={order.id}>
-                      <TableCell className="font-medium">#{order.id}</TableCell>
-                      <TableCell>
-                        <div>
-                          <p className="font-medium">{order.customer.name}</p>
-                          <p className="text-sm text-muted-foreground">{order.customer.email}</p>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right">{order.total.toFixed(2)} lei</TableCell>
-                      <TableCell>{order.date}</TableCell>
-                      <TableCell>
-                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(order.status)}`}>
-                          {getStatusLabel(order.status)}
-                        </span>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => setSelectedOrder(order)}
-                            >
-                              <Eye size={16} className="mr-1" /> Detalii
-                            </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[525px]">
-                            <DialogHeader>
-                              <DialogTitle>Detalii comandă #{selectedOrder?.id}</DialogTitle>
-                            </DialogHeader>
-                            {selectedOrder && (
-                              <div className="space-y-6 py-4">
-                                <div className="space-y-2">
-                                  <h4 className="font-medium">Informații client</h4>
-                                  <div className="rounded-md bg-muted p-4 text-sm">
-                                    <p><strong>Nume:</strong> {selectedOrder.customer.name}</p>
-                                    <p><strong>Email:</strong> {selectedOrder.customer.email}</p>
-                                    <p><strong>Telefon:</strong> {selectedOrder.customer.phone}</p>
-                                    <p><strong>Adresă:</strong> {selectedOrder.customer.address}</p>
+                  {sortedOrders.length > 0 ? (
+                    sortedOrders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-medium">#{order.id}</TableCell>
+                        <TableCell>
+                          <div>
+                            <p className="font-medium">{order.customer.name}</p>
+                            <p className="text-sm text-muted-foreground">{order.customer.email}</p>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right">{order.total.toFixed(2)} lei</TableCell>
+                        <TableCell>{formatDate(order.date)}</TableCell>
+                        <TableCell>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(order.status as OrderStatus)}`}>
+                            {getStatusLabel(order.status as OrderStatus)}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button 
+                                variant="outline" 
+                                size="sm"
+                                onClick={() => setSelectedOrder(order)}
+                              >
+                                <Eye size={16} className="mr-1" /> Detalii
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[525px]">
+                              <DialogHeader>
+                                <DialogTitle>Detalii comandă #{selectedOrder?.id}</DialogTitle>
+                              </DialogHeader>
+                              {selectedOrder && (
+                                <div className="space-y-6 py-4">
+                                  <div className="space-y-2">
+                                    <h4 className="font-medium">Informații client</h4>
+                                    <div className="rounded-md bg-muted p-4 text-sm">
+                                      <p><strong>Nume:</strong> {selectedOrder.customer.name}</p>
+                                      <p><strong>Email:</strong> {selectedOrder.customer.email}</p>
+                                      <p><strong>Telefon:</strong> {selectedOrder.customer.phone}</p>
+                                      <p><strong>Adresă:</strong> {selectedOrder.customer.address}</p>
+                                    </div>
                                   </div>
-                                </div>
-                                
-                                <div className="space-y-2">
-                                  <h4 className="font-medium">Produse comandate</h4>
-                                  <div className="rounded-md border">
-                                    <Table>
-                                      <TableHeader>
-                                        <TableRow>
-                                          <TableHead>Produs</TableHead>
-                                          <TableHead className="text-right">Preț</TableHead>
-                                          <TableHead className="text-right">Cant.</TableHead>
-                                          <TableHead className="text-right">Total</TableHead>
-                                        </TableRow>
-                                      </TableHeader>
-                                      <TableBody>
-                                        {selectedOrder.items.map((item) => (
-                                          <TableRow key={item.id}>
-                                            <TableCell>{item.name}</TableCell>
-                                            <TableCell className="text-right">{item.price.toFixed(2)} lei</TableCell>
-                                            <TableCell className="text-right">{item.quantity}</TableCell>
-                                            <TableCell className="text-right">
-                                              {(item.price * item.quantity).toFixed(2)} lei
-                                            </TableCell>
+                                  
+                                  <div className="space-y-2">
+                                    <h4 className="font-medium">Produse comandate</h4>
+                                    <div className="rounded-md border">
+                                      <Table>
+                                        <TableHeader>
+                                          <TableRow>
+                                            <TableHead>Produs</TableHead>
+                                            <TableHead className="text-right">Preț</TableHead>
+                                            <TableHead className="text-right">Cant.</TableHead>
+                                            <TableHead className="text-right">Total</TableHead>
                                           </TableRow>
-                                        ))}
-                                        <TableRow>
-                                          <TableCell colSpan={3} className="text-right font-medium">Total comandă:</TableCell>
-                                          <TableCell className="text-right font-bold">{selectedOrder.total.toFixed(2)} lei</TableCell>
-                                        </TableRow>
-                                      </TableBody>
-                                    </Table>
+                                        </TableHeader>
+                                        <TableBody>
+                                          {selectedOrder.items.map((item) => (
+                                            <TableRow key={item.id}>
+                                              <TableCell>{item.name}</TableCell>
+                                              <TableCell className="text-right">{item.price.toFixed(2)} lei</TableCell>
+                                              <TableCell className="text-right">{item.quantity}</TableCell>
+                                              <TableCell className="text-right">
+                                                {(item.price * item.quantity).toFixed(2)} lei
+                                              </TableCell>
+                                            </TableRow>
+                                          ))}
+                                          <TableRow>
+                                            <TableCell colSpan={3} className="text-right font-medium">Total comandă:</TableCell>
+                                            <TableCell className="text-right font-bold">{selectedOrder.total.toFixed(2)} lei</TableCell>
+                                          </TableRow>
+                                        </TableBody>
+                                      </Table>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="space-y-2">
+                                    <h4 className="font-medium">Actualizează status</h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      <Button 
+                                        variant={selectedOrder.status === 'pending' ? 'default' : 'outline'}
+                                        size="sm"
+                                        className={selectedOrder.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+                                        onClick={() => handleStatusChange(selectedOrder.id, 'pending')}
+                                      >
+                                        În așteptare
+                                      </Button>
+                                      <Button 
+                                        variant={selectedOrder.status === 'processing' ? 'default' : 'outline'}
+                                        size="sm"
+                                        className={selectedOrder.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
+                                        onClick={() => handleStatusChange(selectedOrder.id, 'processing')}
+                                      >
+                                        În procesare
+                                      </Button>
+                                      <Button 
+                                        variant={selectedOrder.status === 'completed' ? 'default' : 'outline'}
+                                        size="sm"
+                                        className={selectedOrder.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
+                                        onClick={() => handleStatusChange(selectedOrder.id, 'completed')}
+                                      >
+                                        Finalizată
+                                      </Button>
+                                      <Button 
+                                        variant={selectedOrder.status === 'canceled' ? 'default' : 'outline'}
+                                        size="sm"
+                                        className={selectedOrder.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
+                                        onClick={() => handleStatusChange(selectedOrder.id, 'canceled')}
+                                      >
+                                        Anulată
+                                      </Button>
+                                    </div>
                                   </div>
                                 </div>
-                                
-                                <div className="space-y-2">
-                                  <h4 className="font-medium">Actualizează status</h4>
-                                  <div className="flex flex-wrap gap-2">
-                                    <Button 
-                                      variant={selectedOrder.status === 'pending' ? 'default' : 'outline'}
-                                      size="sm"
-                                      className={selectedOrder.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
-                                      onClick={() => handleStatusChange(selectedOrder.id, 'pending')}
-                                    >
-                                      În așteptare
-                                    </Button>
-                                    <Button 
-                                      variant={selectedOrder.status === 'processing' ? 'default' : 'outline'}
-                                      size="sm"
-                                      className={selectedOrder.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
-                                      onClick={() => handleStatusChange(selectedOrder.id, 'processing')}
-                                    >
-                                      În procesare
-                                    </Button>
-                                    <Button 
-                                      variant={selectedOrder.status === 'completed' ? 'default' : 'outline'}
-                                      size="sm"
-                                      className={selectedOrder.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
-                                      onClick={() => handleStatusChange(selectedOrder.id, 'completed')}
-                                    >
-                                      Finalizată
-                                    </Button>
-                                    <Button 
-                                      variant={selectedOrder.status === 'canceled' ? 'default' : 'outline'}
-                                      size="sm"
-                                      className={selectedOrder.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
-                                      onClick={() => handleStatusChange(selectedOrder.id, 'canceled')}
-                                    >
-                                      Anulată
-                                    </Button>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </DialogContent>
-                        </Dialog>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="ml-2 text-red-500 hover:text-red-700"
-                          onClick={() => handleDeleteOrder(order.id)}
-                        >
-                          <Trash2 size={16} />
-                        </Button>
+                              )}
+                            </DialogContent>
+                          </Dialog>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            className="ml-2 text-red-500 hover:text-red-700"
+                            onClick={() => handleDeleteOrder(order.id)}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
+                        Nu există comenzi de afișat.
                       </TableCell>
                     </TableRow>
-                  ))}
+                  )}
                 </TableBody>
               </Table>
             </div>
