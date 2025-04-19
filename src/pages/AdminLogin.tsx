@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -22,7 +21,6 @@ const AdminLogin = () => {
     // Simulate API call delay
     setTimeout(() => {
       if (username === 'admin' && password === '1234') {
-        // Set admin session in localStorage
         localStorage.setItem('adminAuth', 'true');
         toast({
           title: "Autentificare reușită",
@@ -51,11 +49,6 @@ const AdminLogin = () => {
         <ArrowLeft className="h-4 w-4" />
         Înapoi la magazin
       </Button>
-      
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-beauty-magenta/20 blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-beauty-coral/20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-      </div>
       
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">

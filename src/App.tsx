@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import HomePage from '@/pages/Index';
@@ -11,6 +12,8 @@ import Checkout from '@/pages/Checkout';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminProducts from '@/pages/AdminProducts';
 import AdminOrders from '@/pages/AdminOrders';
+import AdminLogin from '@/pages/AdminLogin';
+import WishlistPage from '@/pages/WishlistPage';
 import Cart from '@/components/Cart';
 import { CartProvider } from '@/contexts/CartContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
@@ -36,9 +39,10 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/wishlist" element={<WishlistPage />} />
             
             {/* Admin routes */}
-            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/admin/products" element={<AdminProducts />} />
             <Route path="/admin/orders" element={<AdminOrders />} />

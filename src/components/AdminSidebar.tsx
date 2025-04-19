@@ -46,7 +46,7 @@ const AdminSidebar: React.FC = () => {
       title: "Deconectare reușită",
       description: "Ai fost deconectat din panoul de administrare.",
     });
-    navigate('/admin');
+    navigate('/');
   };
 
   return (
