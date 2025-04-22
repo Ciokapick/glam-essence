@@ -144,36 +144,12 @@ export const saveOrder = (order: any): void => {
 // Helper function to update stock after an order
 const updateProductStockAfterOrder = (productId: string, quantity: number): void => {
   // Get current product
-  const allProducts = getFromDb<Record<string, any>>('products', {});
-  
-  if (Object.keys(allProducts).length > 0) {
-    // Find the product by ID
-    const productKey = Object.keys(allProducts).find(key => allProducts[key].id === productId);
+  getProductStock(productId).then(currentStock => {
+    // Calculate new stock by subtracting the ordered quantity
+    const newStock = Math.max(0, currentStock - quantity);
     
-    if (productKey) {
-      // Calculate new stock by subtracting the ordered quantity
-      const currentStock = allProducts[productKey].stock || 0;
-      const newStock = Math.max(0, currentStock - quantity);
-      
-      // Update the stock
-      allProducts[productKey].stock = newStock;
-      saveToDb('products', allProducts);
-      console.log(`Product ${productId} stock updated to ${newStock} after order`);
-    }
-  } else {
-    // If products not in localStorage yet, import and update
-    import('@/data/products').then(({ products }) => {
-      const productsCopy = { ...products };
-      const productKey = Object.keys(productsCopy).find(key => productsCopy[key].id === productId);
-      
-      if (productKey) {
-        const currentStock = productsCopy[productKey].stock || 0;
-        const newStock = Math.max(0, currentStock - quantity);
-        
-        productsCopy[productKey].stock = newStock;
-        saveToDb('products', productsCopy);
-        console.log(`Product ${productId} stock updated to ${newStock} after order (from imported data)`);
-      }
-    });
-  }
+    // Update the stock
+    updateProductStock(productId, newStock);
+    console.log(`Product ${productId} stock updated to ${newStock} after order`);
+  });
 };

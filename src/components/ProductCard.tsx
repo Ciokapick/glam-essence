@@ -1,84 +1,62 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { ShoppingBag, Heart, Eye } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Star, ShoppingBag, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
-import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import ProductDetailsPopup from './ProductDetailsPopup';
-import { getFromDb } from '@/utils/jsonDb';
+import { getProductStock } from '@/utils/jsonDb';
 
 interface ProductCardProps {
   id: string;
+  slug?: string;
   name: string;
   price: number;
   image: string;
   category: string;
   isNew?: boolean;
   isSale?: boolean;
-  rating?: number;
   discount?: number;
+  rating?: number;
   description?: string;
-  features?: string[];
-  reviewCount?: number;
-  stock?: number;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
+  slug,
   name,
   price,
   image,
   category,
-  isNew = false,
-  isSale = false,
+  isNew,
+  isSale,
+  discount,
   rating = 0,
-  discount = 0,
-  description,
-  features,
-  reviewCount = 0,
-  stock = 0
+  description
 }) => {
   const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const isFavorite = isInWishlist(id);
-  const [showDetails, setShowDetails] = useState(false);
-  const [actualStock, setActualStock] = useState(stock);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [stock, setStock] = useState<number>(0);
   
   useEffect(() => {
+    // Fetch the current stock from the database
     const fetchStock = async () => {
-      const storedProducts = getFromDb<Record<string, any>>('products', {});
-      
-      if (Object.keys(storedProducts).length > 0) {
-        const productKey = Object.keys(storedProducts).find(
-          key => storedProducts[key].id === id
-        );
-        
-        if (productKey && storedProducts[productKey].stock !== undefined) {
-          setActualStock(storedProducts[productKey].stock);
-        }
-      }
+      const currentStock = await getProductStock(id);
+      setStock(currentStock);
     };
     
     fetchStock();
-    
-    // Add an interval to periodically check for stock updates
-    const intervalId = setInterval(fetchStock, 5000);
-    
-    return () => clearInterval(intervalId);
   }, [id]);
   
-  const isOutOfStock = actualStock <= 0;
-
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (isOutOfStock) {
+    if (stock <= 0) {
       toast({
-        title: "Produs indisponibil",
-        description: "Ne pare rău, acest produs nu este momentan în stoc.",
+        title: "Stoc epuizat",
+        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
         variant: "destructive",
       });
       return;
@@ -99,152 +77,117 @@ const ProductCard: React.FC<ProductCardProps> = ({
       variant: "default",
     });
   };
-
-  const handleWishlist = (e: React.MouseEvent) => {
+  
+  const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    
-    if (isFavorite) {
-      removeFromWishlist(id);
-      toast({
-        title: "Eliminat de la favorite",
-        description: `${name} a fost eliminat din lista ta de favorite.`,
-        variant: "default",
-      });
-    } else {
-      addToWishlist({
-        id,
-        name,
-        price,
-        image,
-        category,
-        discount: isSale ? discount : undefined
-      });
-      toast({
-        title: "Adăugat la favorite",
-        description: `${name} a fost adăugat la lista ta de favorite.`,
-        variant: "default",
-      });
-    }
+    setIsPopupOpen(true);
   };
-
-  const handleShowDetails = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowDetails(true);
-  };
-
+  
+  const productUrl = slug ? `/product/${slug}` : `/product/${id}`;
+  
+  // Calculate discounted price if on sale
+  const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
+  
   return (
     <>
-      <div className="product-card group block cursor-pointer" onClick={handleShowDetails}>
-        <div className="relative overflow-hidden rounded-t-xl h-64">
-          <img 
-            src={image} 
-            alt={name} 
-            className="w-full h-full object-cover product-image" 
+      <Link to={productUrl} className="group block">
+        <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-square mb-4">
+          <img
+            src={image}
+            alt={name}
+            className="w-full h-full object-cover transition-transform group-hover:scale-105"
           />
           
-          <div className="shimmer animate-shimmer"></div>
-          
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
-            {isNew && (
-              <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">Nou</Badge>
-            )}
-            {isSale && (
-              <Badge className="bg-beauty-rose text-beauty-rose-foreground border-0">-{discount}%</Badge>
-            )}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+            <button
+              onClick={handleQuickView}
+              className="p-2 bg-white rounded-full hover:bg-gray-100"
+              aria-label="Quick view"
+            >
+              <Eye className="h-5 w-5" />
+            </button>
+            <button
+              onClick={handleAddToCart}
+              disabled={stock <= 0}
+              className={`p-2 bg-white rounded-full ${stock > 0 ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
+              aria-label="Add to cart"
+            >
+              <ShoppingBag className="h-5 w-5" />
+            </button>
           </div>
           
-          <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-            <div className="flex gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-              <Button 
-                size="sm" 
-                className="bg-white text-black hover:bg-white/90 rounded-full"
-                onClick={handleAddToCart}
-                disabled={isOutOfStock}
-              >
-                <ShoppingBag className="h-4 w-4 mr-1" />
-                {isOutOfStock ? 'Indisponibil' : 'Adaugă'}
-              </Button>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                className={`${isFavorite ? 'bg-beauty-rose text-white' : 'bg-white text-black'} hover:bg-white/90 rounded-full`}
-                onClick={handleWishlist}
-              >
-                <Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />
-              </Button>
-              <Button 
-                size="icon" 
-                variant="ghost" 
-                className="bg-white text-black hover:bg-white/90 rounded-full"
-                onClick={handleShowDetails}
-              >
-                <Eye className="h-4 w-4" />
-              </Button>
-            </div>
+          {/* Status badges */}
+          <div className="absolute top-2 left-2 flex flex-col gap-2">
+            {isNew && (
+              <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">
+                Nou
+              </Badge>
+            )}
+            {isSale && discount && (
+              <Badge className="bg-beauty-rose text-beauty-rose-foreground border-0">
+                -{discount}%
+              </Badge>
+            )}
+            {stock <= 0 && (
+              <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-700">
+                Stoc epuizat
+              </Badge>
+            )}
           </div>
         </div>
         
-        <div className="p-4">
-          <div className="text-sm text-muted-foreground mb-1">{category}</div>
-          <h3 className="font-medium text-lg mb-2">{name}</h3>
-          <div className="flex flex-col gap-2">
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                {isSale ? (
-                  <>
-                    <span className="text-muted-foreground line-through mr-2">{price.toFixed(2)} lei</span>
-                    <span className="font-semibold">{(price * (1 - discount / 100)).toFixed(2)} lei</span>
-                  </>
-                ) : (
-                  <span className="font-semibold">{price.toFixed(2)} lei</span>
-                )}
-              </div>
-              
-              {rating > 0 && (
-                <div className="flex items-center">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <svg 
-                        key={i} 
-                        className={`h-4 w-4 ${i < rating ? 'text-beauty-gold' : 'text-gray-300'}`} 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              )}
+        <div>
+          <h3 className="font-medium text-lg mb-1 group-hover:text-beauty-magenta transition-colors">{name}</h3>
+          <p className="text-muted-foreground mb-2">{category}</p>
+          
+          {/* Star rating */}
+          {rating > 0 && (
+            <div className="flex mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star 
+                  key={i}
+                  className={`h-4 w-4 ${i < rating ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
+                />
+              ))}
             </div>
-            <div className={`text-sm ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
-              {isOutOfStock ? 'Indisponibil' : `În stoc: ${actualStock} buc`}
-            </div>
+          )}
+          
+          {/* Price display */}
+          <div className="flex items-center">
+            {isSale && discount ? (
+              <>
+                <span className="font-bold mr-2">{finalPrice.toFixed(2)} lei</span>
+                <span className="text-muted-foreground text-sm line-through">{price.toFixed(2)} lei</span>
+              </>
+            ) : (
+              <span className="font-bold">{price.toFixed(2)} lei</span>
+            )}
+          </div>
+          
+          {/* Stock info */}
+          <div className="text-sm text-muted-foreground mt-1">
+            {stock > 0 ? `${stock} în stoc` : 'Stoc epuizat'}
           </div>
         </div>
-      </div>
-
-      <ProductDetailsPopup 
-        isOpen={showDetails}
-        onClose={() => setShowDetails(false)}
-        product={{
-          id,
-          name,
-          price,
-          image,
-          category,
-          isNew,
-          isSale,
-          discount,
-          rating,
-          reviewCount,
-          description,
-          features,
-          stock: actualStock
-        }}
-      />
+      </Link>
+      
+      {isPopupOpen && (
+        <ProductDetailsPopup
+          id={id}
+          name={name}
+          price={price}
+          image={image}
+          category={category}
+          isNew={isNew}
+          isSale={isSale}
+          discount={discount}
+          rating={rating}
+          description={description}
+          stock={stock}
+          onClose={() => setIsPopupOpen(false)}
+        />
+      )}
     </>
   );
 };

@@ -1,256 +1,258 @@
 
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
+import { X, Minus, Plus, ShoppingBag, Heart } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
-import { Star, Heart, ShoppingBag, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
-import { getFromDb } from '@/utils/jsonDb';
+import { getProductStock } from '@/utils/jsonDb';
 
 interface ProductDetailsPopupProps {
-  isOpen: boolean;
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  category: string;
+  isNew?: boolean;
+  isSale?: boolean;
+  discount?: number;
+  rating?: number;
+  description?: string;
+  stock?: number;
   onClose: () => void;
-  product: {
-    id: string;
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-    description?: string;
-    features?: string[];
-    isNew?: boolean;
-    isSale?: boolean;
-    discount?: number;
-    rating?: number;
-    reviewCount?: number;
-    stock?: number;
-  };
 }
 
-const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({ 
-  isOpen, 
-  onClose, 
-  product 
+const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
+  id,
+  name,
+  price,
+  image,
+  category,
+  isNew,
+  isSale,
+  discount,
+  description,
+  stock: initialStock = 0,
+  onClose
 }) => {
   const { addToCart } = useCart();
-  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const isFavorite = isInWishlist(product.id);
-  const [actualStock, setActualStock] = useState(product.stock || 0);
+  const { addToWishlist, isInWishlist } = useWishlist();
+  const [quantity, setQuantity] = useState(1);
+  const [stock, setStock] = useState(initialStock);
   
+  // Get the latest stock information
   useEffect(() => {
-    // Get the actual stock from our JSON database
     const fetchStock = async () => {
-      const storedProducts = getFromDb<Record<string, any>>('products', {});
-      
-      if (Object.keys(storedProducts).length > 0) {
-        const productKey = Object.keys(storedProducts).find(
-          key => storedProducts[key].id === product.id
-        );
-        
-        if (productKey && storedProducts[productKey].stock !== undefined) {
-          setActualStock(storedProducts[productKey].stock);
-        }
-      }
+      const currentStock = await getProductStock(id);
+      setStock(currentStock);
     };
     
-    if (isOpen) {
-      fetchStock();
-    }
-    
-    // Add an interval to periodically check for stock updates when popup is open
-    let intervalId: number | undefined;
-    if (isOpen) {
-      intervalId = window.setInterval(fetchStock, 5000);
-    }
-    
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, [isOpen, product.id]);
+    fetchStock();
+  }, [id]);
   
-  const isOutOfStock = actualStock <= 0;
-
+  const incrementQuantity = () => {
+    if (quantity < stock) {
+      setQuantity(prev => prev + 1);
+    }
+  };
+  
+  const decrementQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
+  };
+  
   const handleAddToCart = () => {
-    if (isOutOfStock) {
+    if (stock <= 0) {
       toast({
-        title: "Produs indisponibil",
-        description: "Ne pare rău, acest produs nu este momentan în stoc.",
+        title: "Stoc epuizat",
+        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
         variant: "destructive",
       });
       return;
     }
-
+    
     addToCart({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-      category: product.category,
-      discount: product.isSale ? product.discount : undefined
+      id,
+      name,
+      price,
+      image,
+      category,
+      discount: isSale ? discount : undefined,
+      quantity
     });
     
     toast({
       title: "Adăugat în coș",
-      description: `${product.name} a fost adăugat în coșul tău.`,
+      description: `${name} a fost adăugat în coșul tău.`,
+      variant: "default",
+    });
+    
+    onClose();
+  };
+  
+  const handleAddToWishlist = () => {
+    addToWishlist({
+      id,
+      name,
+      price,
+      image,
+      category,
+      discount: isSale ? discount : undefined
+    });
+    
+    toast({
+      title: "Adăugat la favorite",
+      description: `${name} a fost adăugat la lista ta de favorite.`,
       variant: "default",
     });
   };
-
-  const handleWishlist = () => {
-    if (isFavorite) {
-      removeFromWishlist(product.id);
-      toast({
-        title: "Eliminat de la favorite",
-        description: `${product.name} a fost eliminat din lista ta de favorite.`,
-        variant: "default",
-      });
-    } else {
-      addToWishlist({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        category: product.category,
-        discount: product.isSale ? product.discount : undefined
-      });
-      toast({
-        title: "Adăugat la favorite",
-        description: `${product.name} a fost adăugat la lista ta de favorite.`,
-        variant: "default",
-      });
-    }
-  };
-
-  const defaultDescription = "Un produs de înaltă calitate, formulat pentru a oferi cele mai bune rezultate. Perfect pentru utilizare zilnică și pentru toate tipurile de piele.";
-  const defaultFeatures = [
-    "Formulă delicată pentru toate tipurile de piele",
-    "Ingrediente naturale de înaltă calitate",
-    "Fără parabeni și ingrediente dăunătoare",
-    "Testat dermatologic",
-    "Nu este testat pe animale"
-  ];
-
+  
+  // Calculate discounted price if on sale
+  const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
+  const isFavorite = isInWishlist(id);
+  
+  // Handle click outside to close
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('popup-overlay')) {
+        onClose();
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
+  
+  // Prevent body scroll
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+  
   return (
-    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="sm:max-w-lg w-full overflow-auto" side="right">
-        <SheetHeader className="pb-4">
-          <div className="flex justify-between items-center">
-            <SheetTitle className="text-xl">{product.name}</SheetTitle>
-            <SheetClose className="rounded-full hover:bg-gray-100 p-1" onClick={onClose}>
-              <X className="h-5 w-5" />
-            </SheetClose>
-          </div>
-        </SheetHeader>
-        
-        <div className="space-y-6">
-          {/* Product Image */}
-          <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-            <img 
-              src={product.image} 
-              alt={product.name} 
-              className="w-full h-full object-cover" 
-            />
-            
-            {product.isNew && (
-              <Badge className="absolute top-4 left-4 bg-beauty-mint text-beauty-mint-foreground border-0">
-                Nou
-              </Badge>
-            )}
-            
-            {product.isSale && (
-              <Badge className="absolute top-4 left-4 bg-beauty-rose text-beauty-rose-foreground border-0">
-                -{product.discount}%
-              </Badge>
-            )}
-          </div>
-          
-          {/* Category */}
-          <div className="text-sm text-muted-foreground">{product.category}</div>
-          
-          {/* Ratings */}
-          {product.rating && (
-            <div className="flex items-center">
-              <div className="flex mr-2">
-                {[...Array(5)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    className={`h-4 w-4 ${i < (product.rating || 0) ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`} 
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-muted-foreground">{product.reviewCount || 0} reviews</span>
-            </div>
-          )}
-          
-          {/* Price */}
-          <div className="flex items-center">
-            {product.isSale ? (
-              <>
-                <span className="text-2xl font-bold mr-3">
-                  {(product.price * (1 - (product.discount || 0) / 100)).toFixed(2)} lei
-                </span>
-                <span className="text-lg text-muted-foreground line-through">
-                  {product.price.toFixed(2)} lei
-                </span>
-              </>
-            ) : (
-              <span className="text-2xl font-bold">{product.price.toFixed(2)} lei</span>
-            )}
-          </div>
-          
-          {/* Stock Information */}
-          <div className={`text-sm ${isOutOfStock ? 'text-red-500' : 'text-green-600'}`}>
-            {isOutOfStock ? 'Indisponibil' : `În stoc: ${actualStock} buc`}
-          </div>
-          
-          {/* Description */}
-          <p className="text-muted-foreground">
-            {product.description || defaultDescription}
-          </p>
-          
-          {/* Add to Cart/Wishlist */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button 
-              className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1"
-              onClick={handleAddToCart}
-              disabled={isOutOfStock}
-            >
-              <ShoppingBag className="h-5 w-5 mr-2" />
-              {isOutOfStock ? 'Indisponibil' : 'Adaugă în coș'}
-            </Button>
-            <Button 
-              variant="outline" 
-              className={`${
-                isFavorite 
-                  ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
-                  : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
-              }`}
-              onClick={handleWishlist}
-            >
-              <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
-              {isFavorite ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
-            </Button>
-          </div>
-          
-          {/* Product Details */}
-          {(product.features || defaultFeatures) && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Detalii produs</h3>
-              <ul className="space-y-2">
-                {(product.features || defaultFeatures).map((feature, index) => (
-                  <li key={index} className="flex items-start">
-                    <div className="h-2 w-2 rounded-full bg-beauty-magenta mt-1.5 mr-3"></div>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 popup-overlay bg-black/50">
+      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="sticky top-0 bg-white z-10 flex justify-end p-4">
+          <button 
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <X className="h-6 w-6" />
+          </button>
         </div>
-      </SheetContent>
-    </Sheet>
+        
+        <div className="p-6 pt-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Product Image */}
+            <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-square">
+              <img
+                src={image}
+                alt={name}
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Status badges */}
+              <div className="absolute top-2 left-2 flex flex-col gap-2">
+                {isNew && (
+                  <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">
+                    Nou
+                  </Badge>
+                )}
+                {isSale && discount && (
+                  <Badge className="bg-beauty-rose text-beauty-rose-foreground border-0">
+                    -{discount}%
+                  </Badge>
+                )}
+                {stock <= 0 && (
+                  <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-700">
+                    Stoc epuizat
+                  </Badge>
+                )}
+              </div>
+            </div>
+            
+            {/* Product Info */}
+            <div>
+              <h3 className="text-2xl font-bold mb-2">{name}</h3>
+              <p className="text-muted-foreground mb-4">{category}</p>
+              
+              {/* Price display */}
+              <div className="flex items-center mb-4">
+                {isSale && discount ? (
+                  <>
+                    <span className="text-xl font-bold mr-2">{finalPrice.toFixed(2)} lei</span>
+                    <span className="text-muted-foreground line-through">{price.toFixed(2)} lei</span>
+                  </>
+                ) : (
+                  <span className="text-xl font-bold">{price.toFixed(2)} lei</span>
+                )}
+              </div>
+              
+              {/* Description */}
+              {description && (
+                <p className="text-muted-foreground mb-6">
+                  {description}
+                </p>
+              )}
+              
+              {/* Quantity */}
+              <div className="mb-6">
+                <div className="flex items-center space-x-4">
+                  <span className="font-medium">Cantitate:</span>
+                  <div className="flex items-center border rounded-md">
+                    <button
+                      className="px-3 py-2 hover:bg-gray-100" 
+                      onClick={decrementQuantity}
+                      disabled={quantity <= 1}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="px-4 py-2 w-12 text-center">{quantity}</span>
+                    <button
+                      className="px-3 py-2 hover:bg-gray-100" 
+                      onClick={incrementQuantity}
+                      disabled={quantity >= stock}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {stock} disponibile
+                  </span>
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  className="flex-1 bg-beauty-magenta hover:bg-beauty-magenta/90 text-white py-2 px-4 rounded flex items-center justify-center"
+                  onClick={handleAddToCart}
+                  disabled={stock <= 0}
+                >
+                  <ShoppingBag className="h-5 w-5 mr-2" />
+                  {stock > 0 ? 'Adaugă în coș' : 'Stoc epuizat'}
+                </button>
+                <button
+                  className={`border py-2 px-4 rounded flex items-center justify-center ${
+                    isFavorite 
+                      ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
+                      : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
+                  }`}
+                  onClick={handleAddToWishlist}
+                >
+                  <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
+                  Adaugă la favorite
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
