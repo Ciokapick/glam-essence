@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -32,13 +31,18 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           key => storedProducts[key].id === product.id
         );
         
-        if (productKey) {
+        if (productKey && storedProducts[productKey].stock !== undefined) {
           setActualStock(storedProducts[productKey].stock);
         }
       }
     };
     
     fetchStock();
+    
+    // Add an interval to periodically check for stock updates
+    const intervalId = setInterval(fetchStock, 5000);
+    
+    return () => clearInterval(intervalId);
   }, [product.id]);
   
   const isOutOfStock = actualStock <= 0;
@@ -69,7 +73,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
     });
   };
   
-  const handleAddToWishlist = () => {
+  const handleWishlist = () => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
       toast({
@@ -184,7 +188,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
                       ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
                       : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
                   }`}
-                  onClick={handleAddToWishlist}
+                  onClick={handleWishlist}
                 >
                   <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
                   {isFavorite ? 'Eliminat de la favorite' : 'Adaugă la favorite'}

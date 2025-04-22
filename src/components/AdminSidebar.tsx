@@ -62,7 +62,7 @@ const AdminSidebar: React.FC = () => {
   if (isMobile && !sidebarOpen) {
     return (
       <button
-        className="fixed top-4 left-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
+        className="fixed top-4 right-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
         onClick={() => setSidebarOpen(true)}
         aria-label="Deschide meniul admin"
       >
@@ -75,7 +75,7 @@ const AdminSidebar: React.FC = () => {
     <>
       {isMobile && (
         <button
-          className="fixed top-4 left-[calc(100vw-60px)] z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
+          className="fixed top-4 right-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
           onClick={() => setSidebarOpen(false)}
           aria-label="Ascunde meniul admin"
           style={{ display: !sidebarOpen ? 'none' : 'block' }}
@@ -128,4 +128,3 @@ const AdminSidebar: React.FC = () => {
 };
 
 export default AdminSidebar;
-

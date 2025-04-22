@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { ShoppingBag, Heart, Eye } from 'lucide-react';
@@ -54,13 +55,18 @@ const ProductCard: React.FC<ProductCardProps> = ({
           key => storedProducts[key].id === id
         );
         
-        if (productKey) {
+        if (productKey && storedProducts[productKey].stock !== undefined) {
           setActualStock(storedProducts[productKey].stock);
         }
       }
     };
     
     fetchStock();
+    
+    // Add an interval to periodically check for stock updates
+    const intervalId = setInterval(fetchStock, 5000);
+    
+    return () => clearInterval(intervalId);
   }, [id]);
   
   const isOutOfStock = actualStock <= 0;

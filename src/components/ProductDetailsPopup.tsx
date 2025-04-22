@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
@@ -7,7 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Star, Heart, ShoppingBag, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
-import { products } from '@/data/products';
+import { getFromDb } from '@/utils/jsonDb';
 
 interface ProductDetailsPopupProps {
   isOpen: boolean;
@@ -37,10 +37,39 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const isFavorite = isInWishlist(product.id);
+  const [actualStock, setActualStock] = useState(product.stock || 0);
   
-  // Get the actual stock from products data to ensure synchronization
-  const productSlug = Object.keys(products).find(key => products[key].id === product.id);
-  const actualStock = productSlug ? products[productSlug].stock : product.stock || 0;
+  useEffect(() => {
+    // Get the actual stock from our JSON database
+    const fetchStock = async () => {
+      const storedProducts = getFromDb<Record<string, any>>('products', {});
+      
+      if (Object.keys(storedProducts).length > 0) {
+        const productKey = Object.keys(storedProducts).find(
+          key => storedProducts[key].id === product.id
+        );
+        
+        if (productKey && storedProducts[productKey].stock !== undefined) {
+          setActualStock(storedProducts[productKey].stock);
+        }
+      }
+    };
+    
+    if (isOpen) {
+      fetchStock();
+    }
+    
+    // Add an interval to periodically check for stock updates when popup is open
+    let intervalId: number | undefined;
+    if (isOpen) {
+      intervalId = window.setInterval(fetchStock, 5000);
+    }
+    
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isOpen, product.id]);
+  
   const isOutOfStock = actualStock <= 0;
 
   const handleAddToCart = () => {
@@ -206,17 +235,19 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
           </div>
           
           {/* Product Details */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Detalii produs</h3>
-            <ul className="space-y-2">
-              {(product.features || defaultFeatures).map((feature, index) => (
-                <li key={index} className="flex items-start">
-                  <div className="h-2 w-2 rounded-full bg-beauty-magenta mt-1.5 mr-3"></div>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {(product.features || defaultFeatures) && (
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Detalii produs</h3>
+              <ul className="space-y-2">
+                {(product.features || defaultFeatures).map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <div className="h-2 w-2 rounded-full bg-beauty-magenta mt-1.5 mr-3"></div>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </SheetContent>
     </Sheet>
