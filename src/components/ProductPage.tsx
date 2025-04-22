@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -57,9 +56,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
         price: product.price,
         image: product.image,
         category: product.category,
-        discount: product.isSale ? product.discount : undefined,
-        quantity: quantity
-      });
+        discount: product.isSale ? product.discount : undefined
+      }, quantity);
       
       toast({
         title: "Adăugat în coș",

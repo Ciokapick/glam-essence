@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, Minus, Plus, ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -78,9 +77,8 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
       price,
       image,
       category,
-      discount: isSale ? discount : undefined,
-      quantity
-    });
+      discount: isSale ? discount : undefined
+    }, quantity);
     
     toast({
       title: "Adăugat în coș",
