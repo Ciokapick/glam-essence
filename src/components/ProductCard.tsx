@@ -84,7 +84,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setIsPopupOpen(true);
   };
   
-  const productUrl = slug ? `/product/${slug}` : `/product/${id}`;
+  // Fix the product URL to ensure it uses the slug (NOT the ID)
+  const productUrl = slug ? `/product/${slug}` : `/product/${name.toLowerCase().replace(/\s+/g, '-')}`;
   
   // Calculate discounted price if on sale
   const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;

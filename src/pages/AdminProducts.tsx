@@ -8,7 +8,7 @@ import { Edit, Plus, Search, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
-import { getFromDb, saveToDb, updateProductStock } from '@/utils/jsonDb';
+import { getFromDb, saveToDb, updateProductStock, getAllProducts } from '@/utils/jsonDb';
 
 type Product = {
   id: string;
@@ -37,15 +37,9 @@ const AdminProducts = () => {
 
   useEffect(() => {
     const loadProducts = async () => {
-      let storedProducts = getFromDb<Record<string, any>>('products', {});
+      const storedProducts = await getAllProducts();
       
-      if (Object.keys(storedProducts).length === 0) {
-        const { products } = await import('@/data/products');
-        storedProducts = products;
-        saveToDb('products', products);
-      }
-      
-      const productsArray = Object.entries(storedProducts).map(([slug, product]) => ({
+      const productsArray = Object.entries(storedProducts).map(([slug, product]: [string, any]) => ({
         id: product.id,
         name: product.name,
         price: product.price,

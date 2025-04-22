@@ -3,6 +3,24 @@
  * Simple JSON database utility functions
  */
 
+// Event emitter for stock updates
+class StockUpdateEmitter {
+  private listeners: ((productId: string, newStock: number) => void)[] = [];
+
+  public subscribe(listener: (productId: string, newStock: number) => void) {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener);
+    };
+  }
+
+  public emit(productId: string, newStock: number) {
+    this.listeners.forEach(listener => listener(productId, newStock));
+  }
+}
+
+export const stockUpdateEmitter = new StockUpdateEmitter();
+
 // Get data from localStorage
 export const getFromDb = <T>(key: string, defaultValue: T): T => {
   const storedData = localStorage.getItem(key);
@@ -42,6 +60,9 @@ export const updateProductStock = (productId: string, newStock: number): void =>
         productsCopy[productKey].stock = newStock;
         saveToDb('products', productsCopy);
         console.log(`Product ${productId} stock updated to ${newStock}`);
+        
+        // Emit a stock update event
+        stockUpdateEmitter.emit(productId, newStock);
       } else {
         console.error(`Product with ID ${productId} not found`);
       }
@@ -53,6 +74,9 @@ export const updateProductStock = (productId: string, newStock: number): void =>
       allProducts[productKey].stock = newStock;
       saveToDb('products', allProducts);
       console.log(`Product ${productId} stock updated to ${newStock} (from existing DB)`);
+      
+      // Emit a stock update event
+      stockUpdateEmitter.emit(productId, newStock);
     } else {
       console.error(`Product with ID ${productId} not found in existing DB`);
     }

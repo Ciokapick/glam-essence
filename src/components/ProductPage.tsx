@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -20,7 +21,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
 import { similarProducts } from '@/data/products';
-import { getProductStock } from '@/utils/jsonDb';
+import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductPageProps {
   product: any;
@@ -46,6 +47,20 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
     };
     
     fetchStockInfo();
+    
+    // Subscribe to stock updates
+    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
+      if (product?.id === productId) {
+        setProduct(prev => ({
+          ...prev,
+          stock: newStock
+        }));
+      }
+    });
+    
+    return () => {
+      unsubscribe();
+    };
   }, [product?.id]);
   
   const handleAddToCart = () => {

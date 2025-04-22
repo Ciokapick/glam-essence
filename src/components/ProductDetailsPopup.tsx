@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { X, Minus, Plus, ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
 import { toast } from "@/hooks/use-toast";
-import { getProductStock } from '@/utils/jsonDb';
+import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductDetailsPopupProps {
   id: string;
@@ -47,6 +48,17 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
     };
     
     fetchStock();
+    
+    // Subscribe to stock updates
+    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
+      if (id === productId) {
+        setStock(newStock);
+      }
+    });
+    
+    return () => {
+      unsubscribe();
+    };
   }, [id]);
   
   const incrementQuantity = () => {
