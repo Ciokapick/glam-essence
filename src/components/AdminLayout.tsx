@@ -1,8 +1,7 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
