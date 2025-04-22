@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -103,6 +102,15 @@ const Checkout = () => {
   return (
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="container mx-auto px-4 max-w-2xl">
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 text-beauty-magenta hover:underline mb-6 font-medium"
+          onClick={() => navigate('/')}
+        >
+          <svg width={18} height={18} viewBox="0 0 24 24" stroke="currentColor" fill="none" strokeWidth={2}><path d="M19 12H5m0 0l7-7m-7 7l7 7" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          Înapoi la magazin
+        </button>
+        
         <h1 className="text-3xl font-bold mb-8">Finalizare comandă</h1>
         
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">

@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -6,8 +7,10 @@ import {
   LayoutDashboard, 
   ShoppingBag, 
   Package, 
-  LogOut
+  LogOut,
+  Menu
 } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -35,6 +38,12 @@ const AdminSidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+
+  React.useEffect(() => {
+    setSidebarOpen(!isMobile);
+  }, [isMobile]);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -49,47 +58,74 @@ const AdminSidebar: React.FC = () => {
     navigate('/');
   };
 
+  // On small devices, show a menu icon to toggle sidebar
+  if (isMobile && !sidebarOpen) {
+    return (
+      <button
+        className="fixed top-4 left-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
+        onClick={() => setSidebarOpen(true)}
+        aria-label="Deschide meniul admin"
+      >
+        <Menu size={24} />
+      </button>
+    );
+  }
+
   return (
-    <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b">
-        <h2 className="font-bold text-xl text-beauty-magenta">Admin Panel</h2>
-      </div>
-      
-      <div className="flex-1 overflow-y-auto py-4 px-3">
-        <div className="space-y-1">
-          <SidebarItem 
-            icon={<LayoutDashboard size={18} />} 
-            label="Dashboard" 
-            to="/admin/dashboard" 
-            active={isActive('/admin/dashboard')} 
-          />
-          <SidebarItem 
-            icon={<ShoppingBag size={18} />} 
-            label="Comenzi" 
-            to="/admin/orders" 
-            active={isActive('/admin/orders')} 
-          />
-          <SidebarItem 
-            icon={<Package size={18} />} 
-            label="Produse" 
-            to="/admin/products" 
-            active={isActive('/admin/products')} 
-          />
+    <>
+      {isMobile && (
+        <button
+          className="fixed top-4 left-[calc(100vw-60px)] z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
+          onClick={() => setSidebarOpen(false)}
+          aria-label="Ascunde meniul admin"
+          style={{ display: !sidebarOpen ? 'none' : 'block' }}
+        >
+          {/* Use Menu as "close" for simplicity: flips for effect */}
+          <Menu size={24} style={{ transform: 'rotate(180deg)' }} />
+        </button>
+      )}
+      <div
+        className={`fixed md:static top-0 left-0 h-full z-[50] ${sidebarOpen ? 'block' : 'hidden'} w-64 bg-white border-r border-gray-200 flex flex-col`}
+      >
+        <div className="p-4 border-b">
+          <h2 className="font-bold text-xl text-beauty-magenta">Admin Panel</h2>
+        </div>
+        <div className="flex-1 overflow-y-auto py-4 px-3">
+          <div className="space-y-1">
+            <SidebarItem 
+              icon={<LayoutDashboard size={18} />} 
+              label="Dashboard" 
+              to="/admin/dashboard" 
+              active={isActive('/admin/dashboard')} 
+            />
+            <SidebarItem 
+              icon={<ShoppingBag size={18} />} 
+              label="Comenzi" 
+              to="/admin/orders" 
+              active={isActive('/admin/orders')} 
+            />
+            <SidebarItem 
+              icon={<Package size={18} />} 
+              label="Produse" 
+              to="/admin/products" 
+              active={isActive('/admin/products')} 
+            />
+          </div>
+        </div>
+        <div className="p-4 border-t">
+          <Button 
+            variant="outline" 
+            className="w-full flex items-center gap-2 text-gray-700 hover:text-beauty-magenta border-gray-200"
+            onClick={handleLogout}
+          >
+            <LogOut size={18} />
+            <span>Deconectare</span>
+          </Button>
         </div>
       </div>
-      
-      <div className="p-4 border-t">
-        <Button 
-          variant="outline" 
-          className="w-full flex items-center gap-2 text-gray-700 hover:text-beauty-magenta border-gray-200"
-          onClick={handleLogout}
-        >
-          <LogOut size={18} />
-          <span>Deconectare</span>
-        </Button>
-      </div>
-    </div>
+    </>
   );
 };
 
 export default AdminSidebar;
+

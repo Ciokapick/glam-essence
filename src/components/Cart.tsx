@@ -2,26 +2,13 @@ import React from 'react';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCart, CartItem } from '@/contexts/CartContext';
 import { Button } from '@/components/ui/button';
-import { toast } from "@/hooks/use-toast";
 import { useNavigate } from 'react-router-dom';
 
 const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
   const { updateQuantity, removeFromCart } = useCart();
-
-  const handleIncrement = () => {
-    updateQuantity(item.id, item.quantity + 1);
-  };
-
-  const handleDecrement = () => {
-    if (item.quantity > 1) {
-      updateQuantity(item.id, item.quantity - 1);
-    }
-  };
-
-  const finalPrice = item.discount 
-    ? item.price * (1 - item.discount / 100) 
-    : item.price;
-
+  const handleIncrement = () => { updateQuantity(item.id, item.quantity + 1); };
+  const handleDecrement = () => { if (item.quantity > 1) updateQuantity(item.id, item.quantity - 1); };
+  const finalPrice = item.discount ? item.price * (1 - item.discount / 100) : item.price;
   return (
     <div className="flex py-4 border-b">
       <div className="w-20 h-20 rounded-md overflow-hidden mr-4">
@@ -77,13 +64,14 @@ const Cart: React.FC = () => {
   if (!isOpen) return null;
 
   return (
-    <div>
+    <>
       <div 
-        className="fixed inset-0 bg-black/40 z-40"
+        className="fixed inset-0 bg-black/40 z-[90] transition-opacity duration-200"
         onClick={closeCart}
-      ></div>
+        aria-label="Închide coșul"
+      />
       
-      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-50 shadow-xl transform transition-transform duration-300 overflow-auto">
+      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[100] shadow-xl transform transition-transform duration-300 overflow-auto animate-slide-in-right">
         <div className="p-4 border-b sticky top-0 bg-white z-10 flex justify-between items-center">
           <h2 className="text-xl font-bold flex items-center">
             <ShoppingBag className="h-5 w-5 mr-2" />
@@ -150,7 +138,7 @@ const Cart: React.FC = () => {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
