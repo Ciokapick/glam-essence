@@ -4,7 +4,6 @@ import { Navigate, useParams } from 'react-router-dom';
 import ProductPage from '@/components/ProductPage';
 import { getAllProducts } from '@/utils/jsonDb';
 
-// We'll use this component as a central handling point for product pages
 const ProductPages: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const [productData, setProductData] = useState<any>(null);
@@ -46,7 +45,6 @@ const ProductPages: React.FC = () => {
     return <Navigate to="/404" replace />;
   }
   
-  // If the product exists, render the product page with the product details
   return <ProductPage product={productData} />;
 };
 
