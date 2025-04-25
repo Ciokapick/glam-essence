@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from "@/hooks/use-toast";
 import ProductDetailsPopup from './ProductDetailsPopup';
-import { getProductStock } from '@/utils/jsonDb';
+import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductCardProps {
   id: string;
@@ -47,7 +47,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
     };
     
     fetchStock();
-  }, [id]);
+    
+    // Subscribe to stock updates
+    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
+      if (id === productId) {
+        console.log(`ProductCard: Stock updated for ${name} (${id}): ${newStock}`);
+        setStock(newStock);
+      }
+    });
+    
+    return () => {
+      unsubscribe(); // Clean up on unmount
+    };
+  }, [id, name]);
   
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -84,7 +96,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setIsPopupOpen(true);
   };
   
-  // Fix the product URL to ensure it uses the slug (NOT the ID)
+  // Fix the product URL to ensure it uses the slug correctly
   const productUrl = slug ? `/product/${slug}` : `/product/${name.toLowerCase().replace(/\s+/g, '-')}`;
   
   // Calculate discounted price if on sale

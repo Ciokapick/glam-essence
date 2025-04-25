@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import { Edit, Plus, Search, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent } from '@/components/ui/card';
-import { getFromDb, saveToDb, updateProductStock, getAllProducts } from '@/utils/jsonDb';
+import { getFromDb, saveToDb, updateProductStock, getAllProducts, stockUpdateEmitter } from '@/utils/jsonDb';
 
 type Product = {
   id: string;
@@ -36,23 +37,37 @@ const AdminProducts = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    const loadProducts = async () => {
-      const storedProducts = await getAllProducts();
-      
-      const productsArray = Object.entries(storedProducts).map(([slug, product]: [string, any]) => ({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        category: product.category,
-        stock: product.stock || 0,
-        image: product.image
-      }));
-      
-      setProductsList(productsArray);
-    };
-    
     loadProducts();
+    
+    // Subscribe to stock updates
+    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
+      setProductsList(prevList => 
+        prevList.map(product => 
+          product.id === productId ? { ...product, stock: newStock } : product
+        )
+      );
+    });
+    
+    return () => {
+      unsubscribe(); // Clean up subscription
+    };
   }, []);
+  
+  const loadProducts = async () => {
+    const storedProducts = await getAllProducts();
+    
+    const productsArray = Object.entries(storedProducts).map(([slug, product]: [string, any]) => ({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      stock: product.stock || 0,
+      image: product.image
+    }));
+    
+    setProductsList(productsArray);
+    console.log("Admin products loaded:", productsArray);
+  };
 
   const filteredProducts = productsList.filter(
     product => 
@@ -82,7 +97,7 @@ const AdminProducts = () => {
 
     setProductsList([...productsList, productToAdd]);
     
-    import('@/data/products').then(({ products }) => {
+    getAllProducts().then(products => {
       const productsCopy = { ...products };
       const newSlug = newProduct.name.toLowerCase().replace(/\s+/g, '-');
       
@@ -104,6 +119,9 @@ const AdminProducts = () => {
       };
       
       saveToDb('products', productsCopy);
+      
+      // Emit stock update
+      stockUpdateEmitter.emit(newId, Number(newProduct.stock));
     });
     
     setNewProduct({
@@ -130,9 +148,7 @@ const AdminProducts = () => {
     
     setProductsList(updatedProducts);
     
-    import('@/data/products').then(async () => {
-      const storedProducts = getFromDb<Record<string, any>>('products', {});
-      
+    getAllProducts().then(storedProducts => {
       const productKey = Object.keys(storedProducts).find(
         key => storedProducts[key].id === editingProduct.id
       );
@@ -145,6 +161,9 @@ const AdminProducts = () => {
         storedProducts[productKey].image = editingProduct.image;
         
         saveToDb('products', storedProducts);
+        
+        // Emit stock update
+        stockUpdateEmitter.emit(editingProduct.id, editingProduct.stock);
       }
     });
     
@@ -161,16 +180,13 @@ const AdminProducts = () => {
       const updatedProducts = productsList.filter(product => product.id !== id);
       setProductsList(updatedProducts);
       
-      import('@/data/products').then(async () => {
-        const storedProducts = getFromDb<Record<string, any>>('products', {});
-        
+      getAllProducts().then(storedProducts => {
         const productKey = Object.keys(storedProducts).find(
           key => storedProducts[key].id === id
         );
         
         if (productKey) {
           delete storedProducts[productKey];
-          
           saveToDb('products', storedProducts);
         }
       });
@@ -189,6 +205,7 @@ const AdminProducts = () => {
     
     setProductsList(updatedProducts);
     
+    // Use our centralized stock update function
     updateProductStock(id, newStock);
     
     toast({

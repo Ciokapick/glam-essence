@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -34,11 +33,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
-  // Fetch the latest stock information from the database
   useEffect(() => {
     const fetchStockInfo = async () => {
       if (product?.id) {
         const currentStock = await getProductStock(product.id);
+        console.log(`ProductPage: Initial stock for ${product.name} (${product.id}): ${currentStock}`);
         setProduct(prev => ({
           ...prev,
           stock: currentStock
@@ -48,9 +47,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
     
     fetchStockInfo();
     
-    // Subscribe to stock updates
     const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
       if (product?.id === productId) {
+        console.log(`ProductPage: Stock updated for ${product.name} (${product.id}): ${newStock}`);
         setProduct(prev => ({
           ...prev,
           stock: newStock
@@ -61,10 +60,19 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
     return () => {
       unsubscribe();
     };
-  }, [product?.id]);
+  }, [product?.id, product?.name]);
   
   const handleAddToCart = () => {
     if (product) {
+      if (!product?.stock || product.stock <= 0) {
+        toast({
+          title: "Stoc epuizat",
+          description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       addToCart({
         id: product.id,
         name: product.name,
@@ -129,7 +137,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
       
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
-          {/* Breadcrumbs */}
           <nav className="flex text-sm text-muted-foreground mb-6">
             <ol className="flex items-center">
               <li><a href="/" className="hover:text-foreground">Acasă</a></li>
@@ -140,9 +147,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             </ol>
           </nav>
           
-          {/* Product Details */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            {/* Product Images */}
             <div className="space-y-4">
               <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
                 <img 
@@ -164,7 +169,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 )}
               </div>
               
-              {/* Thumbnail Gallery */}
               {product?.gallery && (
                 <div className="grid grid-cols-4 gap-2">
                   {product.gallery.map((image: string, index: number) => (
@@ -182,11 +186,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               )}
             </div>
             
-            {/* Product Info */}
             <div>
               <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
               
-              {/* Ratings */}
               <div className="flex items-center mb-4">
                 <div className="flex mr-2">
                   {[...Array(5)].map((_, i) => (
@@ -199,7 +201,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 <span className="text-sm text-muted-foreground">{product?.reviewCount || 0} reviews</span>
               </div>
               
-              {/* Price */}
               <div className="flex items-center mb-6">
                 {product?.isSale ? (
                   <>
@@ -215,18 +216,16 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 )}
               </div>
               
-              {/* Description */}
               <p className="text-muted-foreground mb-8">
                 {product?.description}
               </p>
               
-              {/* Quantity */}
               <div className="flex items-center space-x-4 mb-6">
                 <span className="font-medium">Cantitate:</span>
                 <div className="flex items-center border rounded-md">
                   <button 
                     className="px-3 py-2 hover:bg-gray-100" 
-                    onClick={decrementQuantity}
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
                   >
                     <Minus className="h-4 w-4" />
@@ -234,7 +233,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   <span className="px-4 py-2 w-12 text-center">{quantity}</span>
                   <button 
                     className="px-3 py-2 hover:bg-gray-100" 
-                    onClick={incrementQuantity}
+                    onClick={() => setQuantity(q => Math.min((product?.stock || 0), q + 1))}
                     disabled={quantity >= (product?.stock || 0)}
                   >
                     <Plus className="h-4 w-4" />
@@ -245,11 +244,34 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </span>
               </div>
               
-              {/* Add to Cart */}
               <div className="flex flex-col sm:flex-row gap-3 mb-8">
                 <button 
                   className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1 px-4 py-2 rounded flex items-center justify-center"
-                  onClick={handleAddToCart}
+                  onClick={() => {
+                    if (!product?.stock || product.stock <= 0) {
+                      toast({
+                        title: "Stoc epuizat",
+                        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+                        variant: "destructive",
+                      });
+                      return;
+                    }
+                    
+                    addToCart({
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                      category: product.category,
+                      discount: product.isSale ? product.discount : undefined
+                    }, quantity);
+                    
+                    toast({
+                      title: "Adăugat în coș",
+                      description: `${product.name} a fost adăugat în coșul tău.`,
+                      variant: "default",
+                    });
+                  }}
                   disabled={!product?.stock || product.stock <= 0}
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
@@ -257,18 +279,42 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </button>
                 <button 
                   className={`border px-4 py-2 rounded flex items-center justify-center ${
-                    isFavorite 
+                    isInWishlist(product?.id) 
                       ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
                       : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
                   }`}
-                  onClick={handleAddToWishlist}
+                  onClick={() => {
+                    if (product) {
+                      if (isInWishlist(product.id)) {
+                        removeFromWishlist(product.id);
+                        toast({
+                          title: "Eliminat de la favorite",
+                          description: `${product.name} a fost eliminat din lista ta de favorite.`,
+                          variant: "default",
+                        });
+                      } else {
+                        addToWishlist({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                          category: product.category,
+                          discount: product.isSale ? product.discount : undefined
+                        });
+                        toast({
+                          title: "Adăugat la favorite",
+                          description: `${product.name} a fost adăugat la lista ta de favorite.`,
+                          variant: "default",
+                        });
+                      }
+                    }
+                  }}
                 >
-                  <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
-                  {isFavorite ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
+                  <Heart className={`h-5 w-5 mr-2 ${isInWishlist(product?.id) ? 'fill-beauty-rose' : ''}`} />
+                  {isInWishlist(product?.id) ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
                 </button>
               </div>
               
-              {/* Benefits */}
               <div className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center">
                   <Truck className="h-5 w-5 text-beauty-magenta mr-3" />
@@ -293,7 +339,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             </div>
           </div>
           
-          {/* Product Details Tabs */}
           <div className="mb-16">
             <Tabs defaultValue="details">
               <TabsList className="w-full grid grid-cols-3 mb-6">
@@ -333,7 +378,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   <h3 className="text-xl font-semibold">Reviews ({product?.reviewCount || 0})</h3>
                   <button className="px-4 py-2 bg-beauty-magenta hover:bg-beauty-magenta/90 text-white rounded">Adaugă un review</button>
                 </div>
-                {/* This would be a list of reviews in a real app */}
                 <div className="space-y-6">
                   <div className="border-b pb-6">
                     <div className="flex justify-between mb-2">
@@ -393,7 +437,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             </Tabs>
           </div>
           
-          {/* Similar Products */}
           <div>
             <h2 className="text-2xl font-bold mb-6">Produse similare</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

@@ -44,6 +44,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
   useEffect(() => {
     const fetchStock = async () => {
       const currentStock = await getProductStock(id);
+      console.log(`ProductDetailsPopup: Initial stock for ${name} (${id}): ${currentStock}`);
       setStock(currentStock);
     };
     
@@ -52,6 +53,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
     // Subscribe to stock updates
     const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
       if (id === productId) {
+        console.log(`ProductDetailsPopup: Stock updated for ${name} (${id}): ${newStock}`);
         setStock(newStock);
       }
     });
@@ -59,7 +61,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
     return () => {
       unsubscribe();
     };
-  }, [id]);
+  }, [id, name]);
   
   const incrementQuantity = () => {
     if (quantity < stock) {
