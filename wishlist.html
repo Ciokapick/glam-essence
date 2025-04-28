@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wishlist - GlamEssence</title>
+    <meta name="description" content="Produsele tale favorite de la GlamEssence." />
+    <meta name="author" content="GlamEssence" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Header/Navbar -->
+      <header class="header">
+        <div class="container header-container">
+          <a href="index.html" class="logo">GlamEssence</a>
+          <nav class="main-nav">
+            <ul class="nav-list">
+              <li><a href="index.html" class="nav-link">Acasă</a></li>
+              <li><a href="parfumuri.html" class="nav-link">Parfumuri</a></li>
+              <li><a href="creme.html" class="nav-link">Creme</a></li>
+              <li><a href="ingrijire.html" class="nav-link">Îngrijire</a></li>
+              <li><a href="about.html" class="nav-link">Despre Noi</a></li>
+              <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+          </nav>
+          <div class="header-actions">
+            <button id="wishlistBtn" class="icon-btn">
+              <span class="icon">❤</span>
+              <span id="wishlistCount" class="count">0</span>
+            </button>
+            <button id="cartBtn" class="icon-btn">
+              <span class="icon">🛒</span>
+              <span id="cartCount" class="count">0</span>
+            </button>
+            <button id="mobileMenuBtn" class="menu-btn">
+              <span class="menu-icon"></span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Page Header -->
+      <section class="page-header" style="background-image: linear-gradient(to right, var(--beauty-rose-light), var(--beauty-hotpink-light));">
+        <div class="container">
+          <h1 class="page-title">Lista mea de favorite</h1>
+          <p class="page-description">Produsele tale favorite sunt salvate aici pentru referință ușoară.</p>
+        </div>
+      </section>
+
+      <!-- Wishlist Section -->
+      <section class="wishlist-section">
+        <div class="container">
+          <div id="wishlistHeader" class="wishlist-header">
+            <p class="wishlist-count"><span id="wishlistTotalCount">0</span> produse favorite</p>
+            <button id="clearWishlistBtn" class="btn btn-outline">Șterge lista</button>
+          </div>
+          
+          <div id="wishlistProducts" class="products-grid">
+            <!-- Wishlist products will be loaded dynamically -->
+            <div class="empty-state">
+              <div class="empty-icon">❤</div>
+              <h3 class="empty-title">Lista ta de favorite este goală</h3>
+              <p class="empty-description">Adaugă produse la favorite pentru a le găsi ușor mai târziu.</p>
+              <a href="index.html" class="btn btn-primary">Continuă cumpărăturile</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+          <div class="footer-content">
+            <div class="footer-column">
+              <h3 class="footer-title">GlamEssence</h3>
+              <p class="footer-description">
+                Descoperă esența frumuseții tale cu produsele noastre premium de îngrijire și parfumerie.
+              </p>
+              <div class="footer-social">
+                <a href="#" class="social-link">FB</a>
+                <a href="#" class="social-link">IG</a>
+                <a href="#" class="social-link">TW</a>
+                <a href="#" class="social-link">YT</a>
+              </div>
+            </div>
+            
+            <div class="footer-column">
+              <h4 class="footer-subtitle">Navigare</h4>
+              <ul class="footer-links">
+                <li><a href="index.html">Acasă</a></li>
+                <li><a href="parfumuri.html">Parfumuri</a></li>
+                <li><a href="creme.html">Creme</a></li>
+                <li><a href="ingrijire.html">Îngrijire</a></li>
+                <li><a href="about.html">Despre Noi</a></li>
+                <li><a href="contact.html">Contact</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-column">
+              <h4 class="footer-subtitle">Informații</h4>
+              <ul class="footer-links">
+                <li><a href="#">Termeni și Condiții</a></li>
+                <li><a href="#">Politica de Confidențialitate</a></li>
+                <li><a href="#">Livrare și Retur</a></li>
+                <li><a href="#">Întrebări Frecvente</a></li>
+              </ul>
+            </div>
+            
+            <div class="footer-column">
+              <h4 class="footer-subtitle">Contact</h4>
+              <address class="footer-contact">
+                <p>Strada Frumuseții nr. 123</p>
+                <p>București, România</p>
+                <p>Email: contact@glamessence.ro</p>
+                <p>Telefon: +40 755 123 456</p>
+              </address>
+            </div>
+          </div>
+          
+          <div class="footer-bottom">
+            <p class="copyright">© 2025 GlamEssence. Toate drepturile rezervate.</p>
+          </div>
+        </div>
+      </footer>
+
+      <!-- Cart Sidebar -->
+      <div id="cartSidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h3>Coșul meu</h3>
+          <button id="closeCartBtn" class="close-btn">&times;</button>
+        </div>
+        <div id="cartItems" class="sidebar-content">
+          <!-- Cart items will be loaded dynamically -->
+        </div>
+        <div class="sidebar-footer">
+          <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">0.00 RON</span>
+          </div>
+          <a href="checkout.html" class="btn btn-primary btn-block">Finalizare comandă</a>
+        </div>
+      </div>
+      
+      <!-- Wishlist Sidebar -->
+      <div id="wishlistSidebar" class="sidebar">
+        <div class="sidebar-header">
+          <h3>Favorite mele</h3>
+          <button id="closeWishlistBtn" class="close-btn">&times;</button>
+        </div>
+        <div id="wishlistItems" class="sidebar-content">
+          <!-- Wishlist items will be loaded dynamically -->
+        </div>
+        <div class="sidebar-footer">
+          <a href="wishlist.html" class="btn btn-outline btn-block">Vezi toate</a>
+        </div>
+      </div>
+      
+      <!-- Overlay -->
+      <div id="overlay" class="overlay"></div>
+      
+      <!-- Toast Notifications -->
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="js/database.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const wishlistProducts = document.getElementById('wishlistProducts');
+        const wishlistTotalCount = document.getElementById('wishlistTotalCount');
+        const clearWishlistBtn = document.getElementById('clearWishlistBtn');
+        const wishlistHeader = document.getElementById('wishlistHeader');
+        
+        // Initialize database
+        initializeDb();
+        
+        // Load wishlist products
+        loadWishlistProducts();
+        
+        // Event listeners
+        clearWishlistBtn.addEventListener('click', clearWishlist);
+        
+        // Load wishlist products
+        function loadWishlistProducts() {
+          const wishlist = getWishlist();
+          
+          // Update wishlist count
+          wishlistTotalCount.textContent = wishlist.length;
+          
+          if (wishlist.length === 0) {
+            wishlistHeader.style.display = 'none';
+            wishlistProducts.innerHTML = `
+              <div class="empty-state">
+                <div class="empty-icon">❤</div>
+                <h3 class="empty-title">Lista ta de favorite este goală</h3>
+                <p class="empty-description">Adaugă produse la favorite pentru a le găsi ușor mai târziu.</p>
+                <a href="index.html" class="btn btn-primary">Continuă cumpărăturile</a>
+              </div>
+            `;
+            return;
+          }
+          
+          // Show wishlist header
+          wishlistHeader.style.display = 'flex';
+          
+          // Render wishlist products
+          wishlistProducts.innerHTML = wishlist.map(product => `
+            <div class="product-card" data-id="${product.id}">
+              <div class="product-image-container">
+                <a href="product.html?slug=${product.slug || generateSlug(product.name)}">
+                  <img src="${product.image}" alt="${product.name}" class="product-image">
+                </a>
+                <div class="product-badges">
+                  ${product.discount ? `<span class="product-badge badge-sale">-${product.discount}%</span>` : ''}
+                  ${product.isNew ? '<span class="product-badge badge-new">Nou</span>' : ''}
+                </div>
+                <div class="product-actions">
+                  <button class="product-action-btn add-to-wishlist-btn active" data-id="${product.id}" title="Eliminare de la favorite">❤</button>
+                  <button class="product-action-btn quick-view-btn" data-id="${product.id}" title="Vizualizare rapidă">👁️</button>
+                </div>
+              </div>
+              <div class="product-content">
+                <h3 class="product-title">${product.name}</h3>
+                <div class="product-category">${product.category}</div>
+                <div class="product-footer">
+                  <div class="product-price-container">
+                    ${product.discount ? `<span class="product-price-original">${formatPrice(product.price)}</span>` : ''}
+                    <span class="product-price">${formatPrice(calculateDiscountedPrice(product.price, product.discount))}</span>
+                  </div>
+                  <button class="btn btn-primary add-to-cart-btn" data-id="${product.id}">Adaugă</button>
+                </div>
+              </div>
+            </div>
+          `).join('');
+          
+          // Add event listeners to product buttons
+          addProductEventListeners();
+        }
+        
+        // Clear wishlist
+        function clearWishlist() {
+          // Show confirmation
+          if (confirm('Ești sigur că vrei să ștergi toate produsele din lista de favorite?')) {
+            // Clear wishlist
+            clearWishlistDB();
+            updateWishlistCount();
+            
+            // Reload wishlist products
+            loadWishlistProducts();
+            
+            // Show success message
+            showToast('Lista de favorite a fost golită');
+          }
+        }
+        
+        // Generate slug from product name (simple version)
+        function generateSlug(name) {
+          return name
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        }
+      });
+    </script>
+    <style>
+      .page-header {
+        padding-top: 120px;
+        padding-bottom: var(--spacing-2xl);
+        text-align: center;
+      }
+      
+      .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-md);
+      }
+      
+      .page-description {
+        font-size: 1.125rem;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      
+      .wishlist-section {
+        padding: var(--spacing-2xl) 0;
+      }
+      
+      .wishlist-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-lg);
+      }
+      
+      .wishlist-count {
+        color: var(--text-muted);
+      }
+    </style>
+  </body>
+</html>

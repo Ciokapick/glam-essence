@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Products - GlamEssence</title>
+    <meta name="description" content="Admin products management for GlamEssence." />
+    <meta name="author" content="GlamEssence" />
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <div id="app" class="admin-layout">
+      <!-- Admin Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar-header">
+          <a href="dashboard.html" class="admin-sidebar-logo">GlamEssence</a>
+        </div>
+        
+        <nav class="admin-sidebar-nav">
+          <ul class="admin-sidebar-nav-list">
+            <li>
+              <a href="dashboard.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">📊</span>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="products.html" class="admin-sidebar-nav-link active">
+                <span class="admin-sidebar-nav-icon">📦</span>
+                <span>Products</span>
+              </a>
+            </li>
+            <li>
+              <a href="orders.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">🛍️</span>
+                <span>Orders</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <div class="admin-sidebar-footer">
+          <button id="adminLogoutBtn" class="admin-sidebar-logout">
+            <span class="admin-sidebar-nav-icon">🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Admin Content -->
+      <main class="admin-content">
+        <header class="admin-header">
+          <h1 class="admin-header-title">Products</h1>
+          <div class="admin-header-actions">
+            <a href="../index.html" class="admin-header-btn" target="_blank">View Store</a>
+          </div>
+        </header>
+        
+        <div class="admin-products">
+          <div class="admin-products-header">
+            <div class="admin-products-search">
+              <input type="text" id="productSearchInput" placeholder="Search products..." class="admin-products-search-input">
+              <button id="searchProductBtn" class="btn btn-primary">Search</button>
+            </div>
+            <button id="addProductBtn" class="btn btn-primary">Add New Product</button>
+          </div>
+          
+          <div class="admin-products-actions">
+            <div class="admin-products-category-filter">
+              <label for="categoryFilter">Category:</label>
+              <select id="categoryFilter">
+                <option value="all">All Categories</option>
+                <option value="parfumuri">Parfumuri</option>
+                <option value="creme">Creme</option>
+                <option value="ingrijire">Ingrijire</option>
+              </select>
+            </div>
+            
+            <button id="refreshProductsBtn" class="btn btn-outline">Refresh</button>
+          </div>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr>
+                  <td colspan="6" class="admin-table-empty">Loading products...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+      
+      <!-- Product Edit Modal -->
+      <div id="productEditModal" class="admin-modal">
+        <div class="admin-modal-content">
+          <div class="admin-modal-header">
+            <h3 id="productEditModalTitle" class="admin-modal-title">Edit Product</h3>
+            <button id="closeProductEditModal" class="admin-modal-close">&times;</button>
+          </div>
+          
+          <div class="admin-modal-body">
+            <form id="productEditForm" class="admin-form">
+              <input type="hidden" id="productId">
+              <input type="hidden" id="productSlug">
+              
+              <div class="admin-form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" class="admin-form-input" required>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productCategory">Category</label>
+                <select id="productCategory" class="admin-form-input" required>
+                  <option value="parfumuri">Parfumuri</option>
+                  <option value="creme">Creme</option>
+                  <option value="ingrijire">Ingrijire</option>
+                </select>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productPrice">Price (RON)</label>
+                <input type="number" id="productPrice" class="admin-form-input" min="0" step="0.01" required>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productStock">Stock</label>
+                <input type="number" id="productStock" class="admin-form-input" min="0" required>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productDiscount">Discount % (Optional)</label>
+                <input type="number" id="productDiscount" class="admin-form-input" min="0" max="100">
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productDescription">Description</label>
+                <textarea id="productDescription" class="admin-form-input" rows="3" required></textarea>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productImage">Image URL</label>
+                <input type="text" id="productImage" class="admin-form-input" required>
+              </div>
+              
+              <div class="admin-form-group">
+                <label for="productIsNew">Is New Product</label>
+                <input type="checkbox" id="productIsNew">
+              </div>
+            </form>
+          </div>
+          
+          <div class="admin-modal-footer">
+            <button id="cancelProductEditBtn" class="btn btn-outline">Cancel</button>
+            <button id="saveProductBtn" class="btn btn-primary">Save Changes</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Confirm Delete Modal -->
+      <div id="confirmDeleteModal" class="admin-modal">
+        <div class="admin-modal-content">
+          <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Confirm Delete</h3>
+            <button id="closeConfirmDeleteModal" class="admin-modal-close">&times;</button>
+          </div>
+          
+          <div class="admin-modal-body">
+            <p>Are you sure you want to delete this product? This action cannot be undone.</p>
+          </div>
+          
+          <div class="admin-modal-footer">
+            <button id="cancelDeleteBtn" class="btn btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-primary">Delete</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Toast Notifications -->
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if admin is authenticated
+        if (localStorage.getItem('adminAuth') !== 'true') {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // DOM Elements
+        const productsTableBody = document.getElementById('productsTableBody');
+        const productSearchInput = document.getElementById('productSearchInput');
+        const searchProductBtn = document.getElementById('searchProductBtn');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const refreshProductsBtn = document.getElementById('refreshProductsBtn');
+        const addProductBtn = document.getElementById('addProductBtn');
+        
+        const productEditModal = document.getElementById('productEditModal');
+        const productEditModalTitle = document.getElementById('productEditModalTitle');
+        const closeProductEditModal = document.getElementById('closeProductEditModal');
+        const productEditForm = document.getElementById('productEditForm');
+        const productId = document.getElementById('productId');
+        const productSlug = document.getElementById('productSlug');
+        const productName = document.getElementById('productName');
+        const productCategory = document.getElementById('productCategory');
+        const productPrice = document.getElementById('productPrice');
+        const productStock = document.getElementById('productStock');
+        const productDiscount = document.getElementById('productDiscount');
+        const productDescription = document.getElementById('productDescription');
+        const productImage = document.getElementById('productImage');
+        const productIsNew = document.getElementById('productIsNew');
+        const cancelProductEditBtn = document.getElementById('cancelProductEditBtn');
+        const saveProductBtn = document.getElementById('saveProductBtn');
+        
+        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+        const closeConfirmDeleteModal = document.getElementById('closeConfirmDeleteModal');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        
+        let currentProductId = null;
+        
+        // Initialize database
+        initializeDb();
+        
+        // Load products
+        loadProducts();
+        
+        // Event listeners
+        searchProductBtn.addEventListener('click', searchProducts);
+        productSearchInput.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter') {
+            searchProducts();
+          }
+        });
+        categoryFilter.addEventListener('change', filterByCategory);
+        refreshProductsBtn.addEventListener('click', loadProducts);
+        addProductBtn.addEventListener('click', openAddProductModal);
+        
+        closeProductEditModal.addEventListener('click', closeModal);
+        cancelProductEditBtn.addEventListener('click', closeModal);
+        saveProductBtn.addEventListener('click', saveProduct);
+        
+        closeConfirmDeleteModal.addEventListener('click', closeDeleteModal);
+        cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+        confirmDeleteBtn.addEventListener('click', deleteProduct);
+        
+        // Admin logout
+        document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+          localStorage.removeItem('adminAuth');
+          window.location.href = 'login.html';
+        });
+        
+        // Load products
+        function loadProducts() {
+          const products = getAllProducts();
+          renderProductsTable(Object.values(products));
+        }
+        
+        // Search products
+        function searchProducts() {
+          const searchTerm = productSearchInput.value.toLowerCase();
+          const products = getAllProducts();
+          
+          const filteredProducts = Object.values(products).filter(product => 
+            product.name.toLowerCase().includes(searchTerm) || 
+            product.description.toLowerCase().includes(searchTerm)
+          );
+          
+          renderProductsTable(filteredProducts);
+        }
+        
+        // Filter by category
+        function filterByCategory() {
+          const category = categoryFilter.value;
+          const products = getAllProducts();
+          
+          if (category === 'all') {
+            renderProductsTable(Object.values(products));
+          } else {
+            const filteredProducts = Object.values(products).filter(product => 
+              product.category === category
+            );
+            renderProductsTable(filteredProducts);
+          }
+        }
+        
+        // Render products table
+        function renderProductsTable(products) {
+          if (products.length === 0) {
+            productsTableBody.innerHTML = '<tr><td colspan="6" class="admin-table-empty">No products found</td></tr>';
+            return;
+          }
+          
+          productsTableBody.innerHTML = products.map(product => `
+            <tr>
+              <td>
+                <img src="${product.image}" alt="${product.name}" class="admin-table-product-image">
+              </td>
+              <td>${product.name}</td>
+              <td>${capitalizeFirstLetter(product.category)}</td>
+              <td>${formatPrice(product.price)}</td>
+              <td>
+                <span class="admin-badge ${product.stock <= 5 ? 'admin-badge-danger' : product.stock <= 10 ? 'admin-badge-warning' : 'admin-badge-success'}">
+                  ${product.stock}
+                </span>
+              </td>
+              <td>
+                <div class="admin-table-actions">
+                  <button class="btn btn-outline edit-product-btn" data-id="${product.id}">Edit</button>
+                  <button class="btn btn-outline delete-product-btn" data-id="${product.id}">Delete</button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+          
+          // Add event listeners to action buttons
+          document.querySelectorAll('.edit-product-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              const productId = this.dataset.id;
+              openEditProductModal(productId);
+            });
+          });
+          
+          document.querySelectorAll('.delete-product-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              const productId = this.dataset.id;
+              openDeleteConfirmModal(productId);
+            });
+          });
+        }
+        
+        // Open add product modal
+        function openAddProductModal() {
+          productEditModalTitle.textContent = 'Add New Product';
+          productEditForm.reset();
+          
+          // Generate a new ID
+          productId.value = generateUniqueId();
+          
+          // Open modal
+          productEditModal.classList.add('active');
+        }
+        
+        // Open edit product modal
+        function openEditProductModal(productId) {
+          const products = getAllProducts();
+          const product = Object.values(products).find(p => p.id === productId);
+          
+          if (product) {
+            productEditModalTitle.textContent = 'Edit Product';
+            
+            // Set form values
+            document.getElementById('productId').value = product.id;
+            document.getElementById('productSlug').value = product.slug;
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productCategory').value = product.category;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productStock').value = product.stock;
+            document.getElementById('productDiscount').value = product.discount || '';
+            document.getElementById('productDescription').value = product.description;
+            document.getElementById('productImage').value = product.image;
+            document.getElementById('productIsNew').checked = product.isNew || false;
+            
+            // Open modal
+            productEditModal.classList.add('active');
+          }
+        }
+        
+        // Close modal
+        function closeModal() {
+          productEditModal.classList.remove('active');
+          productEditForm.reset();
+        }
+        
+        // Generate a unique ID
+        function generateUniqueId() {
+          return Date.now().toString();
+        }
+        
+        // Generate slug from product name
+        function generateSlug(name) {
+          return name
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/[\s_-]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+        }
+        
+        // Save product
+        function saveProduct() {
+          // Get form values
+          const id = productId.value;
+          const name = productName.value;
+          const category = productCategory.value;
+          const price = parseFloat(productPrice.value);
+          const stock = parseInt(productStock.value);
+          const discount = productDiscount.value ? parseFloat(productDiscount.value) : null;
+          const description = productDescription.value;
+          const image = productImage.value;
+          const isNew = productIsNew.checked;
+          
+          // Generate slug for new products or keep existing
+          const slug = productSlug.value || generateSlug(name);
+          
+          // Validate form
+          if (!name || !category || isNaN(price) || isNaN(stock) || !description || !image) {
+            showToast('Please fill in all required fields', 'error');
+            return;
+          }
+          
+          // Get all products
+          const allProducts = getAllProducts();
+          
+          // Create product object
+          const product = {
+            id,
+            name,
+            description,
+            price,
+            category,
+            stock,
+            image,
+            slug,
+            isNew
+          };
+          
+          // Add discount if provided
+          if (discount) {
+            product.discount = discount;
+          }
+          
+          // Update products in database
+          allProducts[slug] = product;
+          saveToDb('products', allProducts);
+          
+          // Close modal
+          closeModal();
+          
+          // Reload products table
+          loadProducts();
+          
+          // Show success message
+          showToast('Product saved successfully');
+        }
+        
+        // Open delete confirm modal
+        function openDeleteConfirmModal(productId) {
+          currentProductId = productId;
+          confirmDeleteModal.classList.add('active');
+        }
+        
+        // Close delete confirm modal
+        function closeDeleteModal() {
+          confirmDeleteModal.classList.remove('active');
+          currentProductId = null;
+        }
+        
+        // Delete product
+        function deleteProduct() {
+          if (!currentProductId) return;
+          
+          const allProducts = getAllProducts();
+          const productToDelete = Object.values(allProducts).find(p => p.id === currentProductId);
+          
+          if (productToDelete) {
+            // Delete product from database
+            delete allProducts[productToDelete.slug];
+            saveToDb('products', allProducts);
+            
+            // Close modal
+            closeDeleteModal();
+            
+            // Reload products table
+            loadProducts();
+            
+            // Show success message
+            showToast('Product deleted successfully');
+          }
+        }
+        
+        // Capitalize first letter
+        function capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+      });
+    </script>
+  </body>
+</html>

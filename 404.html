@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Not Found - GlamEssence</title>
+    <meta name="description" content="Pagina pe care o cauți nu a fost găsită." />
+    <meta name="author" content="GlamEssence" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="not-found">
+        <div class="not-found-container">
+          <h1 class="not-found-title">404</h1>
+          <p class="not-found-text">Oops! Pagina pe care o cauți nu a fost găsită.</p>
+          <a href="index.html" class="btn btn-primary">Înapoi la magazin</a>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      .not-found {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        background-color: var(--background-muted);
+      }
+      
+      .not-found-container {
+        max-width: 600px;
+        padding: var(--spacing-xl);
+      }
+      
+      .not-found-title {
+        font-size: 6rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-md);
+        color: var(--beauty-magenta);
+      }
+      
+      .not-found-text {
+        font-size: 1.5rem;
+        margin-bottom: var(--spacing-xl);
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,554 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Orders - GlamEssence</title>
+    <meta name="description" content="Admin orders management for GlamEssence." />
+    <meta name="author" content="GlamEssence" />
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <div id="app" class="admin-layout">
+      <!-- Admin Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar-header">
+          <a href="dashboard.html" class="admin-sidebar-logo">GlamEssence</a>
+        </div>
+        
+        <nav class="admin-sidebar-nav">
+          <ul class="admin-sidebar-nav-list">
+            <li>
+              <a href="dashboard.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">📊</span>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="products.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">📦</span>
+                <span>Products</span>
+              </a>
+            </li>
+            <li>
+              <a href="orders.html" class="admin-sidebar-nav-link active">
+                <span class="admin-sidebar-nav-icon">🛍️</span>
+                <span>Orders</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <div class="admin-sidebar-footer">
+          <button id="adminLogoutBtn" class="admin-sidebar-logout">
+            <span class="admin-sidebar-nav-icon">🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Admin Content -->
+      <main class="admin-content">
+        <header class="admin-header">
+          <h1 class="admin-header-title">Orders</h1>
+          <div class="admin-header-actions">
+            <a href="../index.html" class="admin-header-btn" target="_blank">View Store</a>
+          </div>
+        </header>
+        
+        <div class="admin-orders">
+          <div class="admin-products-header">
+            <div class="admin-products-search">
+              <input type="text" id="orderSearchInput" placeholder="Search by order ID or customer..." class="admin-products-search-input">
+              <button id="searchOrderBtn" class="btn btn-primary">Search</button>
+            </div>
+          </div>
+          
+          <div class="admin-products-actions">
+            <div class="admin-products-category-filter">
+              <label for="statusFilter">Status:</label>
+              <select id="statusFilter">
+                <option value="all">All Statuses</option>
+                <option value="pending">Pending</option>
+                <option value="processing">Processing</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+            
+            <button id="refreshOrdersBtn" class="btn btn-outline">Refresh</button>
+          </div>
+          
+          <div class="admin-table-container">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Date</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr>
+                  <td colspan="6" class="admin-table-empty">No orders found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+      
+      <!-- Order Detail Modal -->
+      <div id="orderDetailModal" class="admin-modal">
+        <div class="admin-modal-content">
+          <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Order Details</h3>
+            <button id="closeOrderDetailModal" class="admin-modal-close">&times;</button>
+          </div>
+          
+          <div class="admin-modal-body">
+            <div id="orderDetailContent">
+              <!-- Order details will be loaded dynamically -->
+            </div>
+          </div>
+          
+          <div class="admin-modal-footer">
+            <button id="closeOrderModalBtn" class="btn btn-outline">Close</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Toast Notifications -->
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if admin is authenticated
+        if (localStorage.getItem('adminAuth') !== 'true') {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // DOM Elements
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        const orderSearchInput = document.getElementById('orderSearchInput');
+        const searchOrderBtn = document.getElementById('searchOrderBtn');
+        const statusFilter = document.getElementById('statusFilter');
+        const refreshOrdersBtn = document.getElementById('refreshOrdersBtn');
+        
+        const orderDetailModal = document.getElementById('orderDetailModal');
+        const closeOrderDetailModal = document.getElementById('closeOrderDetailModal');
+        const orderDetailContent = document.getElementById('orderDetailContent');
+        const closeOrderModalBtn = document.getElementById('closeOrderModalBtn');
+        
+        // For demo purposes, initialize with some sample orders
+        initializeSampleOrders();
+        
+        // Load orders
+        loadOrders();
+        
+        // Event listeners
+        searchOrderBtn.addEventListener('click', searchOrders);
+        orderSearchInput.addEventListener('keyup', function(e) {
+          if (e.key === 'Enter') {
+            searchOrders();
+          }
+        });
+        statusFilter.addEventListener('change', filterByStatus);
+        refreshOrdersBtn.addEventListener('click', loadOrders);
+        
+        closeOrderDetailModal.addEventListener('click', closeOrderModal);
+        closeOrderModalBtn.addEventListener('click', closeOrderModal);
+        
+        // Admin logout
+        document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+          localStorage.removeItem('adminAuth');
+          window.location.href = 'login.html';
+        });
+        
+        // Load orders
+        function loadOrders() {
+          const orders = getAllOrders();
+          renderOrdersTable(orders);
+        }
+        
+        // Initialize sample orders if none exist
+        function initializeSampleOrders() {
+          const orders = getAllOrders();
+          if (orders.length === 0) {
+            // Add sample orders
+            const sampleOrders = [
+              {
+                id: 'ORD-001',
+                customer: {
+                  name: 'Maria Popescu',
+                  email: 'maria.popescu@example.com',
+                  phone: '+40712345678',
+                  address: 'Strada Florilor 123, București'
+                },
+                items: [
+                  {
+                    id: '1',
+                    name: 'Parfum Floral Extravagance',
+                    price: 350,
+                    quantity: 1,
+                    total: 350
+                  },
+                  {
+                    id: '5',
+                    name: 'Cremă Hidratantă Intensă',
+                    price: 120,
+                    quantity: 2,
+                    total: 240
+                  }
+                ],
+                subtotal: 590,
+                shipping: 20,
+                total: 610,
+                status: 'delivered',
+                date: '2025-04-25T10:30:00',
+                notes: 'Livrare la ușă, vă rog.'
+              },
+              {
+                id: 'ORD-002',
+                customer: {
+                  name: 'Ion Ionescu',
+                  email: 'ion.ionescu@example.com',
+                  phone: '+40723456789',
+                  address: 'Bulevardul Primăverii 45, București'
+                },
+                items: [
+                  {
+                    id: '3',
+                    name: 'Parfum Fresh Citrus',
+                    price: 280,
+                    quantity: 1,
+                    total: 280
+                  }
+                ],
+                subtotal: 280,
+                shipping: 20,
+                total: 300,
+                status: 'processing',
+                date: '2025-04-27T14:20:00',
+                notes: ''
+              },
+              {
+                id: 'ORD-003',
+                customer: {
+                  name: 'Elena Dumitrescu',
+                  email: 'elena.dumitrescu@example.com',
+                  phone: '+40734567890',
+                  address: 'Aleea Rozelor 78, Cluj'
+                },
+                items: [
+                  {
+                    id: '6',
+                    name: 'Cremă Anti-Aging Gold',
+                    price: 250,
+                    quantity: 1,
+                    total: 250
+                  },
+                  {
+                    id: '7',
+                    name: 'Loțiune de Corp Relaxantă',
+                    price: 80,
+                    discount: 10,
+                    quantity: 1,
+                    total: 72
+                  },
+                  {
+                    id: '4',
+                    name: 'Parfum Woody Elegance',
+                    price: 400,
+                    quantity: 1,
+                    total: 400
+                  }
+                ],
+                subtotal: 722,
+                shipping: 0, // Free shipping
+                total: 722,
+                status: 'pending',
+                date: '2025-04-28T09:15:00',
+                notes: 'Sunaţi-mă cu 30 de minute înainte de livrare.'
+              }
+            ];
+            
+            // Save sample orders
+            saveToDb('orders', sampleOrders);
+          }
+        }
+        
+        // Search orders
+        function searchOrders() {
+          const searchTerm = orderSearchInput.value.toLowerCase();
+          const orders = getAllOrders();
+          
+          const filteredOrders = orders.filter(order => 
+            order.id.toLowerCase().includes(searchTerm) || 
+            order.customer.name.toLowerCase().includes(searchTerm) ||
+            order.customer.email.toLowerCase().includes(searchTerm)
+          );
+          
+          renderOrdersTable(filteredOrders);
+        }
+        
+        // Filter by status
+        function filterByStatus() {
+          const status = statusFilter.value;
+          const orders = getAllOrders();
+          
+          if (status === 'all') {
+            renderOrdersTable(orders);
+          } else {
+            const filteredOrders = orders.filter(order => 
+              order.status === status
+            );
+            renderOrdersTable(filteredOrders);
+          }
+        }
+        
+        // Render orders table
+        function renderOrdersTable(orders) {
+          if (orders.length === 0) {
+            ordersTableBody.innerHTML = '<tr><td colspan="6" class="admin-table-empty">No orders found</td></tr>';
+            return;
+          }
+          
+          // Sort orders by date (newest first)
+          orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+          
+          ordersTableBody.innerHTML = orders.map(order => `
+            <tr>
+              <td>${order.id}</td>
+              <td>${order.customer.name}</td>
+              <td>${formatDate(order.date)}</td>
+              <td>${formatPrice(order.total)}</td>
+              <td>
+                <span class="admin-badge admin-badge-${order.status}">${capitalizeFirstLetter(order.status)}</span>
+              </td>
+              <td>
+                <div class="admin-table-actions">
+                  <button class="btn btn-outline view-order-btn" data-id="${order.id}">View</button>
+                  <button class="btn btn-outline update-status-btn" data-id="${order.id}">Update Status</button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+          
+          // Add event listeners to action buttons
+          document.querySelectorAll('.view-order-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              const orderId = this.dataset.id;
+              openOrderDetailModal(orderId);
+            });
+          });
+          
+          document.querySelectorAll('.update-status-btn').forEach(button => {
+            button.addEventListener('click', function() {
+              const orderId = this.dataset.id;
+              // For simplicity, just toggle between processing and delivered
+              toggleOrderStatus(orderId);
+            });
+          });
+        }
+        
+        // Open order detail modal
+        function openOrderDetailModal(orderId) {
+          const orders = getAllOrders();
+          const order = orders.find(o => o.id === orderId);
+          
+          if (order) {
+            orderDetailContent.innerHTML = `
+              <div class="order-detail">
+                <div class="order-detail-header">
+                  <div>
+                    <h4>Order ID: ${order.id}</h4>
+                    <div class="order-detail-date">Date: ${formatDate(order.date)}</div>
+                    <div class="order-detail-status">
+                      Status: <span class="admin-badge admin-badge-${order.status}">${capitalizeFirstLetter(order.status)}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="order-detail-section">
+                  <h5>Customer Information</h5>
+                  <div class="order-detail-customer">
+                    <div>${order.customer.name}</div>
+                    <div>${order.customer.email}</div>
+                    <div>${order.customer.phone}</div>
+                    <div>${order.customer.address}</div>
+                  </div>
+                </div>
+                
+                <div class="order-detail-section">
+                  <h5>Order Items</h5>
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${order.items.map(item => `
+                        <tr>
+                          <td>${item.name}</td>
+                          <td>${formatPrice(item.price)}</td>
+                          <td>${item.quantity}</td>
+                          <td>${formatPrice(item.total)}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+                
+                <div class="order-detail-section">
+                  <h5>Order Summary</h5>
+                  <div class="order-detail-summary">
+                    <div class="order-detail-summary-row">
+                      <span>Subtotal:</span>
+                      <span>${formatPrice(order.subtotal)}</span>
+                    </div>
+                    <div class="order-detail-summary-row">
+                      <span>Shipping:</span>
+                      <span>${order.shipping === 0 ? 'Free' : formatPrice(order.shipping)}</span>
+                    </div>
+                    <div class="order-detail-summary-row order-detail-total">
+                      <span>Total:</span>
+                      <span>${formatPrice(order.total)}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                ${order.notes ? `
+                  <div class="order-detail-section">
+                    <h5>Customer Notes</h5>
+                    <div class="order-detail-notes">${order.notes}</div>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+            
+            // Open modal
+            orderDetailModal.classList.add('active');
+          }
+        }
+        
+        // Close order modal
+        function closeOrderModal() {
+          orderDetailModal.classList.remove('active');
+        }
+        
+        // Toggle order status
+        function toggleOrderStatus(orderId) {
+          const orders = getAllOrders();
+          const orderIndex = orders.findIndex(o => o.id === orderId);
+          
+          if (orderIndex !== -1) {
+            // Cycle through statuses: pending -> processing -> delivered -> pending
+            const statusCycle = ['pending', 'processing', 'delivered'];
+            const currentStatus = orders[orderIndex].status;
+            const currentStatusIndex = statusCycle.indexOf(currentStatus);
+            const nextStatusIndex = (currentStatusIndex + 1) % statusCycle.length;
+            const nextStatus = statusCycle[nextStatusIndex];
+            
+            // Update order status
+            orders[orderIndex].status = nextStatus;
+            saveToDb('orders', orders);
+            
+            // Reload orders table
+            loadOrders();
+            
+            // Show success message
+            showToast(`Order ${orderId} status updated to ${capitalizeFirstLetter(nextStatus)}`);
+          }
+        }
+        
+        // Format date
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // Capitalize first letter
+        function capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+      });
+    </script>
+    <style>
+      /* Order detail styles */
+      .order-detail {
+        padding: var(--spacing-md);
+      }
+      
+      .order-detail-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-lg);
+      }
+      
+      .order-detail-date {
+        color: var(--text-muted);
+        font-size: 0.875rem;
+        margin-top: var(--spacing-xs);
+      }
+      
+      .order-detail-status {
+        margin-top: var(--spacing-xs);
+      }
+      
+      .order-detail-section {
+        margin-bottom: var(--spacing-lg);
+      }
+      
+      .order-detail-section h5 {
+        font-weight: 600;
+        margin-bottom: var(--spacing-sm);
+        padding-bottom: var(--spacing-xs);
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .order-detail-customer {
+        line-height: 1.6;
+      }
+      
+      .order-detail-summary {
+        max-width: 400px;
+        margin-left: auto;
+      }
+      
+      .order-detail-summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: var(--spacing-sm) 0;
+        border-bottom: 1px solid var(--border);
+      }
+      
+      .order-detail-total {
+        font-weight: 700;
+        font-size: 1.125rem;
+      }
+      
+      .order-detail-notes {
+        padding: var(--spacing-md);
+        background-color: var(--background-muted);
+        border-radius: var(--radius-md);
+        font-style: italic;
+      }
+    </style>
+  </body>
+</html>

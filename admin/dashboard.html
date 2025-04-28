@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard - GlamEssence</title>
+    <meta name="description" content="Admin dashboard for GlamEssence." />
+    <meta name="author" content="GlamEssence" />
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+  </head>
+
+  <body>
+    <div id="app" class="admin-layout">
+      <!-- Admin Sidebar -->
+      <aside class="admin-sidebar">
+        <div class="admin-sidebar-header">
+          <a href="dashboard.html" class="admin-sidebar-logo">GlamEssence</a>
+        </div>
+        
+        <nav class="admin-sidebar-nav">
+          <ul class="admin-sidebar-nav-list">
+            <li>
+              <a href="dashboard.html" class="admin-sidebar-nav-link active">
+                <span class="admin-sidebar-nav-icon">📊</span>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="products.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">📦</span>
+                <span>Products</span>
+              </a>
+            </li>
+            <li>
+              <a href="orders.html" class="admin-sidebar-nav-link">
+                <span class="admin-sidebar-nav-icon">🛍️</span>
+                <span>Orders</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        
+        <div class="admin-sidebar-footer">
+          <button id="adminLogoutBtn" class="admin-sidebar-logout">
+            <span class="admin-sidebar-nav-icon">🚪</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </aside>
+      
+      <!-- Admin Content -->
+      <main class="admin-content">
+        <header class="admin-header">
+          <h1 class="admin-header-title">Dashboard</h1>
+          <div class="admin-header-actions">
+            <a href="../index.html" class="admin-header-btn" target="_blank">View Store</a>
+          </div>
+        </header>
+        
+        <div class="admin-dashboard">
+          <div class="admin-dashboard-cards">
+            <div class="admin-dashboard-card">
+              <div class="admin-dashboard-card-icon" style="background-color: var(--beauty-magenta-light);">📦</div>
+              <div class="admin-dashboard-card-content">
+                <h3 id="totalProducts" class="admin-dashboard-card-number">0</h3>
+                <p class="admin-dashboard-card-label">Total Products</p>
+              </div>
+            </div>
+            
+            <div class="admin-dashboard-card">
+              <div class="admin-dashboard-card-icon" style="background-color: var(--beauty-lavender-light);">🛍️</div>
+              <div class="admin-dashboard-card-content">
+                <h3 id="totalOrders" class="admin-dashboard-card-number">0</h3>
+                <p class="admin-dashboard-card-label">Total Orders</p>
+              </div>
+            </div>
+            
+            <div class="admin-dashboard-card">
+              <div class="admin-dashboard-card-icon" style="background-color: var(--beauty-hotpink-light);">💰</div>
+              <div class="admin-dashboard-card-content">
+                <h3 id="totalRevenue" class="admin-dashboard-card-number">0.00 RON</h3>
+                <p class="admin-dashboard-card-label">Total Revenue</p>
+              </div>
+            </div>
+            
+            <div class="admin-dashboard-card">
+              <div class="admin-dashboard-card-icon" style="background-color: var(--beauty-coral-light);">⚠️</div>
+              <div class="admin-dashboard-card-content">
+                <h3 id="lowStockProducts" class="admin-dashboard-card-number">0</h3>
+                <p class="admin-dashboard-card-label">Low Stock Products</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="admin-dashboard-grid">
+            <div class="admin-dashboard-widget">
+              <div class="admin-dashboard-widget-header">
+                <h3>Recent Orders</h3>
+                <a href="orders.html" class="admin-dashboard-widget-link">View all</a>
+              </div>
+              
+              <div class="admin-dashboard-widget-content">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersTable">
+                    <tr>
+                      <td colspan="5" class="admin-table-empty">No orders found</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div class="admin-dashboard-widget">
+              <div class="admin-dashboard-widget-header">
+                <h3>Low Stock Products</h3>
+                <a href="products.html" class="admin-dashboard-widget-link">View all</a>
+              </div>
+              
+              <div class="admin-dashboard-widget-content">
+                <table class="admin-table">
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th>Category</th>
+                      <th>Price</th>
+                      <th>Stock</th>
+                    </tr>
+                  </thead>
+                  <tbody id="lowStockTable">
+                    <tr>
+                      <td colspan="4" class="admin-table-empty">No low stock products</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      
+      <!-- Toast Notifications -->
+      <div id="toast" class="toast"></div>
+    </div>
+
+    <script src="../js/database.js"></script>
+    <script src="admin.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if admin is authenticated
+        if (localStorage.getItem('adminAuth') !== 'true') {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // Initialize database
+        initializeDb();
+        
+        // Load dashboard data
+        loadDashboardData();
+        
+        // Load recent orders
+        loadRecentOrders();
+        
+        // Load low stock products
+        loadLowStockProducts();
+        
+        // Admin logout
+        document.getElementById('adminLogoutBtn').addEventListener('click', function() {
+          localStorage.removeItem('adminAuth');
+          window.location.href = 'login.html';
+        });
+      });
+      
+      // Load dashboard data
+      function loadDashboardData() {
+        const products = getAllProducts();
+        const orders = getAllOrders();
+        
+        // Total products
+        const totalProducts = Object.keys(products).length;
+        document.getElementById('totalProducts').textContent = totalProducts;
+        
+        // Total orders
+        const totalOrders = orders.length;
+        document.getElementById('totalOrders').textContent = totalOrders;
+        
+        // Total revenue
+        const totalRevenue = orders.reduce((total, order) => total + order.total, 0);
+        document.getElementById('totalRevenue').textContent = formatPrice(totalRevenue);
+        
+        // Low stock products
+        const lowStockCount = Object.values(products).filter(product => product.stock <= 10).length;
+        document.getElementById('lowStockProducts').textContent = lowStockCount;
+      }
+      
+      // Load recent orders
+      function loadRecentOrders() {
+        const orders = getAllOrders();
+        const recentOrdersTable = document.getElementById('recentOrdersTable');
+        
+        if (orders.length === 0) {
+          recentOrdersTable.innerHTML = '<tr><td colspan="5" class="admin-table-empty">No orders found</td></tr>';
+          return;
+        }
+        
+        // Sort orders by date (newest first)
+        orders.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Get up to 5 most recent orders
+        const recentOrders = orders.slice(0, 5);
+        
+        recentOrdersTable.innerHTML = recentOrders.map(order => `
+          <tr>
+            <td>${order.id}</td>
+            <td>${order.customer.name}</td>
+            <td>${formatDate(order.date)}</td>
+            <td>${formatPrice(order.total)}</td>
+            <td><span class="admin-badge admin-badge-${order.status.toLowerCase()}">${order.status}</span></td>
+          </tr>
+        `).join('');
+      }
+      
+      // Load low stock products
+      function loadLowStockProducts() {
+        const products = getAllProducts();
+        const lowStockTable = document.getElementById('lowStockTable');
+        
+        // Filter low stock products (stock <= 10)
+        const lowStockProducts = Object.values(products).filter(product => product.stock <= 10);
+        
+        if (lowStockProducts.length === 0) {
+          lowStockTable.innerHTML = '<tr><td colspan="4" class="admin-table-empty">No low stock products</td></tr>';
+          return;
+        }
+        
+        // Sort by stock (ascending)
+        lowStockProducts.sort((a, b) => a.stock - b.stock);
+        
+        // Get up to 5 lowest stock products
+        const lowestStockProducts = lowStockProducts.slice(0, 5);
+        
+        lowStockTable.innerHTML = lowestStockProducts.map(product => `
+          <tr>
+            <td>
+              <div class="admin-table-product">
+                <img src="${product.image}" alt="${product.name}" class="admin-table-product-image">
+                <span>${product.name}</span>
+              </div>
+            </td>
+            <td>${capitalizeFirstLetter(product.category)}</td>
+            <td>${formatPrice(product.price)}</td>
+            <td><span class="admin-badge ${product.stock <= 5 ? 'admin-badge-danger' : 'admin-badge-warning'}">${product.stock}</span></td>
+          </tr>
+        `).join('');
+      }
+      
+      // Format date
+      function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+      }
+      
+      // Capitalize first letter
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+    </script>
+  </body>
+</html>
