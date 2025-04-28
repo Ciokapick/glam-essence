@@ -46,6 +46,7 @@
     </div>
 
     <script src="../js/database.js"></script>
+    <script src="admin.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const adminLoginForm = document.getElementById('adminLoginForm');
@@ -71,17 +72,6 @@
             showToast('Invalid email or password', 'error');
           }
         });
-        
-        // Show toast notification
-        function showToast(message, type = 'success') {
-          const toast = document.getElementById('toast');
-          toast.textContent = message;
-          toast.className = 'toast active ' + type;
-          
-          setTimeout(() => {
-            toast.classList.remove('active');
-          }, 3000);
-        }
       });
     </script>
     <style>

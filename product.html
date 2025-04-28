@@ -4,8 +4,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Detalii Produs - GlamEssence</title>
-    <meta name="description" content="Descoperă detalii despre produsele noastre premium." />
+    <title>Product - GlamEssence</title>
+    <meta name="description" content="Detalii produs GlamEssence" />
     <meta name="author" content="GlamEssence" />
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
@@ -43,22 +43,21 @@
         </div>
       </header>
 
-      <!-- Product Detail -->
-      <section class="product-detail">
+      <!-- Product Section -->
+      <section class="product-page">
         <div class="container">
-          <div id="productContainer" class="product-detail-container">
-            <!-- Product will be loaded dynamically -->
-            <div class="loading">Se încarcă produsul...</div>
+          <div class="product-breadcrumbs">
+            <a href="index.html">Acasă</a> &gt; 
+            <span id="productCategoryBreadcrumb"><a href="#">Category</a></span> &gt; 
+            <span id="productNameBreadcrumb">Product Name</span>
           </div>
-        </div>
-      </section>
-
-      <!-- Related Products -->
-      <section class="related-products">
-        <div class="container">
-          <h2 class="section-title">Produse similare</h2>
-          <div id="relatedProducts" class="products-grid">
-            <!-- Related products will be loaded dynamically -->
+          
+          <div id="productDetails" class="product-details">
+            <!-- Product details will be loaded dynamically -->
+            <div class="product-loading">
+              <div class="loading-spinner"></div>
+              <p>Se încarcă produsul...</p>
+            </div>
           </div>
         </div>
       </section>
@@ -162,213 +161,194 @@
     <script src="js/main.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        const productContainer = document.getElementById('productContainer');
-        const relatedProductsContainer = document.getElementById('relatedProducts');
+        const productDetails = document.getElementById('productDetails');
+        const productCategoryBreadcrumb = document.getElementById('productCategoryBreadcrumb');
+        const productNameBreadcrumb = document.getElementById('productNameBreadcrumb');
         
         // Get product slug from URL
         const urlParams = new URLSearchParams(window.location.search);
         const productSlug = urlParams.get('slug');
         
         if (!productSlug) {
-          // No product slug provided, redirect to homepage
-          window.location.href = 'index.html';
+          window.location.href = '404.html';
           return;
         }
         
-        // Get product by slug
-        const product = getProductBySlug(productSlug);
+        // Initialize database
+        initializeDb();
         
-        if (!product) {
-          // Product not found, show 404 message
-          productContainer.innerHTML = `
-            <div class="empty-state">
-              <div class="empty-icon">🔍</div>
-              <h3 class="empty-title">Produsul nu a fost găsit</h3>
-              <p class="empty-description">Ne pare rău, dar produsul căutat nu există.</p>
-              <a href="index.html" class="btn btn-primary">Înapoi la magazin</a>
-            </div>
-          `;
-          return;
-        }
+        // Load product details
+        loadProductDetails();
         
-        // Update page title
-        document.title = `${product.name} - GlamEssence`;
-        
-        // Render product details
-        productContainer.innerHTML = `
-          <div class="product-breadcrumbs">
-            <a href="index.html">Acasă</a> &gt; 
-            <a href="${product.category}.html">${capitalizeFirstLetter(product.category)}</a> &gt; 
-            <span>${product.name}</span>
-          </div>
+        // Function to load product details
+        function loadProductDetails() {
+          const product = getProductBySlug(productSlug);
           
-          <div class="product-detail-content">
-            <div class="product-detail-image">
-              <img src="${product.image}" alt="${product.name}">
-              <div class="product-badges">
-                ${product.discount ? `<span class="product-badge badge-sale">-${product.discount}%</span>` : ''}
-                ${product.isNew ? '<span class="product-badge badge-new">Nou</span>' : ''}
-              </div>
-            </div>
-            
-            <div class="product-detail-info">
-              <h1 class="product-detail-title">${product.name}</h1>
-              <div class="product-detail-category">${capitalizeFirstLetter(product.category)}</div>
-              
-              <div class="product-detail-price">
-                ${product.discount ? `<span class="product-price-original">${formatPrice(product.price)}</span>` : ''}
-                <span class="product-price">${formatPrice(calculateDiscountedPrice(product.price, product.discount))}</span>
-              </div>
-              
-              <div class="product-detail-description">
-                <p>${product.description}</p>
-              </div>
-              
-              <div class="product-detail-stock">
-                <div class="product-stock" data-id="${product.id}">Stoc: ${product.stock} bucăți</div>
-              </div>
-              
-              <div class="product-detail-actions">
-                <div class="quantity-control">
-                  <button class="quantity-btn" id="decreaseQuantity">-</button>
-                  <input type="number" value="1" min="1" id="quantityInput" class="quantity-input">
-                  <button class="quantity-btn" id="increaseQuantity">+</button>
-                </div>
-                
-                <div class="product-detail-buttons">
-                  <button id="addToCartBtn" class="btn btn-primary">Adaugă în coș</button>
-                  <button id="addToWishlistBtn" class="btn btn-outline">
-                    ${isInWishlist(product.id) ? 'Eliminare de la favorite' : 'Adaugă la favorite'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-        
-        // Load related products
-        loadRelatedProducts(product);
-        
-        // Event listeners for product detail page
-        const quantityInput = document.getElementById('quantityInput');
-        const decreaseQuantityBtn = document.getElementById('decreaseQuantity');
-        const increaseQuantityBtn = document.getElementById('increaseQuantity');
-        const addToCartBtn = document.getElementById('addToCartBtn');
-        const addToWishlistBtn = document.getElementById('addToWishlistBtn');
-        
-        // Decrease quantity
-        decreaseQuantityBtn.addEventListener('click', function() {
-          let quantity = parseInt(quantityInput.value);
-          if (quantity > 1) {
-            quantityInput.value = quantity - 1;
-          }
-        });
-        
-        // Increase quantity
-        increaseQuantityBtn.addEventListener('click', function() {
-          let quantity = parseInt(quantityInput.value);
-          quantityInput.value = quantity + 1;
-        });
-        
-        // Add to cart
-        addToCartBtn.addEventListener('click', function() {
-          const quantity = parseInt(quantityInput.value);
-          if (isNaN(quantity) || quantity < 1) {
-            showToast('Vă rugăm să introduceți o cantitate validă', 'error');
+          if (!product) {
+            window.location.href = '404.html';
             return;
           }
           
-          addToCart(product, quantity);
-          updateCartCount();
-          showToast(`${product.name} a fost adăugat în coș`);
-        });
-        
-        // Add/remove from wishlist
-        addToWishlistBtn.addEventListener('click', function() {
+          // Update page title
+          document.title = `${product.name} - GlamEssence`;
+          
+          // Update breadcrumbs
+          productCategoryBreadcrumb.innerHTML = `<a href="${product.category}.html">${capitalizeFirstLetter(product.category)}</a>`;
+          productNameBreadcrumb.textContent = product.name;
+          
+          // Render product details
+          productDetails.innerHTML = `
+            <div class="product-details-container">
+              <div class="product-image-gallery">
+                <div class="product-image-main-container">
+                  <img src="${product.image}" alt="${product.name}" class="product-image-main">
+                  <div class="product-badges">
+                    ${product.discount ? `<span class="product-badge badge-sale">-${product.discount}%</span>` : ''}
+                    ${product.isNew ? '<span class="product-badge badge-new">Nou</span>' : ''}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="product-info">
+                <h1 class="product-title">${product.name}</h1>
+                
+                <div class="product-price-container">
+                  ${product.discount ? 
+                    `<span class="product-price-original">${formatPrice(product.price)}</span>
+                     <span class="product-price">${formatPrice(calculateDiscountedPrice(product.price, product.discount))}</span>` : 
+                    `<span class="product-price">${formatPrice(product.price)}</span>`
+                  }
+                </div>
+                
+                <div class="product-stock">
+                  <span class="stock-label">Disponibilitate:</span>
+                  <span class="stock-value ${product.stock > 0 ? 'in-stock' : 'out-of-stock'}">
+                    ${product.stock > 0 ? `În stoc (${product.stock} bucăți)` : 'Stoc epuizat'}
+                  </span>
+                </div>
+                
+                <div class="product-description">
+                  <h3>Descriere</h3>
+                  <p>${product.description}</p>
+                </div>
+                
+                <div class="product-actions">
+                  <div class="quantity-control">
+                    <button class="quantity-btn decrease-quantity">-</button>
+                    <input type="number" value="1" min="1" class="quantity-input" id="productQuantity">
+                    <button class="quantity-btn increase-quantity">+</button>
+                  </div>
+                  
+                  <button class="btn btn-primary btn-lg" id="addToCartBtn" ${product.stock === 0 ? 'disabled' : ''}>
+                    ${product.stock === 0 ? 'Stoc epuizat' : 'Adaugă în coș'}
+                  </button>
+                  
+                  <button class="btn btn-outline btn-lg" id="addToWishlistBtn">
+                    <span class="icon">❤</span>
+                  </button>
+                </div>
+                
+                <div class="product-meta">
+                  <div class="product-meta-item">
+                    <span class="meta-label">Categorie:</span>
+                    <span class="meta-value"><a href="${product.category}.html">${capitalizeFirstLetter(product.category)}</a></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          
+          // Add event listeners
+          const quantityInput = document.getElementById('productQuantity');
+          const decreaseBtn = document.querySelector('.decrease-quantity');
+          const increaseBtn = document.querySelector('.increase-quantity');
+          const addToCartBtn = document.getElementById('addToCartBtn');
+          const addToWishlistBtn = document.getElementById('addToWishlistBtn');
+          
+          // Update wishlist button appearance
           if (isInWishlist(product.id)) {
-            removeFromWishlist(product.id);
-            addToWishlistBtn.textContent = 'Adaugă la favorite';
-            showToast(`${product.name} a fost eliminat din favorite`);
-          } else {
-            addToWishlist(product);
-            addToWishlistBtn.textContent = 'Eliminare de la favorite';
-            showToast(`${product.name} a fost adăugat la favorite`);
+            addToWishlistBtn.classList.add('active');
           }
-          updateWishlistCount();
-        });
-        
-        // Listen for stock updates
-        window.addEventListener('stockUpdated', function(e) {
-          const { productId, newStock } = e.detail;
-          if (productId === product.id) {
-            const stockElement = document.querySelector(`.product-stock[data-id="${productId}"]`);
-            if (stockElement) {
-              stockElement.textContent = `Stoc: ${newStock} bucăți`;
+          
+          // Decrease quantity
+          decreaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+              quantityInput.value = currentValue - 1;
             }
-          }
-        });
-      });
-      
-      // Load related products
-      function loadRelatedProducts(currentProduct) {
-        const relatedProductsContainer = document.getElementById('relatedProducts');
-        
-        // Get products from same category
-        const categoryProducts = getProductsByCategory(currentProduct.category);
-        
-        // Filter out current product and limit to 4 products
-        const relatedProducts = categoryProducts
-          .filter(product => product.id !== currentProduct.id)
-          .slice(0, 4);
-        
-        if (relatedProducts.length === 0) {
-          relatedProductsContainer.parentElement.style.display = 'none';
-          return;
+          });
+          
+          // Increase quantity
+          increaseBtn.addEventListener('click', function() {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue < product.stock) {
+              quantityInput.value = currentValue + 1;
+            }
+          });
+          
+          // Add to cart
+          addToCartBtn.addEventListener('click', function() {
+            if (product.stock === 0) return;
+            
+            const quantity = parseInt(quantityInput.value);
+            addToCart(product, quantity);
+            updateCartCount();
+            showToast(`${product.name} a fost adăugat în coș`);
+          });
+          
+          // Add to wishlist
+          addToWishlistBtn.addEventListener('click', function() {
+            if (isInWishlist(product.id)) {
+              removeFromWishlist(product.id);
+              addToWishlistBtn.classList.remove('active');
+              updateWishlistCount();
+              showToast(`${product.name} a fost eliminat din favorite`);
+            } else {
+              addToWishlist(product);
+              addToWishlistBtn.classList.add('active');
+              updateWishlistCount();
+              showToast(`${product.name} a fost adăugat la favorite`);
+            }
+          });
+          
+          // Listen for stock updates
+          window.addEventListener('stockUpdated', function(e) {
+            const { productId, newStock } = e.detail;
+            
+            if (productId === product.id) {
+              const stockElement = document.querySelector('.stock-value');
+              
+              // Update stock display
+              if (newStock > 0) {
+                stockElement.textContent = `În stoc (${newStock} bucăți)`;
+                stockElement.className = 'stock-value in-stock';
+                addToCartBtn.disabled = false;
+                addToCartBtn.textContent = 'Adaugă în coș';
+              } else {
+                stockElement.textContent = 'Stoc epuizat';
+                stockElement.className = 'stock-value out-of-stock';
+                addToCartBtn.disabled = true;
+                addToCartBtn.textContent = 'Stoc epuizat';
+              }
+              
+              // Update max quantity
+              if (parseInt(quantityInput.value) > newStock) {
+                quantityInput.value = newStock > 0 ? newStock : 1;
+              }
+            }
+          });
         }
         
-        // Render related products
-        relatedProductsContainer.innerHTML = relatedProducts.map(product => `
-          <div class="product-card" data-id="${product.id}">
-            <div class="product-image-container">
-              <a href="product.html?slug=${product.slug}">
-                <img src="${product.image}" alt="${product.name}" class="product-image">
-              </a>
-              <div class="product-badges">
-                ${product.discount ? `<span class="product-badge badge-sale">-${product.discount}%</span>` : ''}
-                ${product.isNew ? '<span class="product-badge badge-new">Nou</span>' : ''}
-              </div>
-              <div class="product-actions">
-                <button class="product-action-btn add-to-wishlist-btn" data-id="${product.id}" title="Adaugă la favorite">❤</button>
-                <button class="product-action-btn quick-view-btn" data-id="${product.id}" title="Vizualizare rapidă">👁️</button>
-              </div>
-            </div>
-            <div class="product-content">
-              <h3 class="product-title">${product.name}</h3>
-              <div class="product-category">${product.category}</div>
-              <div class="product-footer">
-                <div class="product-price-container">
-                  ${product.discount ? `<span class="product-price-original">${formatPrice(product.price)}</span>` : ''}
-                  <span class="product-price">${formatPrice(calculateDiscountedPrice(product.price, product.discount))}</span>
-                </div>
-                <button class="btn btn-primary add-to-cart-btn" data-id="${product.id}">Adaugă</button>
-              </div>
-            </div>
-          </div>
-        `).join('');
-        
-        // Add event listeners to product buttons
-        addProductEventListeners();
-      }
-      
-      // Capitalize first letter
-      function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-      }
+        // Helper function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+          return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+      });
     </script>
     <style>
-      .product-detail {
-        padding-top: 100px;
-        padding-bottom: var(--spacing-2xl);
+      .product-page {
+        padding: var(--spacing-2xl) 0;
+        padding-top: calc(var(--header-height) + var(--spacing-lg));
       }
       
       .product-breadcrumbs {
@@ -378,7 +358,7 @@
       }
       
       .product-breadcrumbs a {
-        color: var(--text-muted);
+        color: var(--text-primary);
         text-decoration: none;
       }
       
@@ -386,72 +366,182 @@
         color: var(--beauty-magenta);
       }
       
-      .product-detail-content {
+      .product-details-container {
         display: grid;
         grid-template-columns: 1fr;
         gap: var(--spacing-xl);
       }
       
-      .product-detail-image {
+      .product-image-main-container {
         position: relative;
-        border-radius: var(--radius-lg);
+        border-radius: var(--radius-md);
         overflow: hidden;
       }
       
-      .product-detail-image img {
+      .product-image-main {
         width: 100%;
         height: auto;
+        aspect-ratio: 1 / 1;
         object-fit: cover;
       }
       
-      .product-detail-title {
+      .product-badges {
+        position: absolute;
+        top: var(--spacing-md);
+        left: var(--spacing-md);
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+      
+      .product-title {
         font-size: 2rem;
         font-weight: 700;
+        margin-bottom: var(--spacing-md);
+      }
+      
+      .product-price-container {
+        margin-bottom: var(--spacing-md);
+      }
+      
+      .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+      }
+      
+      .product-price-original {
+        font-size: 1.25rem;
+        color: var(--text-muted);
+        text-decoration: line-through;
+        margin-right: var(--spacing-md);
+      }
+      
+      .product-stock {
+        margin-bottom: var(--spacing-md);
+      }
+      
+      .stock-label {
+        font-weight: 600;
+      }
+      
+      .stock-value.in-stock {
+        color: var(--success);
+      }
+      
+      .stock-value.out-of-stock {
+        color: var(--danger);
+      }
+      
+      .product-description {
+        margin-bottom: var(--spacing-lg);
+      }
+      
+      .product-description h3 {
+        font-size: 1.125rem;
+        font-weight: 600;
         margin-bottom: var(--spacing-sm);
       }
       
-      .product-detail-category {
-        color: var(--text-muted);
-        margin-bottom: var(--spacing-md);
-        font-size: 0.875rem;
+      .product-actions {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+        flex-wrap: wrap;
       }
       
-      .product-detail-price {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-bottom: var(--spacing-lg);
+      .quantity-control {
         display: flex;
         align-items: center;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
       }
       
-      .product-detail-description {
-        margin-bottom: var(--spacing-lg);
-        line-height: 1.6;
+      .quantity-btn {
+        width: 40px;
+        height: 48px;
+        background: none;
+        border: none;
+        font-size: 1.25rem;
+        cursor: pointer;
       }
       
-      .product-detail-stock {
-        margin-bottom: var(--spacing-lg);
+      .quantity-btn:hover {
+        background-color: var(--background-muted);
       }
       
-      .product-detail-actions {
+      .quantity-input {
+        width: 50px;
+        height: 48px;
+        border: none;
+        text-align: center;
+        font-size: 1rem;
+        -moz-appearance: textfield;
+      }
+      
+      .quantity-input::-webkit-outer-spin-button,
+      .quantity-input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      
+      .btn-lg {
+        height: 48px;
+      }
+      
+      #addToWishlistBtn.active {
+        background-color: var(--beauty-rose-light);
+        color: var(--beauty-magenta);
+        border-color: var(--beauty-magenta);
+      }
+      
+      .product-meta {
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--border);
+      }
+      
+      .product-meta-item {
+        margin-bottom: var(--spacing-sm);
+      }
+      
+      .meta-label {
+        font-weight: 600;
+        margin-right: var(--spacing-sm);
+      }
+      
+      .meta-value a {
+        color: var(--beauty-magenta);
+        text-decoration: none;
+      }
+      
+      .product-loading {
         display: flex;
         flex-direction: column;
-        gap: var(--spacing-md);
+        align-items: center;
+        justify-content: center;
+        padding: var(--spacing-2xl) 0;
       }
       
-      .product-detail-buttons {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-md);
+      .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(217, 70, 239, 0.3);
+        border-radius: 50%;
+        border-top-color: var(--beauty-magenta);
+        animation: spin 1s ease-in-out infinite;
+        margin-bottom: var(--spacing-md);
+      }
+      
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
       
       @media (min-width: 768px) {
-        .product-detail-content {
+        .product-details-container {
           grid-template-columns: 1fr 1fr;
-        }
-        
-        .product-detail-buttons {
-          flex-direction: row;
         }
       }
     </style>
