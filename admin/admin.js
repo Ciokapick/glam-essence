@@ -199,3 +199,4 @@ function adminLogout() {
   localStorage.removeItem('adminAuth');
   window.location.href = 'login.html';
 }
+
