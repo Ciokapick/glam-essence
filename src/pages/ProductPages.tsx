@@ -25,7 +25,9 @@ const ProductPages: React.FC = () => {
           return;
         }
         
-        setProductData(products[slug]);
+        // Make sure we're using just the main image, not the gallery
+        const product = products[slug];
+        setProductData(product);
         setLoading(false);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -49,3 +51,4 @@ const ProductPages: React.FC = () => {
 };
 
 export default ProductPages;
+

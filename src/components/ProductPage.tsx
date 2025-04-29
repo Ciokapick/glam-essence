@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -29,7 +30,6 @@ interface ProductPageProps {
 const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) => {
   const [product, setProduct] = useState<any>(initialProduct);
   const [quantity, setQuantity] = useState(1);
-  const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   
@@ -148,10 +148,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
           </nav>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            <div className="space-y-4">
+            <div>
               <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
                 <img 
-                  src={product?.gallery?.[selectedImage] || product?.image} 
+                  src={product?.image} 
                   alt={product?.name} 
                   className="w-full h-full object-cover" 
                 />
@@ -168,22 +168,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </Badge>
                 )}
               </div>
-              
-              {product?.gallery && (
-                <div className="grid grid-cols-4 gap-2">
-                  {product.gallery.map((image: string, index: number) => (
-                    <button
-                      key={index}
-                      className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${
-                        selectedImage === index ? 'border-beauty-magenta' : 'border-transparent'
-                      }`}
-                      onClick={() => setSelectedImage(index)}
-                    >
-                      <img src={image} alt="" className="w-full h-full object-cover" />
-                    </button>
-                  ))}
-                </div>
-              )}
             </div>
             
             <div>
@@ -456,3 +440,4 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
 };
 
 export default ProductPage;
+
