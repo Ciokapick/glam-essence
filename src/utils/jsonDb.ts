@@ -1,6 +1,9 @@
+
 /**
  * Simple JSON database utility functions
  */
+import { cremeProducts } from '@/data/cremeProducts';
+import { ingrijireProducts } from '@/data/ingrijireProducts';
 
 // Event emitter for stock updates
 class StockUpdateEmitter {
