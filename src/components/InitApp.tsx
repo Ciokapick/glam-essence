@@ -1,12 +1,12 @@
 
 import { useEffect } from 'react';
-import { initDatabase } from '@/utils/jsonDb';
+import { initializeProductsDb } from '@/utils/jsonDb';
 
 const InitApp = () => {
   useEffect(() => {
-    // Initialize the database
+    // Initialize our JSON database
     const init = async () => {
-      await initDatabase();
+      await initializeProductsDb();
     };
     
     init();

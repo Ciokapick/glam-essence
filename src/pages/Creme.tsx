@@ -1,77 +1,71 @@
-import React, { useEffect, useState } from 'react';
+
+import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Filter, SlidersHorizontal } from 'lucide-react';
-import { cremeProducts } from '@/data/cremeProducts';
-import { getAllProducts } from '@/utils/jsonDb';
 
 const Creme = () => {
-  const [products, setProducts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     window.scrollTo(0, 0);
-    
-    // Fetch the products from the database (localStorage)
-    const fetchProducts = async () => {
-      try {
-        const allProducts = await getAllProducts();
-        
-        // Filter and map only creme products with their actual stock levels
-        const cremeProductsList = Object.keys(cremeProducts).map(slug => {
-          const dbProduct = allProducts[slug];
-          // Ensure we're using the stock from database if available
-          const stockValue = dbProduct && typeof dbProduct.stock === 'number' ? dbProduct.stock : 0;
-          
-          return {
-            ...cremeProducts[slug],
-            stock: stockValue,
-            slug: slug // Ensure slug is available for ProductCard
-          };
-        });
-        
-        console.log("Creme products with stock:", cremeProductsList);
-        setProducts(cremeProductsList);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        // Fallback to static data if there's an error
-        const staticProducts = Object.keys(cremeProducts).map(slug => ({
-          ...cremeProducts[slug],
-          slug: slug
-        }));
-        setProducts(staticProducts);
-        setLoading(false);
-      }
-    };
-    
-    fetchProducts();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen">
-        <Navbar />
-        <div className="pt-24 pb-16 container mx-auto px-4">
-          <div className="animate-pulse">
-            <div className="h-40 bg-gray-200 rounded-2xl mb-12"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[...Array(8)].map((_, i) => (
-                <div key={i} className="space-y-4">
-                  <div className="aspect-square bg-gray-200 rounded-lg"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+  const products = [
+    {
+      id: "1",
+      name: "Cremă hidratantă Luxury",
+      price: 129.99,
+      image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      category: "Cremă față",
+      isSale: true,
+      discount: 15,
+      rating: 4
+    },
+    {
+      id: "2",
+      name: "Cremă contur ochi Anti-Age",
+      price: 149.99,
+      image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      category: "Cremă ochi",
+      rating: 5
+    },
+    {
+      id: "3",
+      name: "Cremă de mâini Silk",
+      price: 59.99,
+      image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      category: "Cremă mâini",
+      rating: 4
+    },
+    {
+      id: "4",
+      name: "Cremă de corp Intense",
+      price: 89.99,
+      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+      category: "Cremă corp",
+      isNew: true,
+      rating: 4
+    },
+    {
+      id: "5",
+      name: "Cremă nutritivă de noapte",
+      price: 139.99,
+      image: "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
+      category: "Cremă față",
+      rating: 5
+    },
+    {
+      id: "6",
+      name: "Cremă anticelulitică",
+      price: 109.99,
+      image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      category: "Cremă corp",
+      isSale: true,
+      discount: 10,
+      rating: 4
+    }
+  ];
 
   return (
     <div className="min-h-screen">
@@ -114,7 +108,7 @@ const Creme = () => {
           {/* Products grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
             {products.map((product) => (
-              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id.split('-')[1]) * 0.1}s` }}>
+              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
                 <ProductCard {...product} />
               </div>
             ))}
