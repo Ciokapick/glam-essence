@@ -1,4 +1,3 @@
-
 /**
  * Simple JSON database utility functions
  */
@@ -151,4 +150,27 @@ const updateProductStockAfterOrder = (productId: string, quantity: number): void
     // Update the stock
     updateProductStock(productId, newStock);
   });
+};
+
+// Initialize database with static product data
+export const initDatabase = async () => {
+  try {
+    let products = await getAllProducts();
+    
+    // If products don't exist in localStorage, initialize from our static data
+    if (!products || Object.keys(products).length === 0) {
+      // Import all product sets
+      const allProducts = {
+        ...products,
+        ...cremeProducts,
+        ...ingrijireProducts
+      };
+      
+      // Save to localStorage
+      localStorage.setItem('products', JSON.stringify(allProducts));
+      console.info('Products database initialized');
+    }
+  } catch (error) {
+    console.error('Error initializing database:', error);
+  }
 };

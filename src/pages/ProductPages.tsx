@@ -51,4 +51,3 @@ const ProductPages: React.FC = () => {
 };
 
 export default ProductPages;
-

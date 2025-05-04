@@ -96,7 +96,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     setIsPopupOpen(true);
   };
   
-  // Fix the product URL to ensure it uses the slug correctly
+  // Make sure to use the provided slug for the product URL
   const productUrl = slug ? `/product/${slug}` : `/product/${name.toLowerCase().replace(/\s+/g, '-')}`;
   
   // Calculate discounted price if on sale
