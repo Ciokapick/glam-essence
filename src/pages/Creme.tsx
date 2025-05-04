@@ -22,14 +22,18 @@ const Creme = () => {
         
         // Filter and map only creme products with their actual stock levels
         const cremeProductsList = Object.keys(cremeProducts).map(slug => {
-          const productWithStock = allProducts[slug] || cremeProducts[slug];
+          const dbProduct = allProducts[slug];
+          // Ensure we're using the stock from database if available
+          const stockValue = dbProduct && typeof dbProduct.stock === 'number' ? dbProduct.stock : 0;
+          
           return {
             ...cremeProducts[slug],
-            stock: productWithStock?.stock || 0,
+            stock: stockValue,
             slug: slug // Ensure slug is available for ProductCard
           };
         });
         
+        console.log("Creme products with stock:", cremeProductsList);
         setProducts(cremeProductsList);
         setLoading(false);
       } catch (error) {

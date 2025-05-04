@@ -22,14 +22,18 @@ const Ingrijire = () => {
         
         // Filter and map only ingrijire products with their actual stock levels
         const ingrijireProductsList = Object.keys(ingrijireProducts).map(slug => {
-          const productWithStock = allProducts[slug] || ingrijireProducts[slug];
+          const dbProduct = allProducts[slug];
+          // Ensure we're using the stock from database if available
+          const stockValue = dbProduct && typeof dbProduct.stock === 'number' ? dbProduct.stock : 0;
+          
           return {
             ...ingrijireProducts[slug],
-            stock: productWithStock?.stock || 0,
+            stock: stockValue,
             slug: slug // Ensure slug is available for ProductCard
           };
         });
         
+        console.log("Ingrijire products with stock:", ingrijireProductsList);
         setProducts(ingrijireProductsList);
         setLoading(false);
       } catch (error) {
