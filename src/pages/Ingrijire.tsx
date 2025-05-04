@@ -39,9 +39,9 @@ const Ingrijire = () => {
       } catch (error) {
         console.error('Error fetching products:', error);
         // Fallback to static data if there's an error
-        const staticProducts = Object.values(ingrijireProducts).map(product => ({
-          ...product,
-          slug: product.slug
+        const staticProducts = Object.keys(ingrijireProducts).map(slug => ({
+          ...ingrijireProducts[slug],
+          slug: slug
         }));
         setProducts(staticProducts);
         setLoading(false);

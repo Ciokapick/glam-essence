@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -39,9 +38,9 @@ const Creme = () => {
       } catch (error) {
         console.error('Error fetching products:', error);
         // Fallback to static data if there's an error
-        const staticProducts = Object.values(cremeProducts).map(product => ({
-          ...product,
-          slug: product.slug
+        const staticProducts = Object.keys(cremeProducts).map(slug => ({
+          ...cremeProducts[slug],
+          slug: slug
         }));
         setProducts(staticProducts);
         setLoading(false);
