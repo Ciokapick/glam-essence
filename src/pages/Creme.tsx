@@ -1,21 +1,74 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Filter, SlidersHorizontal } from 'lucide-react';
 import { cremeProducts } from '@/data/cremeProducts';
+import { getAllProducts } from '@/utils/jsonDb';
 
 const Creme = () => {
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    
+    // Fetch the products from the database (localStorage)
+    const fetchProducts = async () => {
+      try {
+        const allProducts = await getAllProducts();
+        
+        // Filter and map only creme products with their actual stock levels
+        const cremeProductsList = Object.keys(cremeProducts).map(slug => {
+          const productWithStock = allProducts[slug] || cremeProducts[slug];
+          return {
+            ...cremeProducts[slug],
+            stock: productWithStock?.stock || 0,
+            slug: slug // Ensure slug is available for ProductCard
+          };
+        });
+        
+        setProducts(cremeProductsList);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to static data if there's an error
+        const staticProducts = Object.values(cremeProducts).map(product => ({
+          ...product,
+          slug: product.slug
+        }));
+        setProducts(staticProducts);
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
   }, []);
 
-  const products = Object.values(cremeProducts).map(product => ({
-    ...product,
-    slug: product.slug // Ensure slug is available for ProductCard
-  }));
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        <Navbar />
+        <div className="pt-24 pb-16 container mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-40 bg-gray-200 rounded-2xl mb-12"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <div className="aspect-square bg-gray-200 rounded-lg"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
