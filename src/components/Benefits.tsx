@@ -1,28 +1,31 @@
 
 import React from 'react';
 import { Leaf, TruckIcon, Shield, Gift } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Benefits = () => {
+  const { t } = useLanguage();
+  
   const benefits = [
     {
       icon: <Leaf className="h-12 w-12 text-beauty-mint" />,
-      title: "Ingrediente naturale",
-      description: "Produse create cu ingrediente organice, pentru pielea ta."
+      title: t('benefits.natural_ingredients'),
+      description: t('benefits.natural_ingredients_desc')
     },
     {
       icon: <TruckIcon className="h-12 w-12 text-beauty-lavender" />,
-      title: "Livrare gratuită",
-      description: "Pentru comenzi de peste 200 lei în toată România."
+      title: t('benefits.free_delivery'),
+      description: t('benefits.free_delivery_desc')
     },
     {
       icon: <Shield className="h-12 w-12 text-beauty-rose" />,
-      title: "Calitate garantată",
-      description: "Toate produsele noastre sunt testate și certificate."
+      title: t('benefits.guaranteed_quality'),
+      description: t('benefits.guaranteed_quality_desc')
     },
     {
       icon: <Gift className="h-12 w-12 text-beauty-gold" />,
-      title: "Cadouri speciale",
-      description: "La fiecare comandă primești mostre și surprize."
+      title: t('benefits.special_gifts'),
+      description: t('benefits.special_gifts_desc')
     }
   ];
 

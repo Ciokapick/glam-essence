@@ -5,8 +5,11 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Filter, SlidersHorizontal } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Parfumuri = () => {
+  const { t } = useLanguage();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -14,55 +17,55 @@ const Parfumuri = () => {
   const products = [
     {
       id: "1",
-      name: "Parfum Floral Extravagance",
+      name: t('parfumuri.floral_extravagance'),
       price: 349.99,
       image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Floral",
+      category: t('parfumuri.floral_category'),
       isNew: true,
       rating: 5
     },
     {
       id: "2",
-      name: "Parfum Oriental Mystique",
+      name: t('parfumuri.oriental_mystique'),
       price: 399.99,
       image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Oriental",
+      category: t('parfumuri.oriental_category'),
       isSale: true,
       discount: 10,
       rating: 4
     },
     {
       id: "3",
-      name: "Parfum Fresh Citrus",
+      name: t('parfumuri.fresh_citrus'),
       price: 299.99,
       image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Citric",
+      category: t('parfumuri.citrus_category'),
       rating: 4
     },
     {
       id: "4",
-      name: "Parfum Woody Elegance",
+      name: t('parfumuri.woody_elegance'),
       price: 419.99,
       image: "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Lemnos",
+      category: t('parfumuri.woody_category'),
       rating: 5
     },
     {
       id: "5",
-      name: "Parfum Aquatic Breeze",
+      name: t('parfumuri.aquatic_breeze'),
       price: 329.99,
       image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Acvatic",
+      category: t('parfumuri.aquatic_category'),
       isSale: true,
       discount: 15,
       rating: 4
     },
     {
       id: "6",
-      name: "Parfum Spicy Noir",
+      name: t('parfumuri.spicy_noir'),
       price: 449.99,
       image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Parfum Condimentat",
+      category: t('parfumuri.spicy_category'),
       isNew: true,
       rating: 5
     }
@@ -77,12 +80,12 @@ const Parfumuri = () => {
           {/* Hero Banner */}
           <div className="rounded-2xl bg-gradient-to-r from-beauty-magenta/30 to-beauty-hotpink/30 p-8 md:p-12 mb-12 animate-fade-in">
             <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">Parfumuri excepționale</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('parfumuri.title')}</h1>
               <p className="text-lg text-gray-700 mb-6">
-                Esențe care te inspiră, parfumuri care îți definesc personalitatea și te însoțesc pe parcursul zilei.
+                {t('parfumuri.subtitle')}
               </p>
               <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
-                Descoperă colecția
+                {t('parfumuri.discover_collection')}
               </Button>
             </div>
           </div>
@@ -90,18 +93,18 @@ const Parfumuri = () => {
           {/* Filter section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-              <h2 className="text-2xl font-bold">Toate parfumurile</h2>
-              <p className="text-muted-foreground">Găsește parfumul perfect pentru tine</p>
+              <h2 className="text-2xl font-bold">{t('parfumuri.all_perfumes')}</h2>
+              <p className="text-muted-foreground">{t('parfumuri.find_perfect')}</p>
             </div>
             
             <div className="flex gap-3">
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <Filter className="h-4 w-4" />
-                Filtrează
+                {t('parfumuri.filter')}
               </Button>
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <SlidersHorizontal className="h-4 w-4" />
-                Sortează
+                {t('parfumuri.sort')}
               </Button>
             </div>
           </div>

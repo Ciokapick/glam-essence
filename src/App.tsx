@@ -17,6 +17,7 @@ import WishlistPage from '@/pages/WishlistPage';
 import Cart from '@/components/Cart';
 import { CartProvider } from '@/contexts/CartContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import { Toaster } from '@/components/ui/toaster';
 import ProductPages from '@/pages/ProductPages';
 import InitApp from '@/components/InitApp';
@@ -25,11 +26,12 @@ import NotFound from '@/pages/NotFound';
 function App() {
   return (
     <BrowserRouter>
-      <CartProvider>
-        <WishlistProvider>
-          <InitApp />
-          <Cart />
-          <Routes>
+      <LanguageProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <InitApp />
+            <Cart />
+            <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/parfumuri" element={<ParfumuriPage />} />
             <Route path="/creme" element={<CremePage />} />
@@ -53,8 +55,9 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
-        </WishlistProvider>
-      </CartProvider>
+          </WishlistProvider>
+        </CartProvider>
+      </LanguageProvider>
     </BrowserRouter>
   );
 }

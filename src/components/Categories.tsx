@@ -1,27 +1,30 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Categories = () => {
+  const { t } = useLanguage();
+  
   const categories = [
     {
       id: "parfumuri",
-      name: "Parfumuri",
-      description: "Esențe care spun povestea ta",
+      name: t('nav.perfumes'),
+      description: t('categories.perfumes_desc'),
       image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       color: "from-beauty-magenta/80 to-beauty-magenta/40"
     },
     {
       id: "creme",
-      name: "Creme",
-      description: "Hidratare profundă pentru pielea ta",
+      name: t('nav.creams'),
+      description: t('categories.creams_desc'),
       image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       color: "from-beauty-coral/80 to-beauty-coral/40"
     },
     {
       id: "ingrijire",
-      name: "Îngrijire",
-      description: "Rutina completă pentru strălucire",
+      name: t('nav.skincare'),
+      description: t('categories.skincare_desc'),
       image: "https://images.unsplash.com/photo-1585652757141-8837d676fac8?w=800&auto=format&fit=crop&q=80",
       color: "from-beauty-hotpink/80 to-beauty-hotpink/40"
     }
@@ -31,9 +34,9 @@ const Categories = () => {
     <section className="py-20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Categorii de produse</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('categories.title')}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explorează gama noastră variată de produse premium pentru toate nevoile tale de frumusețe.
+            {t('categories.subtitle')}
           </p>
         </div>
         
@@ -60,7 +63,7 @@ const Categories = () => {
                 <h3 className="text-white text-2xl font-bold mb-2">{category.name}</h3>
                 <p className="text-white/90 mb-4">{category.description}</p>
                 <span className="inline-flex items-center text-white font-medium rounded-full pl-4 pr-3 py-1.5 bg-white/20 backdrop-blur-sm">
-                  Explorează
+                  {t('categories.explore')}
                   <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>

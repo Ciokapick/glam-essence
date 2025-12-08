@@ -1,27 +1,30 @@
 
 import React from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Testimonials = () => {
+  const { t } = useLanguage();
+  
   const testimonials = [
     {
       id: 1,
-      text: "De când folosesc produsele GlamEssence, pielea mea arată mai strălucitoare ca niciodată. Parfumurile lor sunt absolut divine, durează întreaga zi.",
+      text: t('testimonials.maria_text'),
       author: "Maria Ionescu",
-      role: "Make-up Artist",
+      role: t('testimonials.maria_role'),
       avatar: "https://randomuser.me/api/portraits/women/44.jpg"
     },
     {
       id: 2,
-      text: "Am primit setul de îngrijire ca dar și a fost dragoste la prima utilizare. Ingredientele naturale fac o diferență vizibilă pentru tenul meu sensibil.",
+      text: t('testimonials.alex_text'),
       author: "Alexandru Popa",
-      role: "Influencer",
+      role: t('testimonials.alex_role'),
       avatar: "https://randomuser.me/api/portraits/men/32.jpg"
     },
     {
       id: 3,
-      text: "Parfumurile lor sunt unice și memorabile. De fiecare dată când port Floral Extravagance primesc complimente. Calitate excepțională!",
+      text: t('testimonials.cristina_text'),
       author: "Cristina Dumitrescu",
-      role: "Designer",
+      role: t('testimonials.cristina_role'),
       avatar: "https://randomuser.me/api/portraits/women/68.jpg"
     }
   ];
@@ -30,9 +33,9 @@ const Testimonials = () => {
     <section className="py-20 bg-beauty-lavender/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ce spun clienții noștri</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('testimonials.title')}</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Descoperă experiențele autentice ale clienților noștri cu produsele GlamEssence.
+            {t('testimonials.subtitle_extended')}
           </p>
         </div>
         

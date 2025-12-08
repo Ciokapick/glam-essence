@@ -6,12 +6,15 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { openCart, totalItems } = useCart();
   const { totalItems: wishlistItems } = useWishlist();
+  const { t } = useLanguage();
   
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
@@ -40,14 +43,15 @@ export function Navbar() {
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="font-medium relative animated-border pb-1">Acasă</Link>
-            <Link to="/parfumuri" className="font-medium relative animated-border pb-1">Parfumuri</Link>
-            <Link to="/creme" className="font-medium relative animated-border pb-1">Creme</Link>
-            <Link to="/ingrijire" className="font-medium relative animated-border pb-1">Îngrijire</Link>
+            <Link to="/" className="font-medium relative animated-border pb-1">{t('nav.home')}</Link>
+            <Link to="/parfumuri" className="font-medium relative animated-border pb-1">{t('nav.perfumes')}</Link>
+            <Link to="/creme" className="font-medium relative animated-border pb-1">{t('nav.creams')}</Link>
+            <Link to="/ingrijire" className="font-medium relative animated-border pb-1">{t('nav.skincare')}</Link>
           </nav>
           
           {/* Icons */}
           <div className="hidden md:flex items-center space-x-4">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="rounded-full relative" asChild>
               <Link to="/wishlist">
                 <Heart className="h-5 w-5" />
@@ -80,14 +84,15 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white p-4 animate-fade-in">
           <nav className="flex flex-col space-y-4 py-4">
-            <Link to="/" className="font-medium p-2" onClick={toggleMobileMenu}>Acasă</Link>
-            <Link to="/parfumuri" className="font-medium p-2" onClick={toggleMobileMenu}>Parfumuri</Link>
-            <Link to="/creme" className="font-medium p-2" onClick={toggleMobileMenu}>Creme</Link>
-            <Link to="/ingrijire" className="font-medium p-2" onClick={toggleMobileMenu}>Îngrijire</Link>
-            <Link to="/wishlist" className="font-medium p-2" onClick={toggleMobileMenu}>Favorite</Link>
-            <Link to="/admin" className="font-medium p-2" onClick={toggleMobileMenu}>Admin</Link>
+            <Link to="/" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.home')}</Link>
+            <Link to="/parfumuri" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.perfumes')}</Link>
+            <Link to="/creme" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.creams')}</Link>
+            <Link to="/ingrijire" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.skincare')}</Link>
+            <Link to="/wishlist" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.wishlist')}</Link>
+            <Link to="/admin" className="font-medium p-2" onClick={toggleMobileMenu}>{t('nav.admin')}</Link>
           </nav>
           <div className="flex justify-around py-4 border-t">
+            <LanguageSwitcher />
             <Button variant="ghost" size="icon" className="relative" asChild>
               <Link to="/wishlist" onClick={toggleMobileMenu}>
                 <Heart className="h-5 w-5" />

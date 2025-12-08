@@ -2,8 +2,10 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const Hero = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
       {/* Background decoration */}
@@ -17,20 +19,20 @@ const Hero = () => {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <div className="order-2 md:order-1 animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Descoperă esența
+              {t('hero.title')}
               <span className="block gold-gradient">frumuseții tale</span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-lg">
-              Colecția noastră exclusivă de parfumuri și produse de îngrijire te ajută să strălucești în fiecare zi.
+              {t('hero.subtitle')}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/parfumuri">
                 <Button size="lg" variant="outline" className="border-beauty-hotpink/50 hover:border-beauty-hotpink hover:bg-beauty-hotpink/5">
-                  Oferte speciale
+                  {t('hero.cta')}
                 </Button>
               </Link>
               <Link to="/admin" className="text-sm text-gray-500 hover:text-beauty-magenta transition-colors duration-300 flex items-center ml-4">
-                Admin
+                {t('nav.admin')}
               </Link>
             </div>
           </div>
