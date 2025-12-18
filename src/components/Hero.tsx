@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -7,51 +6,60 @@ import { useLanguage } from '@/contexts/LanguageContext';
 const Hero = () => {
   const { t } = useLanguage();
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-beauty-magenta/20 blur-3xl animate-float"></div>
-        <div className="absolute bottom-20 left-10 w-80 h-80 rounded-full bg-beauty-coral/20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/3 left-1/4 w-72 h-72 rounded-full bg-beauty-hotpink/20 blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 -z-10">
+        <img 
+          src="/hero.jpg" 
+          alt="Beauty Background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute left-0 top-0 bottom-0 w-3/4 bg-gradient-to-r from-[#9E8EA8]/90 to-transparent"></div>
+        <div className="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-white/50 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-white to-transparent"></div>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 gap-10 items-center">
-          <div className="order-2 md:order-1 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              {t('hero.title')}
-              <span className="block gold-gradient">frumuseții tale</span>
+      {/* Decorative Elements */}
+      <div className="absolute inset-0 -z-5 overflow-hidden pointer-events-none">
+        <div className="absolute top-20 right-10 w-96 h-96 rounded-full bg-pink-200/30 blur-3xl animate-float"></div>
+        <div className="absolute bottom-20 right-20 w-80 h-80 rounded-full bg-rose-200/20 blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+      </div>
+
+      <div className="container mx-auto px-4 lg:px-8 py-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Left Content */}
+          <div className="max-w-xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
+            <h1 className="text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight text-white">
+              Beauty,
+              <span className="block text-white">Grown by</span>
+              <span className="block text-white">the Earth.</span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-8 max-w-lg">
-              {t('hero.subtitle')}
+            <p className="text-lg text-white mb-10 max-w-md leading-relaxed">
+              Formulated from rare minerals, precious clays, and crystal infusions. Each formula honors the slow power of time, touch, and transformation.
             </p>
-            <div className="flex flex-wrap gap-4">
-              <Link to="/parfumuri">
-                <Button size="lg" variant="outline" className="border-beauty-hotpink/50 hover:border-beauty-hotpink hover:bg-beauty-hotpink/5">
-                  {t('hero.cta')}
-                </Button>
-              </Link>
-              <Link to="/admin" className="text-sm text-gray-500 hover:text-beauty-magenta transition-colors duration-300 flex items-center ml-4">
-                {t('nav.admin')}
-              </Link>
-            </div>
           </div>
-          <div className="order-1 md:order-2 relative">
-            <div className="relative flex justify-center">
-              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-hotpink/30 rounded-full absolute top-10 -left-5 animate-float"></div>
-              <div className="w-60 h-60 md:w-80 md:h-80 bg-beauty-magenta/40 rounded-full absolute -top-10 -right-5 animate-float" style={{ animationDelay: '1.5s' }}></div>
-              <img 
-                src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
-                alt="Luxury perfume bottles" 
-                className="relative z-10 max-w-full h-auto rounded-2xl shadow-xl animate-fade-in"
-                style={{ animationDelay: "0.5s" }}
-              />
-            </div>
-            <div className="absolute -bottom-10 right-0 md:right-10 bg-white/90 backdrop-blur-md rounded-xl p-4 shadow-lg max-w-xs animate-fade-in glass-morphism" style={{ animationDelay: "0.8s" }}>
-              <p className="font-medium text-sm">
-                "Esențe care îți transformă întreaga zi într-o experiență senzorială deosebită."
-              </p>
-              <p className="text-right text-sm mt-2 text-gray-500">— Cosmopolitan</p>
+
+          {/* Right Content - Perfume Bottle Image */}
+          <div className="relative flex justify-center lg:justify-end animate-fade-in" style={{ animationDelay: "0.5s" }}>
+            <div className="relative">
+              {/* Decorative flowers/elements behind */}
+              <div className="absolute -top-10 -left-10 w-40 h-40 opacity-60">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-pink-300 to-rose-400 blur-2xl"></div>
+              </div>
+              
+              {/* Main perfume bottle placeholder */}
+              <div className="relative z-10 w-80 h-96 lg:w-96 lg:h-[500px]">
+              </div>
+
+              {/* Decorative flower elements */}
+              <div className="absolute -bottom-5 -right-5 w-32 h-32 opacity-70">
+                <div className="w-full h-full rounded-full bg-gradient-to-br from-rose-300 to-pink-400 blur-xl"></div>
+              </div>
+
+              {/* Sparkle effect */}
+              <div className="absolute top-1/4 right-0 w-8 h-8 text-white/80 animate-pulse" style={{ animationDelay: "1s" }}>
+                ✨
+              </div>
             </div>
           </div>
         </div>

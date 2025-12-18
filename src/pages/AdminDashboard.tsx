@@ -5,11 +5,13 @@ import AdminLayout from '@/components/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { ShoppingBag, Package, BarChart } from 'lucide-react';
 import { getAllOrders, getAllProducts } from '@/utils/jsonDb';
 
 // Component for showing recent orders
 const RecentOrders = () => {
+  const { t } = useLanguage();
   const [recentOrders, setRecentOrders] = useState<any[]>([]);
   const navigate = useNavigate();
   
@@ -31,7 +33,7 @@ const RecentOrders = () => {
   if (recentOrders.length === 0) {
     return (
       <p className="text-center py-4 text-muted-foreground">
-        Nu există comenzi recente.
+        {t('admin.dashboard.no_recent_orders')}
       </p>
     );
   }
@@ -42,21 +44,21 @@ const RecentOrders = () => {
         {recentOrders.map(order => (
           <div key={order.id} className="flex justify-between items-center border-b pb-4">
             <div>
-              <p className="font-medium">Comanda #{order.id}</p>
+              <p className="font-medium">{t('admin.orders.order_id')} #{order.id}</p>
               <p className="text-sm text-muted-foreground">
                 {order.customer.name} • {order.date}
               </p>
             </div>
             <div className="flex items-center gap-4">
               <span className={`px-2 py-1 text-xs rounded-full ${
-                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
                 order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
                 order.status === 'completed' ? 'bg-green-100 text-green-800' :
                 'bg-red-100 text-red-800'
               }`}>
-                {order.status === 'pending' ? 'În așteptare' : 
-                 order.status === 'processing' ? 'În procesare' :
-                 order.status === 'completed' ? 'Finalizată' : 'Anulată'}
+                {order.status === 'pending' ? t('admin.orders.pending') :
+                 order.status === 'processing' ? t('admin.orders.processing') :
+                 order.status === 'completed' ? t('admin.orders.completed') : t('admin.orders.canceled')}
               </span>
               <span className="font-semibold">{order.total.toFixed(2)} lei</span>
             </div>
@@ -65,12 +67,12 @@ const RecentOrders = () => {
       </div>
       
       {recentOrders.length > 0 && (
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="w-full mt-4"
           onClick={() => navigate('/admin/orders')}
         >
-          Vezi toate comenzile
+          {t('admin.dashboard.view_all_orders')}
         </Button>
       )}
     </>
@@ -79,6 +81,7 @@ const RecentOrders = () => {
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [orderCount, setOrderCount] = useState(0);
   const [productCount, setProductCount] = useState(0);
   const [revenue, setRevenue] = useState(0);
@@ -109,8 +112,8 @@ const Dashboard = () => {
     <AdminLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500 mt-1">Privire generală asupra magazinului tău</p>
+          <h1 className="text-3xl font-bold text-gray-900">{t('admin.dashboard.title')}</h1>
+          <p className="text-gray-500 mt-1">{t('admin.dashboard.subtitle')}</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -121,7 +124,7 @@ const Dashboard = () => {
                   <ShoppingBag className="h-8 w-8 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Comenzi</p>
+                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.orders')}</p>
                   <h3 className="text-2xl font-bold">{orderCount}</h3>
                 </div>
               </div>
@@ -130,7 +133,7 @@ const Dashboard = () => {
                 className="w-full mt-4 justify-start p-0 text-blue-600"
                 onClick={() => navigate('/admin/orders')}
               >
-                Vezi comenzile →
+                {t('admin.dashboard.view_orders')}
               </Button>
             </CardContent>
           </Card>
@@ -142,7 +145,7 @@ const Dashboard = () => {
                   <Package className="h-8 w-8 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Produse</p>
+                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.products')}</p>
                   <h3 className="text-2xl font-bold">{productCount}</h3>
                 </div>
               </div>
@@ -151,7 +154,7 @@ const Dashboard = () => {
                 className="w-full mt-4 justify-start p-0 text-green-600"
                 onClick={() => navigate('/admin/products')}
               >
-                Vezi produsele →
+                {t('admin.dashboard.view_products')}
               </Button>
             </CardContent>
           </Card>
@@ -163,7 +166,7 @@ const Dashboard = () => {
                   <BarChart className="h-8 w-8 text-purple-600" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">Venituri</p>
+                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.revenue')}</p>
                   <h3 className="text-2xl font-bold">{revenue.toFixed(2)} lei</h3>
                 </div>
               </div>
@@ -173,8 +176,8 @@ const Dashboard = () => {
         
         <Card>
           <CardHeader>
-            <CardTitle>Comenzi recente</CardTitle>
-            <CardDescription>Ultimele 5 comenzi plasate</CardDescription>
+            <CardTitle>{t('admin.dashboard.recent_orders')}</CardTitle>
+            <CardDescription>{t('admin.dashboard.recent_orders_subtitle')}</CardDescription>
           </CardHeader>
           <CardContent>
             <RecentOrders />

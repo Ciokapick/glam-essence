@@ -3,10 +3,11 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { 
-  LayoutDashboard, 
-  ShoppingBag, 
-  Package, 
+import { useLanguage } from '@/contexts/LanguageContext';
+import {
+  LayoutDashboard,
+  ShoppingBag,
+  Package,
   LogOut,
   Menu
 } from 'lucide-react';
@@ -37,6 +38,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, to, active }) =>
 const AdminSidebar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const { toast } = useToast();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
@@ -52,8 +54,8 @@ const AdminSidebar: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('adminAuth');
     toast({
-      title: "Deconectare reușită",
-      description: "Ai fost deconectat din panoul de administrare.",
+      title: t('admin.sidebar.logout_success'),
+      description: t('admin.sidebar.logout_message'),
     });
     navigate('/');
   };
@@ -64,7 +66,7 @@ const AdminSidebar: React.FC = () => {
       <button
         className="fixed top-4 right-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
         onClick={() => setSidebarOpen(true)}
-        aria-label="Deschide meniul admin"
+        aria-label={t('admin.sidebar.open_menu')}
       >
         <Menu size={24} />
       </button>
@@ -77,7 +79,7 @@ const AdminSidebar: React.FC = () => {
         <button
           className="fixed top-4 right-4 z-[60] bg-white p-2 rounded-md shadow-md border border-gray-200"
           onClick={() => setSidebarOpen(false)}
-          aria-label="Ascunde meniul admin"
+          aria-label={t('admin.sidebar.hide_menu')}
           style={{ display: !sidebarOpen ? 'none' : 'block' }}
         >
           {/* Use Menu as "close" for simplicity: flips for effect */}
@@ -88,38 +90,38 @@ const AdminSidebar: React.FC = () => {
         className={`fixed md:static top-0 left-0 h-full z-[50] ${sidebarOpen ? 'block' : 'hidden'} w-64 bg-white border-r border-gray-200 flex flex-col`}
       >
         <div className="p-4 border-b">
-          <h2 className="font-bold text-xl text-beauty-magenta">Admin Panel</h2>
+          <h2 className="font-bold text-xl text-beauty-magenta">{t('admin.sidebar.admin_panel')}</h2>
         </div>
         <div className="flex-1 overflow-y-auto py-4 px-3">
           <div className="space-y-1">
-            <SidebarItem 
-              icon={<LayoutDashboard size={18} />} 
-              label="Dashboard" 
-              to="/admin/dashboard" 
-              active={isActive('/admin/dashboard')} 
+            <SidebarItem
+              icon={<LayoutDashboard size={18} />}
+              label={t('admin.sidebar.dashboard')}
+              to="/admin/dashboard"
+              active={isActive('/admin/dashboard')}
             />
-            <SidebarItem 
-              icon={<ShoppingBag size={18} />} 
-              label="Comenzi" 
-              to="/admin/orders" 
-              active={isActive('/admin/orders')} 
+            <SidebarItem
+              icon={<ShoppingBag size={18} />}
+              label={t('admin.sidebar.orders')}
+              to="/admin/orders"
+              active={isActive('/admin/orders')}
             />
-            <SidebarItem 
-              icon={<Package size={18} />} 
-              label="Produse" 
-              to="/admin/products" 
-              active={isActive('/admin/products')} 
+            <SidebarItem
+              icon={<Package size={18} />}
+              label={t('admin.sidebar.products')}
+              to="/admin/products"
+              active={isActive('/admin/products')}
             />
           </div>
         </div>
         <div className="p-4 border-t">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="w-full flex items-center gap-2 text-gray-700 hover:text-beauty-magenta border-gray-200"
             onClick={handleLogout}
           >
             <LogOut size={18} />
-            <span>Deconectare</span>
+            <span>{t('admin.sidebar.logout')}</span>
           </Button>
         </div>
       </div>

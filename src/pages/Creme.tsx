@@ -5,67 +5,28 @@ import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Filter, SlidersHorizontal } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { products } from '@/data/products';
 
 const Creme = () => {
+  const { t } = useLanguage();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const products = [
-    {
-      id: "1",
-      name: "Cremă hidratantă Luxury",
-      price: 129.99,
-      image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Cremă față",
-      isSale: true,
-      discount: 15,
-      rating: 4
-    },
-    {
-      id: "2",
-      name: "Cremă contur ochi Anti-Age",
-      price: 149.99,
-      image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Cremă ochi",
-      rating: 5
-    },
-    {
-      id: "3",
-      name: "Cremă de mâini Silk",
-      price: 59.99,
-      image: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Cremă mâini",
-      rating: 4
-    },
-    {
-      id: "4",
-      name: "Cremă de corp Intense",
-      price: 89.99,
-      image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
-      category: "Cremă corp",
-      isNew: true,
-      rating: 4
-    },
-    {
-      id: "5",
-      name: "Cremă nutritivă de noapte",
-      price: 139.99,
-      image: "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
-      category: "Cremă față",
-      rating: 5
-    },
-    {
-      id: "6",
-      name: "Cremă anticelulitică",
-      price: 109.99,
-      image: "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      category: "Cremă corp",
-      isSale: true,
-      discount: 10,
-      rating: 4
-    }
-  ];
+  // Filter cream products from the main products data
+  const creamProducts = Object.values(products).filter(product =>
+    product.category.includes('Cremă') ||
+    product.category.includes('Ulei') ||
+    product.category.includes('Ser') ||
+    product.category.includes('Mască') ||
+    product.category.includes('Curățare') ||
+    product.category.includes('Tonic')
+  );
+  
+  // Take first 6 products for display
+  const displayProducts = creamProducts.slice(0, 6);
 
   return (
     <div className="min-h-screen">
@@ -76,12 +37,12 @@ const Creme = () => {
           {/* Hero Banner */}
           <div className="rounded-2xl bg-gradient-to-r from-beauty-coral/30 to-beauty-coral/10 p-8 md:p-12 mb-12 animate-fade-in">
             <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">Creme pentru îngrijire perfectă</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('creme.title')}</h1>
               <p className="text-lg text-gray-700 mb-6">
-                Formula noastră unică oferă hidratare intensă și protecție pentru toate tipurile de piele.
+                {t('creme.subtitle')}
               </p>
               <Button className="bg-beauty-coral text-white hover:bg-beauty-coral/90">
-                Descoperă colecția
+                {t('creme.discover_collection')}
               </Button>
             </div>
           </div>
@@ -89,25 +50,25 @@ const Creme = () => {
           {/* Filter section */}
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
-              <h2 className="text-2xl font-bold">Toate cremele</h2>
-              <p className="text-muted-foreground">Soluții de hidratare pentru toate nevoile</p>
+              <h2 className="text-2xl font-bold">{t('creme.all_creams')}</h2>
+              <p className="text-muted-foreground">{t('creme.hydration_solutions')}</p>
             </div>
             
             <div className="flex gap-3">
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <Filter className="h-4 w-4" />
-                Filtrează
+                {t('creme.filter')}
               </Button>
               <Button variant="outline" size="sm" className="flex items-center gap-2">
                 <SlidersHorizontal className="h-4 w-4" />
-                Sortează
+                {t('creme.sort')}
               </Button>
             </div>
           </div>
           
           {/* Products grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {products.map((product) => (
+            {displayProducts.map((product) => (
               <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
                 <ProductCard {...product} />
               </div>

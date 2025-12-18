@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
@@ -10,6 +11,7 @@ import { Button } from '@/components/ui/button';
 
 const WishlistPage = () => {
   const { items, clearWishlist } = useWishlist();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen">
@@ -17,18 +19,18 @@ const WishlistPage = () => {
       
       <main className="container mx-auto px-4 pt-24 pb-16">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Lista mea de favorite</h1>
+          <h1 className="text-3xl font-bold mb-2">{t('wishlist.title')}</h1>
           <p className="text-muted-foreground">
-            Produsele tale favorite sunt salvate aici pentru referință ușoară.
+            {t('wishlist.subtitle')}
           </p>
         </div>
 
         {items.length > 0 ? (
           <>
             <div className="flex justify-between items-center mb-6">
-              <p className="text-muted-foreground">{items.length} produse favorite</p>
+              <p className="text-muted-foreground">{items.length} {t('wishlist.favorite_products')}</p>
               <Button variant="outline" onClick={clearWishlist}>
-                Șterge lista
+                {t('wishlist.clear_list')}
               </Button>
             </div>
             
@@ -52,14 +54,14 @@ const WishlistPage = () => {
             <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
               <Heart className="h-10 w-10 text-beauty-rose" />
             </div>
-            <h2 className="text-2xl font-semibold mb-3">Lista ta de favorite este goală</h2>
+            <h2 className="text-2xl font-semibold mb-3">{t('wishlist.empty_title')}</h2>
             <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-              Adaugă produse la favorite pentru a le putea găsi ușor mai târziu.
+              {t('wishlist.empty_subtitle')}
             </p>
             <Button asChild>
               <Link to="/">
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                Continuă cumpărăturile
+                {t('wishlist.continue_shopping')}
               </Link>
             </Button>
           </div>

@@ -14,12 +14,14 @@ import {
   DialogTrigger 
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Order } from '@/pages/Checkout';
 import { getFromDb, saveToDb, getAllOrders } from '@/utils/jsonDb';
 
 type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
 const AdminOrders = () => {
+  const { t } = useLanguage();
   const [orders, setOrders] = useState<Order[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -51,9 +53,9 @@ const AdminOrders = () => {
     } catch (error) {
       console.error('Error loading orders:', error);
       toast({
-        title: "Eroare",
-        description: "Nu s-au putut încărca comenzile. Încearcă din nou.",
-        variant: "destructive",
+        title: t('common.error'),
+        description: t('admin.orders.load_error'),
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -81,31 +83,31 @@ const AdminOrders = () => {
     }
     
     toast({
-      title: "Status actualizat",
-      description: `Comanda #${orderId} a fost marcată ca ${getStatusLabel(newStatus)}.`,
+      title: t('admin.orders.status_updated'),
+      description: t('admin.orders.status_update_message').replace('{orderId}', orderId).replace('{status}', getStatusLabel(newStatus)),
     });
   };
 
   const handleDeleteOrder = (orderId: string) => {
-    if (window.confirm('Ești sigur că vrei să ștergi această comandă?')) {
+    if (window.confirm(t('admin.orders.confirm_delete'))) {
       const updatedOrders = orders.filter(order => order.id !== orderId);
       setOrders(updatedOrders);
       
       saveToDb('orders', updatedOrders);
       
       toast({
-        title: "Comandă ștearsă",
-        description: `Comanda #${orderId} a fost ștearsă cu succes.`,
+        title: t('admin.orders.deleted'),
+        description: t('admin.orders.delete_message').replace('{orderId}', orderId),
       });
     }
   };
 
   const getStatusLabel = (status: OrderStatus): string => {
     const statusLabels = {
-      pending: 'În așteptare',
-      processing: 'În procesare',
-      completed: 'Finalizată',
-      canceled: 'Anulată'
+      pending: t('admin.orders.pending'),
+      processing: t('admin.orders.processing'),
+      completed: t('admin.orders.completed'),
+      canceled: t('admin.orders.canceled')
     };
     return statusLabels[status];
   };
@@ -135,8 +137,8 @@ const AdminOrders = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Comenzi</h1>
-            <p className="text-gray-500 mt-1">Gestionează comenzile clienților ({orders.length} comenzi)</p>
+            <h1 className="text-3xl font-bold text-gray-900">{t('admin.orders.title')}</h1>
+            <p className="text-gray-500 mt-1">{t('admin.orders.subtitle').replace('{count}', orders.length.toString())}</p>
           </div>
           
           <Button 
@@ -149,7 +151,7 @@ const AdminOrders = () => {
             ) : (
               <RefreshCw className="h-4 w-4 mr-2" />
             )}
-            Reîmprospătează
+            {t('admin.orders.refresh')}
           </Button>
         </div>
 
@@ -158,7 +160,7 @@ const AdminOrders = () => {
             <div className="relative mb-6">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Caută după ID, nume sau email..." 
+                placeholder={t('admin.orders.search_orders')} 
                 className="pl-10" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -169,12 +171,12 @@ const AdminOrders = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>ID Comandă</TableHead>
-                    <TableHead>Client</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                    <TableHead>Data</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Acțiuni</TableHead>
+                    <TableHead>{t('admin.orders.order_id')}</TableHead>
+                    <TableHead>{t('admin.orders.customer')}</TableHead>
+                    <TableHead className="text-right">{t('admin.orders.total')}</TableHead>
+                    <TableHead>{t('admin.orders.date')}</TableHead>
+                    <TableHead>{t('admin.orders.status')}</TableHead>
+                    <TableHead className="text-right">{t('admin.orders.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -203,12 +205,12 @@ const AdminOrders = () => {
                                 size="sm"
                                 onClick={() => setSelectedOrder(order)}
                               >
-                                <Eye size={16} className="mr-1" /> Detalii
+                                <Eye size={16} className="mr-1" /> {t('admin.orders.details')}
                               </Button>
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[525px]">
                               <DialogHeader>
-                                <DialogTitle>Detalii comandă #{selectedOrder?.id}</DialogTitle>
+                                <DialogTitle>{t('admin.orders.details_title').replace('{orderId}', selectedOrder?.id || '')}</DialogTitle>
                               </DialogHeader>
                               {selectedOrder && (
                                 <OrderDetails 
@@ -232,7 +234,7 @@ const AdminOrders = () => {
                   ) : (
                     <TableRow>
                       <TableCell colSpan={6} className="text-center py-6 text-muted-foreground">
-                        {isLoading ? 'Se încarcă comenzile...' : 'Nu există comenzi de afișat.'}
+                        {isLoading ? t('admin.orders.loading_orders') : t('admin.orders.no_orders')}
                       </TableCell>
                     </TableRow>
                   )}
@@ -254,28 +256,30 @@ const OrderDetails = ({
   order: Order; 
   onStatusChange: (orderId: string, status: OrderStatus) => void;
 }) => {
+  const { t } = useLanguage();
+  
   return (
     <div className="space-y-6 py-4">
       <div className="space-y-2">
-        <h4 className="font-medium">Informații client</h4>
+        <h4 className="font-medium">{t('admin.orders.customer_info')}</h4>
         <div className="rounded-md bg-muted p-4 text-sm">
-          <p><strong>Nume:</strong> {order.customer.name}</p>
-          <p><strong>Email:</strong> {order.customer.email}</p>
-          <p><strong>Telefon:</strong> {order.customer.phone}</p>
-          <p><strong>Adresă:</strong> {order.customer.address}</p>
+          <p><strong>{t('admin.orders.name')}</strong> {order.customer.name}</p>
+          <p><strong>{t('admin.orders.email')}</strong> {order.customer.email}</p>
+          <p><strong>{t('admin.orders.phone')}</strong> {order.customer.phone}</p>
+          <p><strong>{t('admin.orders.address')}</strong> {order.customer.address}</p>
         </div>
       </div>
       
       <div className="space-y-2">
-        <h4 className="font-medium">Produse comandate</h4>
+        <h4 className="font-medium">{t('admin.orders.ordered_products')}</h4>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Produs</TableHead>
-                <TableHead className="text-right">Preț</TableHead>
-                <TableHead className="text-right">Cant.</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead>{t('common.product')}</TableHead>
+                <TableHead className="text-right">{t('common.price')}</TableHead>
+                <TableHead className="text-right">{t('admin.orders.quantity')}</TableHead>
+                <TableHead className="text-right">{t('common.total')}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -290,7 +294,7 @@ const OrderDetails = ({
                 </TableRow>
               ))}
               <TableRow>
-                <TableCell colSpan={3} className="text-right font-medium">Total comandă:</TableCell>
+                <TableCell colSpan={3} className="text-right font-medium">{t('admin.orders.order_total')}</TableCell>
                 <TableCell className="text-right font-bold">{order.total.toFixed(2)} lei</TableCell>
               </TableRow>
             </TableBody>
@@ -299,7 +303,7 @@ const OrderDetails = ({
       </div>
       
       <div className="space-y-2">
-        <h4 className="font-medium">Actualizează status</h4>
+        <h4 className="font-medium">{t('admin.orders.update_status')}</h4>
         <div className="flex flex-wrap gap-2">
           <Button 
             variant={order.status === 'pending' ? 'default' : 'outline'}
@@ -307,7 +311,7 @@ const OrderDetails = ({
             className={order.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
             onClick={() => onStatusChange(order.id, 'pending')}
           >
-            În așteptare
+            {t('admin.orders.pending')}
           </Button>
           <Button 
             variant={order.status === 'processing' ? 'default' : 'outline'}
@@ -315,7 +319,7 @@ const OrderDetails = ({
             className={order.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
             onClick={() => onStatusChange(order.id, 'processing')}
           >
-            În procesare
+            {t('admin.orders.processing')}
           </Button>
           <Button 
             variant={order.status === 'completed' ? 'default' : 'outline'}
@@ -323,7 +327,7 @@ const OrderDetails = ({
             className={order.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
             onClick={() => onStatusChange(order.id, 'completed')}
           >
-            Finalizată
+            {t('admin.orders.completed')}
           </Button>
           <Button 
             variant={order.status === 'canceled' ? 'default' : 'outline'}
@@ -331,7 +335,7 @@ const OrderDetails = ({
             className={order.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
             onClick={() => onStatusChange(order.id, 'canceled')}
           >
-            Anulată
+            {t('admin.orders.canceled')}
           </Button>
         </div>
       </div>

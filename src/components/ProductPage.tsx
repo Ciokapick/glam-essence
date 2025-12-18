@@ -2,15 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { 
-  Star, 
-  Truck, 
-  Clock, 
-  ShieldCheck, 
-  Heart, 
-  Share2, 
-  Minus, 
-  Plus, 
+import {
+  Star,
+  Truck,
+  Clock,
+  ShieldCheck,
+  Heart,
+  Share2,
+  Minus,
+  Plus,
   ChevronRight,
   ShoppingBag
 } from 'lucide-react';
@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
 import { similarProducts } from '@/data/products';
@@ -28,6 +29,7 @@ interface ProductPageProps {
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) => {
+  const { t } = useLanguage();
   const [product, setProduct] = useState<any>(initialProduct);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
@@ -66,8 +68,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
     if (product) {
       if (!product?.stock || product.stock <= 0) {
         toast({
-          title: "Stoc epuizat",
-          description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+          title: t('toast.out_of_stock'),
+          description: t('toast.out_of_stock_desc'),
           variant: "destructive",
         });
         return;
@@ -83,8 +85,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
       }, quantity);
       
       toast({
-        title: "Adăugat în coș",
-        description: `${product.name} a fost adăugat în coșul tău.`,
+        title: t('toast.added_to_cart'),
+        description: t('toast.added_to_cart_desc').replace('{productName}', product.name),
         variant: "default",
       });
     }
@@ -107,8 +109,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
       if (isInWishlist(product.id)) {
         removeFromWishlist(product.id);
         toast({
-          title: "Eliminat de la favorite",
-          description: `${product.name} a fost eliminat din lista ta de favorite.`,
+          title: t('toast.removed_from_wishlist'),
+          description: t('toast.removed_from_wishlist_desc').replace('{productName}', product.name),
           variant: "default",
         });
       } else {
@@ -121,8 +123,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
           discount: product.isSale ? product.discount : undefined
         });
         toast({
-          title: "Adăugat la favorite",
-          description: `${product.name} a fost adăugat la lista ta de favorite.`,
+          title: t('toast.added_to_wishlist'),
+          description: t('toast.added_to_wishlist_desc').replace('{productName}', product.name),
           variant: "default",
         });
       }
@@ -139,9 +141,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
         <div className="container mx-auto px-4">
           <nav className="flex text-sm text-muted-foreground mb-6">
             <ol className="flex items-center">
-              <li><a href="/" className="hover:text-foreground">Acasă</a></li>
+              <li><a href="/" className="hover:text-foreground">{t('product.breadcrumb.home')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li><a href="/parfumuri" className="hover:text-foreground">Parfumuri</a></li>
+              <li><a href="/parfumuri" className="hover:text-foreground">{t('product.breadcrumb.perfumes')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
               <li className="text-foreground font-medium truncate">{product?.name}</li>
             </ol>
@@ -158,7 +160,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 
                 {product?.isNew && (
                   <Badge className="absolute top-4 left-4 bg-beauty-mint text-beauty-mint-foreground border-0">
-                    Nou
+                    {t('product.new_badge')}
                   </Badge>
                 )}
                 
@@ -176,13 +178,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               <div className="flex items-center mb-4">
                 <div className="flex mr-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`h-4 w-4 ${i < (product?.rating || 0) ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`} 
+                    <Star
+                      key={i}
+                      className={`h-4 w-4 ${i < (product?.rating || 0) ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
                     />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">{product?.reviewCount || 0} reviews</span>
+                <span className="text-sm text-muted-foreground">{product?.reviewCount || 0} {t('product.reviews')}</span>
               </div>
               
               <div className="flex items-center mb-6">
@@ -205,18 +207,18 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               </p>
               
               <div className="flex items-center space-x-4 mb-6">
-                <span className="font-medium">Cantitate:</span>
+                <span className="font-medium">{t('product.quantity')}</span>
                 <div className="flex items-center border rounded-md">
-                  <button 
-                    className="px-3 py-2 hover:bg-gray-100" 
+                  <button
+                    className="px-3 py-2 hover:bg-gray-100"
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </button>
                   <span className="px-4 py-2 w-12 text-center">{quantity}</span>
-                  <button 
-                    className="px-3 py-2 hover:bg-gray-100" 
+                  <button
+                    className="px-3 py-2 hover:bg-gray-100"
                     onClick={() => setQuantity(q => Math.min((product?.stock || 0), q + 1))}
                     disabled={quantity >= (product?.stock || 0)}
                   >
@@ -224,18 +226,18 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </button>
                 </div>
                 <span className="text-sm text-muted-foreground">
-                  {product?.stock || 0} disponibile
+                  {product?.stock || 0} {t('product.available')}
                 </span>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                <button 
+                <button
                   className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1 px-4 py-2 rounded flex items-center justify-center"
                   onClick={() => {
                     if (!product?.stock || product.stock <= 0) {
                       toast({
-                        title: "Stoc epuizat",
-                        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+                        title: t('toast.out_of_stock'),
+                        description: t('toast.out_of_stock_desc'),
                         variant: "destructive",
                       });
                       return;
@@ -251,20 +253,20 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     }, quantity);
                     
                     toast({
-                      title: "Adăugat în coș",
-                      description: `${product.name} a fost adăugat în coșul tău.`,
+                      title: t('toast.added_to_cart'),
+                      description: t('toast.added_to_cart_desc').replace('{productName}', product.name),
                       variant: "default",
                     });
                   }}
                   disabled={!product?.stock || product.stock <= 0}
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
-                  {product?.stock && product.stock > 0 ? 'Adaugă în coș' : 'Stoc epuizat'}
+                  {product?.stock && product.stock > 0 ? t('product.add_to_cart') : t('product.out_of_stock')}
                 </button>
-                <button 
+                <button
                   className={`border px-4 py-2 rounded flex items-center justify-center ${
-                    isInWishlist(product?.id) 
-                      ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20" 
+                    isInWishlist(product?.id)
+                      ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20"
                       : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
                   }`}
                   onClick={() => {
@@ -272,8 +274,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                       if (isInWishlist(product.id)) {
                         removeFromWishlist(product.id);
                         toast({
-                          title: "Eliminat de la favorite",
-                          description: `${product.name} a fost eliminat din lista ta de favorite.`,
+                          title: t('toast.removed_from_wishlist'),
+                          description: t('toast.removed_from_wishlist_desc').replace('{productName}', product.name),
                           variant: "default",
                         });
                       } else {
@@ -286,8 +288,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                           discount: product.isSale ? product.discount : undefined
                         });
                         toast({
-                          title: "Adăugat la favorite",
-                          description: `${product.name} a fost adăugat la lista ta de favorite.`,
+                          title: t('toast.added_to_wishlist'),
+                          description: t('toast.added_to_wishlist_desc').replace('{productName}', product.name),
                           variant: "default",
                         });
                       }
@@ -295,29 +297,29 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   }}
                 >
                   <Heart className={`h-5 w-5 mr-2 ${isInWishlist(product?.id) ? 'fill-beauty-rose' : ''}`} />
-                  {isInWishlist(product?.id) ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
+                  {isInWishlist(product?.id) ? t('product.remove_from_wishlist') : t('product.add_to_wishlist')}
                 </button>
               </div>
               
               <div className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center">
                   <Truck className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">Livrare gratuită pentru comenzi peste 300 lei</span>
+                  <span className="text-sm">{t('product.free_shipping')}</span>
                 </div>
                 <div className="flex items-center">
                   <Clock className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">Expediere în 24 de ore</span>
+                  <span className="text-sm">{t('product.shipping_24h')}</span>
                 </div>
                 <div className="flex items-center">
                   <ShieldCheck className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">Garanție de autenticitate 100%</span>
+                  <span className="text-sm">{t('product.authenticity_warranty')}</span>
                 </div>
               </div>
               
               <div className="mt-6 flex items-center">
                 <button className="inline-flex items-center gap-1 text-sm px-3 py-1 hover:bg-gray-100 rounded-md">
                   <Share2 className="h-4 w-4" />
-                  Share
+                  {t('product.share')}
                 </button>
               </div>
             </div>
@@ -326,22 +328,22 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
           <div className="mb-16">
             <Tabs defaultValue="details">
               <TabsList className="w-full grid grid-cols-3 mb-6">
-                <TabsTrigger value="details">Detalii produs</TabsTrigger>
-                <TabsTrigger value="features">Caracteristici</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews ({product?.reviewCount || 0})</TabsTrigger>
+                <TabsTrigger value="details">{t('product.product_details')}</TabsTrigger>
+                <TabsTrigger value="features">{t('product.features')}</TabsTrigger>
+                <TabsTrigger value="reviews">{t('product.reviews_title')} ({product?.reviewCount || 0})</TabsTrigger>
               </TabsList>
               <TabsContent value="details" className="p-6 rounded-lg bg-gray-50/50">
-                <h3 className="text-xl font-semibold mb-4">Descriere</h3>
+                <h3 className="text-xl font-semibold mb-4">{t('product.description')}</h3>
                 <p className="mb-4">{product?.details}</p>
                 <p className="mb-4">
-                  {product?.name} este un produs premium, creat cu cele mai bune ingrediente pentru a oferi o experiență de utilizare deosebită. Calitatea sa excepțională se reflectă în fiecare detaliu, de la compoziție la ambalaj.
+                  {product?.name} {t('language') === 'ro' ? 'este un produs premium, creat cu cele mai bune ingrediente pentru a oferi o experiență de utilizare deosebită. Calitatea sa excepțională se reflectă în fiecare detaliu, de la compoziție la ambalaj.' : 'is a premium product, created with the finest ingredients to provide an exceptional user experience. Its exceptional quality is reflected in every detail, from composition to packaging.'}
                 </p>
                 <p>
-                  Acest produs este perfect pentru utilizare zilnică, oferind rezultate remarcabile și satisfacție garantată. Fiecare utilizare vă va convinge de calitatea sa superioară și de valoarea investiției în frumusețea și încrederea personală.
+                  {t('language') === 'ro' ? 'Acest produs este perfect pentru utilizare zilnică, oferind rezultate remarkable și satisfacție garantată. Fiecare utilizare vă va convinge de calitatea sa superioară și de valoarea investiției în frumusețea și încrederea personală.' : 'This product is perfect for daily use, offering remarkable results and guaranteed satisfaction. Each use will convince you of its superior quality and the value of investing in beauty and personal confidence.'}
                 </p>
               </TabsContent>
               <TabsContent value="features" className="p-6 rounded-lg bg-gray-50/50">
-                <h3 className="text-xl font-semibold mb-4">Caracteristici</h3>
+                <h3 className="text-xl font-semibold mb-4">{t('product.features')}</h3>
                 {product?.features && (
                   <ul className="space-y-2">
                     {product.features.map((feature: string, index: number) => (
@@ -353,14 +355,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </ul>
                 )}
                 <div className="mt-6 pt-6 border-t">
-                  <h4 className="font-medium mb-2">SKU: {product?.sku}</h4>
-                  <p className="text-sm text-muted-foreground">Categoria: {product?.category}</p>
+                  <h4 className="font-medium mb-2">{t('product.sku')} {product?.sku}</h4>
+                  <p className="text-sm text-muted-foreground">{t('product.category')} {product?.category}</p>
                 </div>
               </TabsContent>
               <TabsContent value="reviews" className="p-6 rounded-lg bg-gray-50/50">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold">Reviews ({product?.reviewCount || 0})</h3>
-                  <button className="px-4 py-2 bg-beauty-magenta hover:bg-beauty-magenta/90 text-white rounded">Adaugă un review</button>
+                  <h3 className="text-xl font-semibold">{t('product.reviews_title')} ({product?.reviewCount || 0})</h3>
+                  <button className="px-4 py-2 bg-beauty-magenta hover:bg-beauty-magenta/90 text-white rounded">{t('product.add_review')}</button>
                 </div>
                 <div className="space-y-6">
                   <div className="border-b pb-6">
@@ -369,9 +371,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         <h4 className="font-medium">Maria D.</h4>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className="h-4 w-4 text-beauty-gold fill-beauty-gold" 
+                            <Star
+                              key={i}
+                              className="h-4 w-4 text-beauty-gold fill-beauty-gold"
                             />
                           ))}
                         </div>
@@ -387,9 +389,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         <h4 className="font-medium">Alexandru P.</h4>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${i < 4 ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`} 
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${i < 4 ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
                             />
                           ))}
                         </div>
@@ -405,9 +407,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         <h4 className="font-medium">Elena M.</h4>
                         <div className="flex">
                           {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className="h-4 w-4 text-beauty-gold fill-beauty-gold" 
+                            <Star
+                              key={i}
+                              className="h-4 w-4 text-beauty-gold fill-beauty-gold"
                             />
                           ))}
                         </div>
@@ -422,7 +424,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
           </div>
           
           <div>
-            <h2 className="text-2xl font-bold mb-6">Produse similare</h2>
+            <h2 className="text-2xl font-bold mb-6">{t('product.similar_products')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {similarProducts.map((product) => (
                 <div key={product.id} className="animate-fade-in">

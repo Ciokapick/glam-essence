@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Edit, Plus, Search, Trash2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { getFromDb, saveToDb, updateProductStock, getAllProducts, stockUpdateEmitter } from '@/utils/jsonDb';
 
@@ -21,6 +22,7 @@ type Product = {
 };
 
 const AdminProducts = () => {
+  const { t } = useLanguage();
   const [productsList, setProductsList] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [newProduct, setNewProduct] = useState<Partial<Product>>({
@@ -78,9 +80,9 @@ const AdminProducts = () => {
   const handleAddProduct = () => {
     if (!newProduct.name || !newProduct.price || !newProduct.category || newProduct.stock === undefined) {
       toast({
-        title: "Eroare",
-        description: "Toate câmpurile sunt obligatorii.",
-        variant: "destructive",
+        title: t('admin.products.error'),
+        description: t('admin.products.all_fields_required'),
+        variant: 'destructive',
       });
       return;
     }
@@ -134,8 +136,8 @@ const AdminProducts = () => {
     setIsAddDialogOpen(false);
     
     toast({
-      title: "Succes",
-      description: "Produsul a fost adăugat cu succes.",
+      title: t('admin.products.success'),
+      description: t('admin.products.added_success'),
     });
   };
 
@@ -170,13 +172,13 @@ const AdminProducts = () => {
     setIsEditDialogOpen(false);
     
     toast({
-      title: "Succes",
-      description: "Produsul a fost actualizat cu succes.",
+      title: t('admin.products.success'),
+      description: t('admin.products.updated_success'),
     });
   };
 
   const handleDeleteProduct = (id: string) => {
-    if (window.confirm('Ești sigur că vrei să ștergi acest produs?')) {
+    if (window.confirm(t('admin.products.confirm_delete'))) {
       const updatedProducts = productsList.filter(product => product.id !== id);
       setProductsList(updatedProducts);
       
@@ -192,8 +194,8 @@ const AdminProducts = () => {
       });
       
       toast({
-        title: "Succes",
-        description: "Produsul a fost șters cu succes.",
+        title: t('admin.products.success'),
+        description: t('admin.products.deleted_success'),
       });
     }
   };
@@ -209,8 +211,8 @@ const AdminProducts = () => {
     updateProductStock(id, newStock);
     
     toast({
-      title: "Stoc actualizat",
-      description: `Stocul a fost actualizat la ${newStock} unități.`,
+      title: t('admin.products.stock_updated'),
+      description: t('admin.products.stock_update_message').replace('{stock}', newStock.toString()),
     });
   };
 
@@ -219,22 +221,22 @@ const AdminProducts = () => {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Produse</h1>
-            <p className="text-gray-500 mt-1">Gestionează produsele din magazinul tău</p>
+            <h1 className="text-3xl font-bold text-gray-900">{t('admin.products.title')}</h1>
+            <p className="text-gray-500 mt-1">{t('admin.products.subtitle')}</p>
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
               <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
-                <Plus className="mr-2 h-4 w-4" /> Adaugă produs
+                <Plus className="mr-2 h-4 w-4" /> {t('admin.products.add_product')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Adaugă produs nou</DialogTitle>
+                <DialogTitle>{t('admin.products.add_new_product')}</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label htmlFor="name">Nume produs</Label>
+                  <Label htmlFor="name">{t('admin.products.product_name')}</Label>
                   <Input 
                     id="name" 
                     value={newProduct.name} 
@@ -242,7 +244,7 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="price">Preț (lei)</Label>
+                  <Label htmlFor="price">{t('admin.products.price')}</Label>
                   <Input 
                     id="price" 
                     type="number" 
@@ -251,7 +253,7 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="category">Categorie</Label>
+                  <Label htmlFor="category">{t('admin.products.category')}</Label>
                   <Input 
                     id="category" 
                     value={newProduct.category} 
@@ -259,7 +261,7 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="stock">Stoc</Label>
+                  <Label htmlFor="stock">{t('admin.products.stock')}</Label>
                   <Input 
                     id="stock" 
                     type="number" 
@@ -268,7 +270,7 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="image">URL Imagine</Label>
+                  <Label htmlFor="image">{t('admin.products.image_url')}</Label>
                   <Input 
                     id="image" 
                     value={newProduct.image || ''} 
@@ -277,12 +279,12 @@ const AdminProducts = () => {
                   />
                 </div>
                 <div className="flex justify-end space-x-2 pt-4">
-                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Anulează</Button>
+                  <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>{t('admin.products.cancel')}</Button>
                   <Button 
                     className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white" 
                     onClick={handleAddProduct}
                   >
-                    Adaugă
+                    {t('admin.products.add')}
                   </Button>
                 </div>
               </div>
@@ -295,7 +297,7 @@ const AdminProducts = () => {
             <div className="relative mb-6">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Caută produse..." 
+                placeholder={t('admin.products.search_products')} 
                 className="pl-10" 
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -306,12 +308,12 @@ const AdminProducts = () => {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">Imagine</TableHead>
-                    <TableHead>Nume Produs</TableHead>
-                    <TableHead>Categorie</TableHead>
-                    <TableHead className="text-right">Preț</TableHead>
-                    <TableHead className="text-center">Stoc</TableHead>
-                    <TableHead className="text-right">Acțiuni</TableHead>
+                    <TableHead className="w-[100px]">{t('admin.products.image')}</TableHead>
+                    <TableHead>{t('admin.products.product_name_header')}</TableHead>
+                    <TableHead>{t('admin.products.category_header')}</TableHead>
+                    <TableHead className="text-right">{t('admin.products.price_header')}</TableHead>
+                    <TableHead className="text-center">{t('admin.products.stock_header')}</TableHead>
+                    <TableHead className="text-right">{t('admin.products.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -363,12 +365,12 @@ const AdminProducts = () => {
                             </DialogTrigger>
                             <DialogContent>
                               <DialogHeader>
-                                <DialogTitle>Editează produs</DialogTitle>
+                                <DialogTitle>{t('admin.products.edit_product')}</DialogTitle>
                               </DialogHeader>
                               {editingProduct && (
                                 <div className="space-y-4 py-4">
                                   <div className="space-y-2">
-                                    <Label htmlFor="edit-name">Nume produs</Label>
+                                    <Label htmlFor="edit-name">{t('admin.products.product_name')}</Label>
                                     <Input 
                                       id="edit-name" 
                                       value={editingProduct.name} 
@@ -376,7 +378,7 @@ const AdminProducts = () => {
                                     />
                                   </div>
                                   <div className="space-y-2">
-                                    <Label htmlFor="edit-price">Preț (lei)</Label>
+                                    <Label htmlFor="edit-price">{t('admin.products.price')}</Label>
                                     <Input 
                                       id="edit-price" 
                                       type="number" 
@@ -385,7 +387,7 @@ const AdminProducts = () => {
                                     />
                                   </div>
                                   <div className="space-y-2">
-                                    <Label htmlFor="edit-category">Categorie</Label>
+                                    <Label htmlFor="edit-category">{t('admin.products.category')}</Label>
                                     <Input 
                                       id="edit-category" 
                                       value={editingProduct.category} 
@@ -393,7 +395,7 @@ const AdminProducts = () => {
                                     />
                                   </div>
                                   <div className="space-y-2">
-                                    <Label htmlFor="edit-stock">Stoc</Label>
+                                    <Label htmlFor="edit-stock">{t('admin.products.stock')}</Label>
                                     <Input 
                                       id="edit-stock" 
                                       type="number" 
@@ -402,7 +404,7 @@ const AdminProducts = () => {
                                     />
                                   </div>
                                   <div className="space-y-2">
-                                    <Label htmlFor="edit-image">URL Imagine</Label>
+                                    <Label htmlFor="edit-image">{t('admin.products.image_url')}</Label>
                                     <Input 
                                       id="edit-image" 
                                       value={editingProduct.image} 
@@ -410,12 +412,12 @@ const AdminProducts = () => {
                                     />
                                   </div>
                                   <div className="flex justify-end space-x-2 pt-4">
-                                    <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Anulează</Button>
+                                    <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>{t('admin.products.cancel')}</Button>
                                     <Button 
                                       className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white" 
                                       onClick={handleEditProduct}
                                     >
-                                      Salvează
+                                      {t('admin.products.save')}
                                     </Button>
                                   </div>
                                 </div>

@@ -7,11 +7,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { LockKeyhole, User, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -32,15 +34,15 @@ const AdminLogin = () => {
       if (username === 'admin' && password === '1234') {
         localStorage.setItem('adminAuth', 'true');
         toast({
-          title: "Autentificare reușită",
-          description: "Bine ai venit în panoul de administrare.",
+          title: t('admin.login.success'),
+          description: t('admin.login.welcome'),
           variant: "default",
         });
         navigate('/admin/dashboard');
       } else {
         toast({
-          title: "Autentificare eșuată",
-          description: "Numele de utilizator sau parola sunt incorecte.",
+          title: t('admin.login.failed'),
+          description: t('admin.login.invalid_credentials'),
           variant: "destructive",
         });
       }
@@ -50,25 +52,25 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-beauty-rose/10 flex items-center justify-center p-4 relative">
-      <Button 
-        variant="ghost" 
+      <Button
+        variant="ghost"
         className="absolute top-4 left-4 flex items-center gap-2"
         onClick={() => navigate('/')}
       >
         <ArrowLeft className="h-4 w-4" />
-        Înapoi la magazin
+        {t('admin.login.back_to_store')}
       </Button>
       
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-3xl font-bold">Administrator</CardTitle>
-          <p className="text-muted-foreground">Autentificare în panoul de administrare</p>
+          <CardTitle className="text-3xl font-bold">{t('admin.login.title')}</CardTitle>
+          <p className="text-muted-foreground">{t('admin.login.subtitle')}</p>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin}>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="username">Nume utilizator</Label>
+                <Label htmlFor="username">{t('admin.login.username')}</Label>
                 <div className="relative">
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -82,7 +84,7 @@ const AdminLogin = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Parolă</Label>
+                <Label htmlFor="password">{t('admin.login.password')}</Label>
                 <div className="relative">
                   <LockKeyhole className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
@@ -96,12 +98,12 @@ const AdminLogin = () => {
                   />
                 </div>
               </div>
-              <Button 
-                type="submit" 
-                className="w-full bg-beauty-magenta hover:bg-beauty-magenta/90 text-white" 
+              <Button
+                type="submit"
+                className="w-full bg-beauty-magenta hover:bg-beauty-magenta/90 text-white"
                 disabled={isLoading}
               >
-                {isLoading ? "Autentificare..." : "Autentificare"}
+                {isLoading ? t('admin.login.logging_in') : t('admin.login.login')}
               </Button>
             </div>
           </form>

@@ -19,7 +19,7 @@ const Parfumuri = () => {
       id: "1",
       name: t('parfumuri.floral_extravagance'),
       price: 349.99,
-      image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumFloralExtravagance.jpg",
       category: t('parfumuri.floral_category'),
       isNew: true,
       rating: 5
@@ -28,7 +28,7 @@ const Parfumuri = () => {
       id: "2",
       name: t('parfumuri.oriental_mystique'),
       price: 399.99,
-      image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumOrientalMystique.png",
       category: t('parfumuri.oriental_category'),
       isSale: true,
       discount: 10,
@@ -38,7 +38,7 @@ const Parfumuri = () => {
       id: "3",
       name: t('parfumuri.fresh_citrus'),
       price: 299.99,
-      image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumFreshCitrus.png",
       category: t('parfumuri.citrus_category'),
       rating: 4
     },
@@ -46,7 +46,7 @@ const Parfumuri = () => {
       id: "4",
       name: t('parfumuri.woody_elegance'),
       price: 419.99,
-      image: "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumWoodyElegance.jpg",
       category: t('parfumuri.woody_category'),
       rating: 5
     },
@@ -54,7 +54,7 @@ const Parfumuri = () => {
       id: "5",
       name: t('parfumuri.aquatic_breeze'),
       price: 329.99,
-      image: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumAquaticBreeze.avif",
       category: t('parfumuri.aquatic_category'),
       isSale: true,
       discount: 15,
@@ -64,7 +64,7 @@ const Parfumuri = () => {
       id: "6",
       name: t('parfumuri.spicy_noir'),
       price: 449.99,
-      image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumSpicyNoir.avif",
       category: t('parfumuri.spicy_category'),
       isNew: true,
       rating: 5

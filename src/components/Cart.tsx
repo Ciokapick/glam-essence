@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
 import { useCart, CartItem } from '@/contexts/CartContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,6 +55,7 @@ const CartItemRow: React.FC<{ item: CartItem }> = ({ item }) => {
 
 const Cart: React.FC = () => {
   const { items, isOpen, closeCart, totalItems, subtotal, clearCart } = useCart();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const handleCheckout = () => {
@@ -65,19 +67,19 @@ const Cart: React.FC = () => {
 
   return (
     <>
-      <div 
+      <div
         className="fixed inset-0 bg-black/40 z-[90] transition-opacity duration-200"
         onClick={closeCart}
-        aria-label="Închide coșul"
+        aria-label={t('cart.close_cart')}
       />
       
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white z-[100] shadow-xl transform transition-transform duration-300 overflow-auto animate-slide-in-right">
         <div className="p-4 border-b sticky top-0 bg-white z-10 flex justify-between items-center">
           <h2 className="text-xl font-bold flex items-center">
             <ShoppingBag className="h-5 w-5 mr-2" />
-            Coșul tău ({totalItems})
+            {t('cart.title')} ({totalItems})
           </h2>
-          <button 
+          <button
             onClick={closeCart}
             className="rounded-full p-1 hover:bg-gray-100"
           >
@@ -89,10 +91,10 @@ const Cart: React.FC = () => {
           {items.length === 0 ? (
             <div className="text-center py-10">
               <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-              <h3 className="text-lg font-medium mb-2">Coșul tău este gol</h3>
-              <p className="text-muted-foreground mb-6">Adaugă produse pentru a începe cumpărăturile</p>
+              <h3 className="text-lg font-medium mb-2">{t('cart.empty_title')}</h3>
+              <p className="text-muted-foreground mb-6">{t('cart.empty_subtitle')}</p>
               <Button onClick={closeCart} className="bg-beauty-magenta hover:bg-beauty-magenta/90">
-                Continuă cumpărăturile
+                {t('cart.continue_shopping')}
               </Button>
             </div>
           ) : (
@@ -105,32 +107,32 @@ const Cart: React.FC = () => {
               
               <div className="pt-4 border-t mt-4">
                 <div className="flex justify-between mb-2">
-                  <span>Subtotal</span>
+                  <span>{t('cart.subtotal')}</span>
                   <span className="font-semibold">{subtotal.toFixed(2)} lei</span>
                 </div>
                 <div className="flex justify-between mb-4">
-                  <span>Transport</span>
+                  <span>{t('cart.shipping')}</span>
                   <span className="font-semibold">15.00 lei</span>
                 </div>
                 <div className="flex justify-between text-lg font-bold mb-6">
-                  <span>Total</span>
+                  <span>{t('cart.total')}</span>
                   <span>{(subtotal + 15).toFixed(2)} lei</span>
                 </div>
                 
                 <div className="flex gap-2">
-                  <Button 
+                  <Button
                     onClick={clearCart}
                     variant="outline"
                     className="flex-1"
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
-                    Golește coșul
+                    {t('cart.clear_cart')}
                   </Button>
-                  <Button 
+                  <Button
                     onClick={handleCheckout}
                     className="flex-1 bg-beauty-magenta hover:bg-beauty-magenta/90"
                   >
-                    Finalizează comanda
+                    {t('cart.checkout')}
                   </Button>
                 </div>
               </div>
