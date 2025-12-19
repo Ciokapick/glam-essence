@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { products } from '@/data/products';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import { Star, Heart, ShoppingBag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -13,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 const ParfumFloralExtravagance = () => {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
   const product = products["parfum-floral-extravagance"];
   
   useEffect(() => {
@@ -31,8 +33,8 @@ const ParfumFloralExtravagance = () => {
       });
       
       toast({
-        title: "Adăugat în coș",
-        description: `${product.name} a fost adăugat în coșul tău.`,
+        title: t("toast.added_to_cart"),
+        description: t("toast.added_to_cart_desc").replace("{productName}", t(product.name)),
         variant: "default",
       });
     }
@@ -43,8 +45,8 @@ const ParfumFloralExtravagance = () => {
       if (isInWishlist(product.id)) {
         removeFromWishlist(product.id);
         toast({
-          title: "Eliminat de la favorite",
-          description: `${product.name} a fost eliminat din lista ta de favorite.`,
+          title: t("toast.removed_from_wishlist"),
+          description: t("toast.removed_from_wishlist_desc").replace("{productName}", t(product.name)),
           variant: "default",
         });
       } else {
@@ -57,8 +59,8 @@ const ParfumFloralExtravagance = () => {
           discount: product.isSale ? product.discount : undefined
         });
         toast({
-          title: "Adăugat la favorite",
-          description: `${product.name} a fost adăugat la lista ta de favorite.`,
+          title: t("toast.added_to_wishlist"),
+          description: t("toast.added_to_wishlist_desc").replace("{productName}", t(product.name)),
           variant: "default",
         });
       }
@@ -97,7 +99,7 @@ const ParfumFloralExtravagance = () => {
             
             {/* Product Info */}
             <div>
-              <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">{t(product.name)}</h1>
               
               {/* Ratings */}
               <div className="flex items-center mb-4">
@@ -135,12 +137,12 @@ const ParfumFloralExtravagance = () => {
               
               {/* Add to Cart/Wishlist */}
               <div className="flex flex-col sm:flex-row gap-3 mb-8">
-                <Button 
+                <Button
                   className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1"
                   onClick={handleAddToCart}
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
-                  Adaugă în coș
+                  {t("common.add_to_cart")}
                 </Button>
                 <Button 
                   variant="outline" 
@@ -152,13 +154,13 @@ const ParfumFloralExtravagance = () => {
                   onClick={handleAddToWishlist}
                 >
                   <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
-                  {isFavorite ? 'Eliminat de la favorite' : 'Adaugă la favorite'}
+                  {isFavorite ? t("product.remove_from_wishlist") : t("product.add_to_wishlist")}
                 </Button>
               </div>
               
               {/* Product Details */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Detalii produs</h3>
+                <h3 className="text-lg font-semibold">{t("product.product_details")}</h3>
                 <ul className="space-y-2">
                   {product.features.map((feature, index) => (
                     <li key={index} className="flex items-start">

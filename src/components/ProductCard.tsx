@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Star, ShoppingBag, Eye } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import ProductDetailsPopup from './ProductDetailsPopup';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
@@ -36,6 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   description
 }) => {
   const { addToCart } = useCart();
+  const { t } = useLanguage();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [stock, setStock] = useState<number>(0);
   
@@ -67,8 +69,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     
     if (stock <= 0) {
       toast({
-        title: "Stoc epuizat",
-        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+        title: t("toast.out_of_stock"),
+        description: t("toast.out_of_stock_desc"),
         variant: "destructive",
       });
       return;
@@ -84,8 +86,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
     });
     
     toast({
-      title: "Adăugat în coș",
-      description: `${name} a fost adăugat în coșul tău.`,
+      title: t("toast.added_to_cart"),
+      description: t("toast.added_to_cart_desc").replace("{productName}", t(name)),
       variant: "default",
     });
   };
@@ -101,7 +103,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   // Calculate discounted price if on sale
   const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
-  
+
+  console.log(`ProductCard image for ${name}: ${image}`);
+
   return (
     <>
       <Link to={productUrl} className="group block">
@@ -134,7 +138,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div className="absolute top-2 left-2 flex flex-col gap-2">
             {isNew && (
               <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">
-                Nou
+                {t("product.new_badge")}
               </Badge>
             )}
             {isSale && discount && (
@@ -144,15 +148,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
             )}
             {stock <= 0 && (
               <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-700">
-                Stoc epuizat
+                {t("product.out_of_stock")}
               </Badge>
             )}
           </div>
         </div>
         
         <div>
-          <h3 className="font-medium text-lg mb-1 group-hover:text-beauty-magenta transition-colors">{name}</h3>
-          <p className="text-muted-foreground mb-2">{category}</p>
+          <h3 className="font-medium text-lg mb-1 group-hover:text-beauty-magenta transition-colors">{t(name)}</h3>
+          <p className="text-muted-foreground mb-2">{t(category)}</p>
           
           {/* Star rating */}
           {rating > 0 && (
@@ -180,7 +184,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Stock info */}
           <div className="text-sm text-muted-foreground mt-1">
-            {stock > 0 ? `${stock} în stoc` : 'Stoc epuizat'}
+            {stock > 0 ? `${stock} ${t("product.available")}` : t("product.out_of_stock")}
           </div>
         </div>
       </Link>

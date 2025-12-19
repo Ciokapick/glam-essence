@@ -30,12 +30,12 @@ const Hero = () => {
           {/* Left Content */}
           <div className="max-w-xl animate-fade-in" style={{ animationDelay: "0.2s" }}>
             <h1 className="text-5xl lg:text-7xl font-serif font-bold mb-6 leading-tight text-white">
-              Beauty,
-              <span className="block text-white">Grown by</span>
-              <span className="block text-white">the Earth.</span>
+              {t('hero.new_title_line1')}
+              <span className="block text-white">{t('hero.new_title_line2')}</span>
+              <span className="block text-white">{t('hero.new_title_line3')}</span>
             </h1>
             <p className="text-lg text-white mb-10 max-w-md leading-relaxed">
-              Formulated from rare minerals, precious clays, and crystal infusions. Each formula honors the slow power of time, touch, and transformation.
+              {t('hero.new_subtitle')}
             </p>
           </div>
 

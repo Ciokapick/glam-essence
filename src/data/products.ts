@@ -24,17 +24,17 @@ export const products: { [key: string]: Product } = {
   "parfum-floral-extravagance": {
     id: "1",
     slug: "parfum-floral-extravagance",
-    name: "Parfum Floral Extravagance",
+    name: "parfumuri.floral_extravagance",
     price: 349.99,
     oldPrice: 399.99,
-    image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumFloralExtravagance.jpg",
     gallery: [
       "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum",
+    category: "parfumuri.floral_category",
     isNew: true,
     rating: 5,
     reviewCount: 47,
@@ -55,16 +55,16 @@ export const products: { [key: string]: Product } = {
   "parfum-oriental-mystique": {
     id: "2",
     slug: "parfum-oriental-mystique",
-    name: "Parfum Oriental Mystique",
+    name: "parfumuri.oriental_mystique",
     price: 399.99,
-    image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumOrientalMystique.png",
     gallery: [
       "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1595425970377-75accd411a5a?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1615526675651-91ee6f2e35b7?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum Oriental",
+    category: "parfumuri.oriental_category",
     isSale: true,
     discount: 10,
     rating: 4,
@@ -86,16 +86,16 @@ export const products: { [key: string]: Product } = {
   "parfum-fresh-citrus": {
     id: "3",
     slug: "parfum-fresh-citrus",
-    name: "Parfum Fresh Citrus",
+    name: "parfumuri.fresh_citrus",
     price: 299.99,
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumFreshCitrus.png",
     gallery: [
       "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1617897903246-719242758050?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1611414129830-44e5563c0091?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1588618575327-95834477028b?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum Citric",
+    category: "parfumuri.citrus_category",
     rating: 4,
     reviewCount: 28,
     description: "Un parfum revigorant cu note proaspete de citrice și accente verzi. Perfect pentru utilizarea de zi și pentru zilele călduroase de vară.",
@@ -115,16 +115,16 @@ export const products: { [key: string]: Product } = {
   "parfum-woody-elegance": {
     id: "4",
     slug: "parfum-woody-elegance",
-    name: "Parfum Woody Elegance",
+    name: "parfumuri.woody_elegance",
     price: 419.99,
-    image: "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumWoodyElegance.jpg",
     gallery: [
       "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1594033677177-39908202d630?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1551446339-5501f611e9a8?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1566150308864-39049370d85e?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum Lemnos",
+    category: "parfumuri.woody_category",
     rating: 5,
     reviewCount: 31,
     description: "Un parfum lemnos sofisticat cu note calde de santal, cedru și vetiver. Ideal pentru bărbații care apreciază eleganța clasică și rafinamentul.",
@@ -144,16 +144,16 @@ export const products: { [key: string]: Product } = {
   "parfum-aquatic-breeze": {
     id: "5",
     slug: "parfum-aquatic-breeze",
-    name: "Parfum Aquatic Breeze",
+    name: "parfumuri.aquatic_breeze",
     price: 329.99,
-    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
+    image: "/ParfumAquaticBreeze.avif",
     gallery: [
       "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1576073719676-aa95576db207?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1531022493105-969fe1d18187?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1578996834254-13d1b661a5ed?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum Acvatic",
+    category: "parfumuri.aquatic_category",
     isSale: true,
     discount: 15,
     rating: 4,
@@ -175,16 +175,16 @@ export const products: { [key: string]: Product } = {
   "parfum-spicy-noir": {
     id: "6",
     slug: "parfum-spicy-noir",
-    name: "Parfum Spicy Noir",
+    name: "parfumuri.spicy_noir",
     price: 449.99,
-    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumSpicyNoir.avif",
     gallery: [
       "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1591375782226-461d9a617541?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1575330933415-cea1e7ce53eb?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1558730174-cc150ae8949f?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Parfum Condimentat",
+    category: "parfumuri.spicy_category",
     isNew: true,
     rating: 5,
     reviewCount: 17,
@@ -205,7 +205,7 @@ export const products: { [key: string]: Product } = {
   "crema-hidratanta-luxury": {
     id: "7",
     slug: "crema-hidratanta-luxury",
-    name: "Cremă hidratantă Luxury",
+    name: "creme.luxury_cream",
     price: 129.99,
     oldPrice: 152.99,
     image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
@@ -215,12 +215,12 @@ export const products: { [key: string]: Product } = {
       "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=800&auto=format&fit=crop&q=80",
       "https://images.unsplash.com/photo-1578083881005-040fc7572338?w=800&auto=format&fit=crop&q=80"
     ],
-    category: "Cremă față",
+    category: "creme.face_category",
     isSale: true,
     discount: 15,
     rating: 4,
     reviewCount: 32,
-    description: "Crema hidratantă Luxury oferă o hidratare intensă și de lungă durată pentru tenul uscat și deshidratat. Formula sa bogată, îmbogățită cu acid hialuronic, ceramide și extracte botanice, ajută la refacerea barierei naturale a pielii, oferind un aspect neted, catifelat și strălucitor.",
+    description: "products.luxury_cream_desc",
     details: "O cremă luxoasă formulată cu ingrediente premium pentru hidratare intensă. Conține acid hialuronic, ceramide, ulei de argan și extracte botanice care hrănesc și revigorează pielea. Textura ușoară se absoarbe rapid, lăsând pielea catifelată și strălucitoare.",
     features: [
       "Hidratare intensă de lungă durată",
@@ -237,7 +237,7 @@ export const products: { [key: string]: Product } = {
   "crema-contur-ochi-anti-age": {
     id: "8",
     slug: "crema-contur-ochi-anti-age",
-    name: "Cremă contur ochi Anti-Age",
+    name: "creme.eye_contour_cream",
     price: 149.99,
     image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
     gallery: [
@@ -565,37 +565,40 @@ export const products: { [key: string]: Product } = {
 export const similarProducts = [
   {
     id: "5",
-    name: "Parfum Oriental Mystique",
-    price: 399.99,
-    image: "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Oriental",
+    name: "Parfum Aquatic Breeze",
+    price: 329.99,
+    image: "/ParfumAquaticBreeze.avif",
+    category: "Parfum Acvatic",
     isSale: true,
-    discount: 10,
+    discount: 15,
     rating: 4
   },
   {
     id: "6",
-    name: "Parfum Fresh Citrus",
-    price: 299.99,
-    image: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Citric",
-    rating: 4
-  },
-  {
-    id: "7",
     name: "Parfum Spicy Noir",
     price: 449.99,
-    image: "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    image: "/ParfumSpicyNoir.avif",
     category: "Parfum Condimentat",
     isNew: true,
     rating: 5
   },
   {
+    id: "7",
+    name: "Cremă hidratantă Luxury",
+    price: 129.99,
+    image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    category: "Cremă față",
+    isSale: true,
+    discount: 15,
+    rating: 4
+  },
+  {
     id: "8",
-    name: "Parfum Woody Elegance",
-    price: 419.99,
-    image: "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-    category: "Parfum Lemnos",
-    rating: 5
+    name: "Cremă de corp Intense",
+    price: 89.99,
+    image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+    category: "Cremă corp",
+    isNew: true,
+    rating: 4
   }
 ];

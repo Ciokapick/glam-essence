@@ -64,11 +64,11 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				beauty: {
-					lavender: "#D6BCFA",
-					rose: "#FFDEE2",
+					lavender: "#FAFCFD",
+					rose: "#FAFCFD",
 					mint: "#F2FCE2",
 					gold: "#FEDC5A",
-					blush: "#FFDEE2",
+					blush: "#FAFCFD",
 					magenta: "#D946EF",
 					hotpink: "#FF6B9B",
 					coral: "#FF7979"

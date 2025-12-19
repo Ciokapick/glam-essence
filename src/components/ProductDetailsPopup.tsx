@@ -4,6 +4,7 @@ import { X, Minus, Plus, ShoppingBag, Heart } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useWishlist } from '@/contexts/WishlistContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
@@ -37,6 +38,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
 }) => {
   const { addToCart } = useCart();
   const { addToWishlist, isInWishlist } = useWishlist();
+  const { t } = useLanguage();
   const [quantity, setQuantity] = useState(1);
   const [stock, setStock] = useState(initialStock);
   
@@ -78,8 +80,8 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
   const handleAddToCart = () => {
     if (stock <= 0) {
       toast({
-        title: "Stoc epuizat",
-        description: "Ne pare rău, acest produs nu mai este disponibil în stoc.",
+        title: t("toast.out_of_stock"),
+        description: t("toast.out_of_stock_desc"),
         variant: "destructive",
       });
       return;
@@ -95,8 +97,8 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
     }, quantity);
     
     toast({
-      title: "Adăugat în coș",
-      description: `${name} a fost adăugat în coșul tău.`,
+      title: t("toast.added_to_cart"),
+      description: t("toast.added_to_cart_desc").replace("{productName}", t(name)),
       variant: "default",
     });
     
@@ -114,8 +116,8 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
     });
     
     toast({
-      title: "Adăugat la favorite",
-      description: `${name} a fost adăugat la lista ta de favorite.`,
+      title: t("toast.added_to_wishlist"),
+      description: t("toast.added_to_wishlist_desc").replace("{productName}", t(name)),
       variant: "default",
     });
   };
@@ -171,7 +173,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
               <div className="absolute top-2 left-2 flex flex-col gap-2">
                 {isNew && (
                   <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">
-                    Nou
+                    {t("product.new_badge")}
                   </Badge>
                 )}
                 {isSale && discount && (
@@ -181,7 +183,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
                 )}
                 {stock <= 0 && (
                   <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-700">
-                    Stoc epuizat
+                    {t("product.out_of_stock")}
                   </Badge>
                 )}
               </div>
@@ -189,8 +191,8 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
             
             {/* Product Info */}
             <div>
-              <h3 className="text-2xl font-bold mb-2">{name}</h3>
-              <p className="text-muted-foreground mb-4">{category}</p>
+              <h3 className="text-2xl font-bold mb-2">{t(name)}</h3>
+              <p className="text-muted-foreground mb-4">{t(category)}</p>
               
               {/* Price display */}
               <div className="flex items-center mb-4">
@@ -214,7 +216,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
               {/* Quantity */}
               <div className="mb-6">
                 <div className="flex items-center space-x-4">
-                  <span className="font-medium">Cantitate:</span>
+                  <span className="font-medium">{t("product.quantity")}</span>
                   <div className="flex items-center border rounded-md">
                     <button
                       className="px-3 py-2 hover:bg-gray-100" 
@@ -233,7 +235,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
                     </button>
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {stock} disponibile
+                    {stock} {t("product.available")}
                   </span>
                 </div>
               </div>
@@ -246,7 +248,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
                   disabled={stock <= 0}
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
-                  {stock > 0 ? 'Adaugă în coș' : 'Stoc epuizat'}
+                  {stock > 0 ? t("common.add_to_cart") : t("product.out_of_stock")}
                 </button>
                 <button
                   className={`border py-2 px-4 rounded flex items-center justify-center ${
@@ -257,7 +259,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
                   onClick={handleAddToWishlist}
                 >
                   <Heart className={`h-5 w-5 mr-2 ${isFavorite ? 'fill-beauty-rose' : ''}`} />
-                  Adaugă la favorite
+                  {t("product.add_to_wishlist")}
                 </button>
               </div>
             </div>

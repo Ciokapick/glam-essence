@@ -6,6 +6,7 @@ import ProductCard from '@/components/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Filter, SlidersHorizontal } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { products } from '@/data/products';
 
 const Parfumuri = () => {
   const { t } = useLanguage();
@@ -14,62 +15,7 @@ const Parfumuri = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const products = [
-    {
-      id: "1",
-      name: t('parfumuri.floral_extravagance'),
-      price: 349.99,
-      image: "/ParfumFloralExtravagance.jpg",
-      category: t('parfumuri.floral_category'),
-      isNew: true,
-      rating: 5
-    },
-    {
-      id: "2",
-      name: t('parfumuri.oriental_mystique'),
-      price: 399.99,
-      image: "/ParfumOrientalMystique.png",
-      category: t('parfumuri.oriental_category'),
-      isSale: true,
-      discount: 10,
-      rating: 4
-    },
-    {
-      id: "3",
-      name: t('parfumuri.fresh_citrus'),
-      price: 299.99,
-      image: "/ParfumFreshCitrus.png",
-      category: t('parfumuri.citrus_category'),
-      rating: 4
-    },
-    {
-      id: "4",
-      name: t('parfumuri.woody_elegance'),
-      price: 419.99,
-      image: "/ParfumWoodyElegance.jpg",
-      category: t('parfumuri.woody_category'),
-      rating: 5
-    },
-    {
-      id: "5",
-      name: t('parfumuri.aquatic_breeze'),
-      price: 329.99,
-      image: "/ParfumAquaticBreeze.avif",
-      category: t('parfumuri.aquatic_category'),
-      isSale: true,
-      discount: 15,
-      rating: 4
-    },
-    {
-      id: "6",
-      name: t('parfumuri.spicy_noir'),
-      price: 449.99,
-      image: "/ParfumSpicyNoir.avif",
-      category: t('parfumuri.spicy_category'),
-      isNew: true,
-      rating: 5
-    }
-  ];
+  const perfumeProducts = Object.values(products).filter(p => p.category.startsWith('parfumuri.'));
 
   return (
     <div className="min-h-screen">
@@ -111,9 +57,9 @@ const Parfumuri = () => {
           
           {/* Products grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {products.map((product) => (
+            {perfumeProducts.map((product) => (
               <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
-                <ProductCard {...product} />
+                <ProductCard {...product} name={t(product.name)} category={t(product.category)} />
               </div>
             ))}
           </div>

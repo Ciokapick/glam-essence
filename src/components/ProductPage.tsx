@@ -86,7 +86,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
       
       toast({
         title: t('toast.added_to_cart'),
-        description: t('toast.added_to_cart_desc').replace('{productName}', product.name),
+        description: t('toast.added_to_cart_desc').replace('{productName}', t(product.name)),
         variant: "default",
       });
     }
@@ -110,7 +110,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
         removeFromWishlist(product.id);
         toast({
           title: t('toast.removed_from_wishlist'),
-          description: t('toast.removed_from_wishlist_desc').replace('{productName}', product.name),
+          description: t('toast.removed_from_wishlist_desc').replace('{productName}', t(product.name)),
           variant: "default",
         });
       } else {
@@ -124,7 +124,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
         });
         toast({
           title: t('toast.added_to_wishlist'),
-          description: t('toast.added_to_wishlist_desc').replace('{productName}', product.name),
+          description: t('toast.added_to_wishlist_desc').replace('{productName}', t(product.name)),
           variant: "default",
         });
       }
@@ -133,10 +133,12 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   
   const isFavorite = isInWishlist(product?.id);
   
+  console.log(`ProductPage image for ${product?.name}: ${product?.image}`);
+
   return (
     <div className="min-h-screen">
       <Navbar />
-      
+
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           <nav className="flex text-sm text-muted-foreground mb-6">
@@ -145,17 +147,17 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
               <li><a href="/parfumuri" className="hover:text-foreground">{t('product.breadcrumb.perfumes')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li className="text-foreground font-medium truncate">{product?.name}</li>
+              <li className="text-foreground font-medium truncate">{t(product?.name)}</li>
             </ol>
           </nav>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <div>
               <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
-                <img 
-                  src={product?.image} 
-                  alt={product?.name} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={product?.image}
+                  alt={product?.name}
+                  className="w-full h-full object-cover"
                 />
                 
                 {product?.isNew && (
@@ -173,7 +175,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             </div>
             
             <div>
-              <h1 className="text-3xl font-bold mb-2">{product?.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">{t(product?.name)}</h1>
               
               <div className="flex items-center mb-4">
                 <div className="flex mr-2">
@@ -254,7 +256,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     
                     toast({
                       title: t('toast.added_to_cart'),
-                      description: t('toast.added_to_cart_desc').replace('{productName}', product.name),
+                      description: t('toast.added_to_cart_desc').replace('{productName}', t(product.name)),
                       variant: "default",
                     });
                   }}
@@ -275,7 +277,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         removeFromWishlist(product.id);
                         toast({
                           title: t('toast.removed_from_wishlist'),
-                          description: t('toast.removed_from_wishlist_desc').replace('{productName}', product.name),
+                          description: t('toast.removed_from_wishlist_desc').replace('{productName}', t(product.name)),
                           variant: "default",
                         });
                       } else {
@@ -289,7 +291,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         });
                         toast({
                           title: t('toast.added_to_wishlist'),
-                          description: t('toast.added_to_wishlist_desc').replace('{productName}', product.name),
+                          description: t('toast.added_to_wishlist_desc').replace('{productName}', t(product.name)),
                           variant: "default",
                         });
                       }

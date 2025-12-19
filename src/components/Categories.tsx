@@ -12,21 +12,21 @@ const Categories = () => {
       name: t('nav.perfumes'),
       description: t('categories.perfumes_desc'),
       image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      color: "from-beauty-magenta/80 to-beauty-magenta/40"
+      color: "from-beauty-magenta/40 to-beauty-magenta/20"
     },
     {
       id: "creme",
       name: t('nav.creams'),
       description: t('categories.creams_desc'),
       image: "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      color: "from-beauty-coral/80 to-beauty-coral/40"
+      color: "from-beauty-coral/40 to-beauty-coral/20"
     },
     {
       id: "ingrijire",
       name: t('nav.skincare'),
       description: t('categories.skincare_desc'),
       image: "https://images.unsplash.com/photo-1585652757141-8837d676fac8?w=800&auto=format&fit=crop&q=80",
-      color: "from-beauty-hotpink/80 to-beauty-hotpink/40"
+      color: "from-beauty-hotpink/40 to-beauty-hotpink/20"
     }
   ];
 
@@ -56,13 +56,13 @@ const Categories = () => {
               />
               
               {/* Gradient overlay */}
-              <div className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-80`}></div>
+              <div className={`absolute inset-0 bg-gradient-to-t ${category.color} opacity-60`}></div>
               
               {/* Content */}
-              <div className="relative p-6 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+              <div className="relative p-6 pb-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                 <h3 className="text-white text-2xl font-bold mb-2">{category.name}</h3>
                 <p className="text-white/90 mb-4">{category.description}</p>
-                <span className="inline-flex items-center text-white font-medium rounded-full pl-4 pr-3 py-1.5 bg-white/20 backdrop-blur-sm">
+                <span className="inline-flex items-center text-white font-medium rounded-full pl-4 pr-3 py-1.5 bg-white/20 backdrop-blur-sm mb-2">
                   {t('categories.explore')}
                   <svg className="w-5 h-5 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />

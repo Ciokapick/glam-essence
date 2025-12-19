@@ -31,6 +31,10 @@ const translations: Translations = {
   'hero.title': { en: 'Discover Your Beauty', ro: 'Descoperă-ți Frumusețea' },
   'hero.subtitle': { en: 'Premium beauty products that enhance your natural radiance', ro: 'Produse de frumusețe premium care îți accentuează strălucirea naturală' },
   'hero.cta': { en: 'Shop Now', ro: 'Cumpără Acum' },
+  'hero.new_title_line1': { en: 'Beauty,', ro: 'Frumusețea,' },
+  'hero.new_title_line2': { en: 'Grown by', ro: 'Cultivată de' },
+  'hero.new_title_line3': { en: 'the Earth.', ro: 'Pământ.' },
+  'hero.new_subtitle': { en: 'Formulated from rare minerals, precious clays, and crystal infusions. Each formula honors the slow power of time, touch, and transformation.', ro: 'Formulate din minerale rare, argile prețioase și infuzii de cristal. Fiecare formulă onorează puterea lentă a timpului, atingerii și transformării.' },
   
   // Categories
   'categories.title': { en: 'Our Categories', ro: 'Categoriile Noastre' },
@@ -162,6 +166,7 @@ const translations: Translations = {
   'products.delicate_fragrance': { en: 'Delicate, long-lasting fragrance', ro: 'Parfum delicat, de lungă durată' },
   'products.quick_absorption': { en: 'Quick absorption, no greasy residue', ro: 'Absorbție rapidă, nu lasă reziduuri grase' },
   'products.premium_packaging': { en: 'Premium, reusable packaging', ro: 'Ambalaj premium, reutilizabil' },
+  'products.eye_contour_cream_desc': { en: 'This eye contour cream effectively combats the signs of aging in the delicate eye area. It reduces wrinkles, dark circles and bags under the eyes, providing a younger and rested appearance.', ro: 'Crema contur ochi Anti-Age combate eficient semnele îmbătrânirii din zona delicată a ochilor. Reduce ridurile, cearcănele și pungile de sub ochi, oferind un aspect mai tânăr și odihnit.' },
   
   // Testimonials translations
   'testimonials.maria_text': { en: "Since using GlamEssence products, my skin has never looked more radiant. Their perfumes are absolutely divine and last all day.", ro: "De când folosesc produsele GlamEssence, pielea mea arată mai strălucitoare ca niciodată. Parfumurile lor sunt absolut divine, durează întreaga zi." },

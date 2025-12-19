@@ -8,17 +8,17 @@ const Benefits = () => {
   
   const benefits = [
     {
-      icon: <Leaf className="h-12 w-12 text-beauty-mint" />,
+      icon: <Leaf className="h-12 w-12 text-green-600" />,
       title: t('benefits.natural_ingredients'),
       description: t('benefits.natural_ingredients_desc')
     },
     {
-      icon: <TruckIcon className="h-12 w-12 text-beauty-lavender" />,
+      icon: <TruckIcon className="h-12 w-12 text-beauty-coral" />,
       title: t('benefits.free_delivery'),
       description: t('benefits.free_delivery_desc')
     },
     {
-      icon: <Shield className="h-12 w-12 text-beauty-rose" />,
+      icon: <Shield className="h-12 w-12 text-blue-500" />,
       title: t('benefits.guaranteed_quality'),
       description: t('benefits.guaranteed_quality_desc')
     },

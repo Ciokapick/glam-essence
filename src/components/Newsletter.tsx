@@ -8,7 +8,7 @@ const Newsletter = () => {
   const { t } = useLanguage();
   
   return (
-    <section className="py-20 bg-gradient-to-r from-beauty-rose/20 to-beauty-hotpink/10">
+    <section className="py-20 bg-[#FAFCFD]">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('newsletter.title')}</h2>

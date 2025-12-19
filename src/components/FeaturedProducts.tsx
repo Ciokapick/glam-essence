@@ -13,7 +13,7 @@ const FeaturedProducts = () => {
       id: "1",
       name: t('products.floral_extravagance'),
       price: 349.99,
-      image: "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      image: "/ParfumFloralExtravagance.jpg",
       category: "Parfum",
       isNew: true,
       rating: 5,
@@ -85,7 +85,7 @@ const FeaturedProducts = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-beauty-rose/10">
+    <section className="py-20 bg-gradient-to-b from-[#FAFCFD] to-[#FAFCFD]/10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('featured.title')}</h2>
@@ -104,7 +104,7 @@ const FeaturedProducts = () => {
         
         <div className="text-center mt-12">
           <Link to="/parfumuri">
-            <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
+            <Button className="bg-beauty-coral hover:bg-beauty-coral/90 text-white">
               {t('featured_products.view_all')}
             </Button>
           </Link>
