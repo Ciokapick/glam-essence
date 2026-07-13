@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -20,13 +20,19 @@ const Checkout = () => {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cardPayments, setCardPayments] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'cash' | 'card'>('cash');
+
+  useEffect(() => {
+    api.checkoutConfig().then((config) => setCardPayments(config.cardPayments)).catch(() => setCardPayments(false));
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     try {
-      await api.placeOrder({
+      const orderInput = {
         items: items,
         customer: {
           name: formData.name,
@@ -34,13 +40,21 @@ const Checkout = () => {
           address: formData.address,
           phone: formData.phone
         }
-      });
+      };
+
+      if (paymentMethod === 'card') {
+        const session = await api.createCheckoutSession(orderInput);
+        window.location.assign(session.url);
+        return;
+      }
+
+      const order = await api.placeOrder(orderInput);
       
       // Clear cart and show success message
       clearCart();
       toast({
         title: "Comandă plasată cu succes!",
-        description: "Vă mulțumim pentru comandă. Veți primi un email de confirmare în curând.",
+        description: `Referință ${order.id}. Plata se face la livrare.`,
       });
       
       // Redirect to home
@@ -112,6 +126,19 @@ const Checkout = () => {
                 onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </div>
+            <fieldset className="space-y-3 border-t pt-5">
+              <legend className="mb-3 font-medium">Metodă de plată</legend>
+              <label className="flex cursor-pointer items-center gap-3 rounded-md border p-4">
+                <input type="radio" name="payment" checked={paymentMethod === 'cash'} onChange={() => setPaymentMethod('cash')} />
+                <span><strong>Plată la livrare</strong><small className="block text-gray-500">Comanda este înregistrată imediat.</small></span>
+              </label>
+              {cardPayments && (
+                <label className="flex cursor-pointer items-center gap-3 rounded-md border p-4">
+                  <input type="radio" name="payment" checked={paymentMethod === 'card'} onChange={() => setPaymentMethod('card')} />
+                  <span><strong>Card prin Stripe</strong><small className="block text-gray-500">Vei continua într-o pagină de plată securizată.</small></span>
+                </label>
+              )}
+            </fieldset>
             <div>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -145,7 +172,7 @@ const Checkout = () => {
               className="w-full bg-beauty-magenta hover:bg-beauty-magenta/90"
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Se procesează...' : 'Plasează comanda'}
+              {isSubmitting ? 'Se procesează...' : paymentMethod === 'card' ? 'Continuă către plata securizată' : 'Plasează comanda'}
             </Button>
           </div>
         </form>
