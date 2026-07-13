@@ -14,6 +14,7 @@ import AdminProducts from '@/pages/AdminProducts';
 import AdminOrders from '@/pages/AdminOrders';
 import AdminLogin from '@/pages/AdminLogin';
 import WishlistPage from '@/pages/WishlistPage';
+import SeturiPage from '@/pages/SeturiPage';
 import Cart from '@/components/Cart';
 import { CartProvider } from '@/contexts/CartContext';
 import { WishlistProvider } from '@/contexts/WishlistContext';
@@ -41,6 +42,7 @@ function App() {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/wishlist" element={<WishlistPage />} />
+            <Route path="/seturi" element={<SeturiPage />} />
             
             {/* Admin routes */}
             <Route path="/admin" element={<AdminLogin />} />

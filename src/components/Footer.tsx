@@ -1,136 +1,63 @@
-
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Twitter, Youtube, MapPin, Phone, Mail } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Footer = () => {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const copy = language === 'ro' ? {
+    line: 'Parfumuri și ritualuri de îngrijire alese pentru momentele tale.',
+    shop: 'Colecții', info: 'Descoperă', account: 'Contul tău', country: 'Magazin online · România',
+  } : {
+    line: 'Fragrances and care rituals chosen for the moments that matter.',
+    shop: 'Collections', info: 'Discover', account: 'Your account', country: 'Online boutique · Romania',
+  };
+
   return (
-    <footer className="bg-[#FAFCFD] pt-16 pb-8 border-t">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Brand and description */}
-          <div>
-            <Link to="/" className="text-2xl font-bold">
-              <span className="gold-gradient">Glam</span>
-              <span className="font-light">Essence</span>
+    <footer className="bg-[#1c1217] pb-8 pt-20 text-white md:pt-28">
+      <div className="container mx-auto px-5 md:px-8">
+        <div className="grid gap-14 border-b border-white/12 pb-16 md:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1fr]">
+          <div className="max-w-sm">
+            <Link to="/" className="font-serif text-3xl font-medium">Glam Essence</Link>
+            <p className="mt-5 text-sm leading-7 text-white/55">{copy.line}</p>
+            <Link to="/contact" className="mt-7 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[.17em] text-[#d7a5ae]">
+              Contact <ArrowUpRight className="h-4 w-4" />
             </Link>
-            <p className="mt-4 text-muted-foreground">
-              {t('footer.about_text')}
-            </p>
-            <div className="flex space-x-4 mt-6">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Youtube className="h-5 w-5" />
-              </a>
-            </div>
           </div>
-          
-          {/* Categories */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">{t('common.categories')}</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/parfumuri" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('nav.perfumes')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/creme" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('nav.creams')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/ingrijire" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('nav.skincare')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/seturi" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.gift_sets')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/bestsellers" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.bestsellers')}
-                </Link>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Information */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.information')}</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/despre-noi" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.about_us')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.contact')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/termeni" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.terms')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/politica-confidentialitate" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.privacy')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/faq" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {t('footer.faq')}
-                </Link>
-              </li>
-            </ul>
-          </div>
-          
-          {/* Contact */}
-          <div>
-            <h3 className="font-semibold text-lg mb-4">{t('footer.contact')}</h3>
-            <ul className="space-y-4">
-              <li className="flex">
-                <MapPin className="h-5 w-5 mr-3 text-primary" />
-                <span className="text-muted-foreground">
-                  {t('footer.address')}
-                </span>
-              </li>
-              <li className="flex">
-                <Phone className="h-5 w-5 mr-3 text-primary" />
-                <span className="text-muted-foreground">
-                  {t('footer.phone')}
-                </span>
-              </li>
-              <li className="flex">
-                <Mail className="h-5 w-5 mr-3 text-primary" />
-                <span className="text-muted-foreground">
-                  {t('footer.email')}
-                </span>
-              </li>
-            </ul>
-          </div>
+
+          <FooterColumn title={copy.shop} links={[
+            ['/parfumuri', language === 'ro' ? 'Parfumuri' : 'Perfumes'],
+            ['/creme', language === 'ro' ? 'Creme' : 'Creams'],
+            ['/ingrijire', language === 'ro' ? 'Îngrijire' : 'Skincare'],
+            ['/seturi', language === 'ro' ? 'Seturi cadou' : 'Gift sets'],
+          ]} />
+          <FooterColumn title={copy.info} links={[
+            ['/about', language === 'ro' ? 'Povestea noastră' : 'Our story'],
+            ['/contact', 'Contact'],
+            ['/parfumuri', language === 'ro' ? 'Ghid de parfum' : 'Fragrance guide'],
+          ]} />
+          <FooterColumn title={copy.account} links={[
+            ['/account', language === 'ro' ? 'Cont' : 'Account'],
+            ['/wishlist', language === 'ro' ? 'Favorite' : 'Wishlist'],
+            ['/checkout', 'Checkout'],
+          ]} />
         </div>
-        
-        <div className="border-t mt-12 pt-8 text-center text-muted-foreground text-sm">
-          <p>© {new Date().getFullYear()} GlamEssence. {t('footer.rights')}</p>
+
+        <div className="flex flex-col gap-3 pt-7 text-[9px] uppercase tracking-[.18em] text-white/35 sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} Glam Essence</p>
+          <p>{copy.country}</p>
         </div>
       </div>
     </footer>
   );
 };
+
+const FooterColumn = ({ title, links }: { title: string; links: string[][] }) => (
+  <div>
+    <h3 className="mb-5 text-[9px] font-semibold uppercase tracking-[.22em] text-white/40">{title}</h3>
+    <ul className="space-y-3">
+      {links.map(([to, label]) => <li key={`${to}-${label}`}><Link to={to} className="text-sm text-white/70 transition hover:text-white">{label}</Link></li>)}
+    </ul>
+  </div>
+);
 
 export default Footer;
