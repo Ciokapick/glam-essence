@@ -2,10 +2,12 @@ import { FormEvent, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from '@/hooks/use-toast';
+import { api } from '@/services/api';
 
 const Newsletter = () => {
   const { language } = useLanguage();
   const [email, setEmail] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const copy = language === 'ro' ? {
     eyebrow: 'Scrisori de la Glam Essence',
     title: 'Noutăți rare, trimise cu măsură.',
@@ -24,11 +26,19 @@ const Newsletter = () => {
     privacy: 'Unsubscribe anytime. Your address is used only for these updates.',
   };
 
-  const handleSubmit = (event: FormEvent) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     if (!email.trim()) return;
-    toast({ title: copy.success });
-    setEmail('');
+    setIsSubmitting(true);
+    try {
+      await api.subscribe(email, language);
+      toast({ title: copy.success });
+      setEmail('');
+    } catch (error) {
+      toast({ title: language === 'ro' ? 'Abonarea nu a reușit.' : 'Subscription failed.', description: error instanceof Error ? error.message : undefined, variant: 'destructive' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -50,8 +60,8 @@ const Newsletter = () => {
               placeholder={copy.placeholder}
               className="h-14 flex-1 bg-transparent px-1 text-sm text-[#281922] outline-none placeholder:text-[#8e8186]"
             />
-            <button type="submit" className="group inline-flex h-14 items-center justify-center gap-3 px-2 text-[10px] font-semibold uppercase tracking-[.18em] text-[#281922]">
-              {copy.button}
+            <button type="submit" disabled={isSubmitting} className="group inline-flex h-14 items-center justify-center gap-3 px-2 text-[10px] font-semibold uppercase tracking-[.18em] text-[#281922] disabled:opacity-50">
+              {isSubmitting ? '…' : copy.button}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
           </form>

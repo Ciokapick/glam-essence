@@ -56,7 +56,27 @@ db.exec(`
     image TEXT NOT NULL DEFAULT '',
     category TEXT NOT NULL DEFAULT ''
   );
+
+  CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+    email TEXT PRIMARY KEY,
+    locale TEXT NOT NULL DEFAULT 'ro',
+    status TEXT NOT NULL DEFAULT 'active' CHECK(status IN ('active','unsubscribed')),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS pending_checkouts (
+    stripe_session_id TEXT PRIMARY KEY,
+    payload TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending' CHECK(status IN ('pending','completed','expired')),
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+  );
 `);
+
+const orderColumns = new Set(db.prepare('PRAGMA table_info(orders)').all().map((column) => column.name));
+if (!orderColumns.has('payment_status')) db.exec("ALTER TABLE orders ADD COLUMN payment_status TEXT NOT NULL DEFAULT 'cash_on_delivery'");
+if (!orderColumns.has('payment_reference')) db.exec("ALTER TABLE orders ADD COLUMN payment_reference TEXT NOT NULL DEFAULT ''");
 
 const seedProducts = JSON.parse(readFileSync(path.join(import.meta.dirname, 'seed-products.json'), 'utf8'));
 const productCount = db.prepare('SELECT COUNT(*) AS count FROM products').get().count;
@@ -148,7 +168,7 @@ export function createOrder(input) {
   const id = `GE-${Date.now().toString(36).toUpperCase()}-${randomUUID().slice(0, 4).toUpperCase()}`;
   const getProduct = db.prepare('SELECT * FROM products WHERE id = ?');
   const insertOrder = db.prepare(`INSERT INTO orders
-    (id, customer_name, customer_email, customer_address, customer_phone, total) VALUES (?, ?, ?, ?, ?, ?)`);
+    (id, customer_name, customer_email, customer_address, customer_phone, total, payment_status, payment_reference) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
   const insertItem = db.prepare(`INSERT INTO order_items
     (order_id, product_id, name, price, quantity, image, category) VALUES (?, ?, ?, ?, ?, ?, ?)`);
   const reduceStock = db.prepare('UPDATE products SET stock = stock - ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND stock >= ?');
@@ -168,7 +188,7 @@ export function createOrder(input) {
       return { product, quantity, unitPrice };
     });
     const total = Math.round((subtotal + 15) * 100) / 100;
-    insertOrder.run(id, input.customer.name, input.customer.email, input.customer.address, input.customer.phone, total);
+    insertOrder.run(id, input.customer.name, input.customer.email, input.customer.address, input.customer.phone, total, input.paymentStatus || 'cash_on_delivery', input.paymentReference || '');
     for (const { product, quantity, unitPrice } of items) {
       if (reduceStock.run(quantity, product.id, quantity).changes !== 1) throw new Error(`Stoc insuficient pentru ${product.name}.`);
       insertItem.run(id, product.id, product.name, unitPrice, quantity, product.image, product.category);
@@ -189,6 +209,8 @@ function decodeOrder(row) {
     total: row.total,
     customer: { name: row.customer_name, email: row.customer_email, address: row.customer_address, phone: row.customer_phone },
     status: row.status,
+    paymentStatus: row.payment_status,
+    paymentReference: row.payment_reference,
     date: row.created_at,
   };
 }
@@ -208,4 +230,34 @@ export function updateOrderStatus(id, status) {
 
 export function deleteOrder(id) {
   return db.prepare('DELETE FROM orders WHERE id = ?').run(id).changes > 0;
+}
+
+export function prepareCheckout(items) {
+  const getProduct = db.prepare('SELECT * FROM products WHERE id = ?');
+  return items.map((item) => {
+    const product = getProduct.get(item.id);
+    const quantity = Number(item.quantity);
+    if (!product || !Number.isInteger(quantity) || quantity < 1 || product.stock < quantity) throw new Error('Un produs nu mai este disponibil în cantitatea selectată.');
+    const price = product.discount ? product.price * (1 - product.discount / 100) : product.price;
+    return { id: product.id, name: product.name, image: product.image, category: product.category, quantity, price };
+  });
+}
+
+export function savePendingCheckout(sessionId, input) {
+  db.prepare('INSERT OR REPLACE INTO pending_checkouts (stripe_session_id, payload) VALUES (?, ?)').run(sessionId, JSON.stringify(input));
+}
+
+export function completePendingCheckout(sessionId) {
+  const row = db.prepare("SELECT * FROM pending_checkouts WHERE stripe_session_id = ? AND status = 'pending'").get(sessionId);
+  if (!row) return null;
+  const input = JSON.parse(row.payload);
+  const order = createOrder({ ...input, paymentStatus: 'paid', paymentReference: sessionId });
+  db.prepare("UPDATE pending_checkouts SET status = 'completed', updated_at = CURRENT_TIMESTAMP WHERE stripe_session_id = ?").run(sessionId);
+  return order;
+}
+
+export function subscribeNewsletter(email, locale = 'ro') {
+  db.prepare(`INSERT INTO newsletter_subscribers (email, locale) VALUES (?, ?)
+    ON CONFLICT(email) DO UPDATE SET locale = excluded.locale, status = 'active', updated_at = CURRENT_TIMESTAMP`).run(email, locale);
+  return { email, locale, status: 'active' };
 }

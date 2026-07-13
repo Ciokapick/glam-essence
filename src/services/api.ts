@@ -15,6 +15,8 @@ export interface Order {
   total: number;
   customer: { name: string; email: string; address: string; phone: string };
   status: OrderStatus;
+  paymentStatus?: 'cash_on_delivery' | 'paid';
+  paymentReference?: string;
   date: string;
 }
 
@@ -35,6 +37,9 @@ export const api = {
   products: () => request<Product[]>('/api/products'),
   product: (slug: string) => request<Product>(`/api/products/${encodeURIComponent(slug)}`),
   placeOrder: (input: Pick<Order, 'customer' | 'items'>) => request<Order>('/api/orders', { method: 'POST', body: JSON.stringify(input) }),
+  checkoutConfig: () => request<{ cardPayments: boolean }>('/api/checkout/config'),
+  createCheckoutSession: (input: Pick<Order, 'customer' | 'items'>) => request<{ id: string; url: string }>('/api/checkout/session', { method: 'POST', body: JSON.stringify(input) }),
+  subscribe: (email: string, locale: 'ro' | 'en') => request<{ email: string; status: string }>('/api/newsletter', { method: 'POST', body: JSON.stringify({ email, locale }) }),
   login: (email: string, password: string) => request<{ authenticated: true }>('/api/admin/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   session: () => request<{ authenticated: boolean }>('/api/admin/session'),
   logout: () => request<{ authenticated: false }>('/api/admin/logout', { method: 'POST' }),

@@ -23,6 +23,7 @@ import { Toaster } from '@/components/ui/toaster';
 import ProductPages from '@/pages/ProductPages';
 import InitApp from '@/components/InitApp';
 import NotFound from '@/pages/NotFound';
+import CheckoutSuccess from '@/pages/CheckoutSuccess';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/account" element={<AccountPage />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/seturi" element={<SeturiPage />} />
             
