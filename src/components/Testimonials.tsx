@@ -1,71 +1,52 @@
-
-import React from 'react';
+import { ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const Testimonials = () => {
-  const { t } = useLanguage();
-  
-  const testimonials = [
-    {
-      id: 1,
-      text: t('testimonials.maria_text'),
-      author: "Maria Ionescu",
-      role: t('testimonials.maria_role'),
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg"
-    },
-    {
-      id: 2,
-      text: t('testimonials.alex_text'),
-      author: "Alexandru Popa",
-      role: t('testimonials.alex_role'),
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg"
-    },
-    {
-      id: 3,
-      text: t('testimonials.cristina_text'),
-      author: "Cristina Dumitrescu",
-      role: t('testimonials.cristina_role'),
-      avatar: "https://randomuser.me/api/portraits/women/68.jpg"
-    }
-  ];
+  const { language } = useLanguage();
+  const copy = language === 'ro' ? {
+    eyebrow: 'Ghid olfactiv',
+    title: 'Nu alegi doar un parfum. Alegi felul în care vrei să fii ținută minte.',
+    body: 'Începe cu starea pe care vrei s-o porți. Floral pentru lumină, citric pentru energie, lemnos pentru profunzime sau oriental pentru o prezență care rămâne.',
+    cta: 'Găsește-ți familia olfactivă',
+    notes: ['Floral · luminos', 'Citric · energic', 'Lemnos · profund', 'Oriental · magnetic'],
+  } : {
+    eyebrow: 'Scent guide',
+    title: 'You are not choosing a fragrance. You are choosing how you want to be remembered.',
+    body: 'Start with the mood you want to wear. Floral for light, citrus for energy, woody for depth, or oriental for a presence that lingers.',
+    cta: 'Find your fragrance family',
+    notes: ['Floral · luminous', 'Citrus · energetic', 'Woody · grounded', 'Oriental · magnetic'],
+  };
 
   return (
-    <section className="py-20 bg-beauty-lavender/10">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('testimonials.title')}</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            {t('testimonials.subtitle_extended')}
-          </p>
+    <section className="overflow-hidden bg-[#d9c1bc]">
+      <div className="grid min-h-[680px] lg:grid-cols-2">
+        <div className="relative min-h-[460px] overflow-hidden lg:min-h-full">
+          <img
+            src="/ParfumWoodyElegance.jpg"
+            alt="Parfum Woody Elegance într-o compoziție editorială"
+            className="absolute inset-0 h-full w-full object-cover transition duration-[1800ms] hover:scale-[1.025]"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
+          <p className="absolute bottom-6 left-6 text-[9px] font-medium uppercase tracking-[.25em] text-white/75">Woody Elegance · Eau de Parfum</p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <div 
-              key={testimonial.id} 
-              className="bg-white rounded-xl p-8 shadow-md relative animate-fade-in"
-              style={{ animationDelay: `${testimonial.id * 0.2}s` }}
-            >
-              {/* Quote mark */}
-              <div className="absolute top-4 right-6 text-beauty-lavender/20 text-7xl font-serif">
-                "
-              </div>
-              
-              <p className="text-gray-700 mb-6 relative z-10">{testimonial.text}</p>
-              
-              <div className="flex items-center">
-                <img 
-                  src={testimonial.avatar} 
-                  alt={testimonial.author} 
-                  className="w-12 h-12 rounded-full mr-4 object-cover" 
-                />
-                <div>
-                  <h4 className="font-semibold">{testimonial.author}</h4>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                </div>
-              </div>
+
+        <div className="flex items-center bg-[#eee2dd] px-6 py-20 md:px-14 lg:px-[10%]">
+          <div className="max-w-2xl">
+            <p className="mb-6 text-[10px] font-semibold uppercase tracking-[.3em] text-[#9c5967]">{copy.eyebrow}</p>
+            <h2 className="font-serif text-4xl font-medium leading-[1.05] tracking-[-.035em] text-[#281922] md:text-6xl">{copy.title}</h2>
+            <p className="mt-7 max-w-xl text-sm leading-7 text-[#6d5f65] md:text-base">{copy.body}</p>
+
+            <div className="mt-9 grid grid-cols-2 gap-x-6 gap-y-3 border-y border-[#281922]/12 py-6">
+              {copy.notes.map((note) => <span key={note} className="text-[10px] font-medium uppercase tracking-[.16em] text-[#4a3941]">{note}</span>)}
             </div>
-          ))}
+
+            <Link to="/parfumuri" className="group mt-8 inline-flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[.16em] text-[#281922]">
+              {copy.cta}
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

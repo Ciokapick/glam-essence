@@ -98,6 +98,19 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', sans-serif;
+    background: #fffdfb;
+    color: #281922;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: #d8adb6;
+    color: #281922;
+  }
+
+  :focus-visible {
+    outline: 2px solid #9c5967;
+    outline-offset: 3px;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -123,6 +136,20 @@
 }
 
 @layer components {
+  .glam-hero {
+    min-height: min(920px, 100svh);
+  }
+
+  .glam-grain {
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(255, 255, 255, .24) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 70% 60%, rgba(33, 18, 26, .16) 0 1px, transparent 1.5px);
+    background-size: 5px 5px, 7px 7px;
+    mix-blend-mode: soft-light;
+    opacity: .24;
+    pointer-events: none;
+  }
+
   .product-card {
     @apply relative overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-xl;
   }
@@ -201,5 +228,16 @@
 
   .page-exit-active {
     @apply opacity-0 transition-opacity duration-300;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 }

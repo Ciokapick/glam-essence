@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { api } from '@/services/api';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -12,20 +13,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // Initialize products database on admin page load
-    const initDatabase = async () => {
-      const { initializeProductsDb } = await import('@/utils/jsonDb');
-      await initializeProductsDb();
-    };
-    
-    initDatabase();
-    
-    // Check if admin is authenticated
-    const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
-    
-    // If not authenticated and not on login page, redirect to login
-    if (!isAuthenticated && location.pathname !== '/admin') {
-      navigate('/admin');
+    if (location.pathname !== '/admin') {
+      api.session().catch(() => navigate('/admin', { replace: true }));
     }
   }, [navigate, location.pathname]);
 

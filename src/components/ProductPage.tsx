@@ -21,16 +21,16 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
-import { similarProducts } from '@/data/products';
+import { similarProducts, type Product } from '@/data/products';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductPageProps {
-  product: any;
+  product: Product;
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) => {
   const { t } = useLanguage();
-  const [product, setProduct] = useState<any>(initialProduct);
+  const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
@@ -444,4 +444,3 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
 };
 
 export default ProductPage;
-

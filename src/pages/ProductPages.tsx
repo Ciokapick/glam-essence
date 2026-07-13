@@ -2,11 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import ProductPage from '@/components/ProductPage';
-import { getAllProducts } from '@/utils/jsonDb';
+import { api } from '@/services/api';
+import type { Product } from '@/data/products';
 
 const ProductPages: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [productData, setProductData] = useState<any>(null);
+  const [productData, setProductData] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   
@@ -15,10 +16,7 @@ const ProductPages: React.FC = () => {
     
     const fetchProduct = async () => {
       try {
-        // Get products from localStorage (which includes any stock updates)
-        const products = await getAllProducts();
-        
-        if (!slug || !products[slug]) {
+        if (!slug) {
           console.error(`Product not found for slug: ${slug}`);
           setError(true);
           setLoading(false);
@@ -26,7 +24,7 @@ const ProductPages: React.FC = () => {
         }
         
         // Make sure we're using just the main image, not the gallery
-        const product = products[slug];
+        const product = await api.product(slug);
         setProductData(product);
         setLoading(false);
       } catch (err) {
@@ -51,4 +49,3 @@ const ProductPages: React.FC = () => {
 };
 
 export default ProductPages;
-

@@ -1,11 +1,10 @@
-
-import React, { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, ShoppingBag, Eye } from 'lucide-react';
+import { ArrowUpRight, Eye, ShoppingBag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { toast } from "@/hooks/use-toast";
+import { toast } from '@/hooks/use-toast';
 import ProductDetailsPopup from './ProductDetailsPopup';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
@@ -23,185 +22,80 @@ interface ProductCardProps {
   description?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  id,
-  slug,
-  name,
-  price,
-  image,
-  category,
-  isNew,
-  isSale,
-  discount,
-  rating = 0,
-  description
-}) => {
+const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, discount, rating = 0, description }: ProductCardProps) => {
   const { addToCart } = useCart();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [stock, setStock] = useState<number>(0);
-  
+  const [stock, setStock] = useState(0);
+
   useEffect(() => {
-    // Fetch the current stock from the database
-    const fetchStock = async () => {
-      const currentStock = await getProductStock(id);
-      setStock(currentStock);
-    };
-    
-    fetchStock();
-    
-    // Subscribe to stock updates
-    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
-      if (id === productId) {
-        console.log(`ProductCard: Stock updated for ${name} (${id}): ${newStock}`);
-        setStock(newStock);
-      }
+    getProductStock(id).then(setStock);
+    return stockUpdateEmitter.subscribe((productId, nextStock) => {
+      if (id === productId) setStock(nextStock);
     });
-    
-    return () => {
-      unsubscribe(); // Clean up on unmount
-    };
-  }, [id, name]);
-  
-  const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    
+  }, [id]);
+
+  const handleAddToCart = () => {
     if (stock <= 0) {
-      toast({
-        title: t("toast.out_of_stock"),
-        description: t("toast.out_of_stock_desc"),
-        variant: "destructive",
-      });
+      toast({ title: t('toast.out_of_stock'), description: t('toast.out_of_stock_desc'), variant: 'destructive' });
       return;
     }
-    
-    addToCart({
-      id,
-      name,
-      price,
-      image,
-      category,
-      discount: isSale ? discount : undefined
-    });
-    
-    toast({
-      title: t("toast.added_to_cart"),
-      description: t("toast.added_to_cart_desc").replace("{productName}", t(name)),
-      variant: "default",
-    });
+    addToCart({ id, name, price, image, category, discount: isSale ? discount : undefined });
+    toast({ title: t('toast.added_to_cart'), description: t('toast.added_to_cart_desc').replace('{productName}', t(name)) });
   };
-  
-  const handleQuickView = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setIsPopupOpen(true);
-  };
-  
-  // Fix the product URL to ensure it uses the slug correctly
-  const productUrl = slug ? `/product/${slug}` : `/product/${name.toLowerCase().replace(/\s+/g, '-')}`;
-  
-  // Calculate discounted price if on sale
-  const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
 
-  console.log(`ProductCard image for ${name}: ${image}`);
+  const productUrl = slug ? `/product/${slug}` : `/product/${name.toLowerCase().replace(/\s+/g, '-')}`;
+  const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
 
   return (
     <>
-      <Link to={productUrl} className="group block">
-        <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-square mb-4">
-          <img
-            src={image}
-            alt={name}
-            className="w-full h-full object-cover transition-transform group-hover:scale-105"
-          />
-          
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+      <article className="group">
+        <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-[#f2ece9]">
+          <Link to={productUrl} aria-label={`${language === 'ro' ? 'Vezi' : 'View'} ${t(name)}`}>
+            <img src={image} alt={t(name)} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.035]" loading="lazy" />
+          </Link>
+          <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0">
             <button
-              onClick={handleQuickView}
-              className="p-2 bg-white rounded-full hover:bg-gray-100"
-              aria-label="Quick view"
+              onClick={() => setIsPopupOpen(true)}
+              className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#281922] transition hover:bg-[#f2e7e3]"
+              aria-label={language === 'ro' ? 'Previzualizare rapidă' : 'Quick view'}
             >
-              <Eye className="h-5 w-5" />
+              <Eye className="h-4 w-4" />
             </button>
             <button
               onClick={handleAddToCart}
               disabled={stock <= 0}
-              className={`p-2 bg-white rounded-full ${stock > 0 ? 'hover:bg-gray-100' : 'opacity-50 cursor-not-allowed'}`}
-              aria-label="Add to cart"
+              className="flex h-11 flex-1 items-center justify-center gap-2 bg-white px-4 text-[10px] font-semibold uppercase tracking-[.14em] text-[#281922] transition hover:bg-[#f2e7e3] disabled:cursor-not-allowed disabled:opacity-55"
             >
-              <ShoppingBag className="h-5 w-5" />
+              <ShoppingBag className="h-4 w-4" />
+              {stock > 0 ? t('common.add_to_cart') : t('product.out_of_stock')}
             </button>
           </div>
-          
-          {/* Status badges */}
-          <div className="absolute top-2 left-2 flex flex-col gap-2">
-            {isNew && (
-              <Badge className="bg-beauty-mint text-beauty-mint-foreground border-0">
-                {t("product.new_badge")}
-              </Badge>
-            )}
-            {isSale && discount && (
-              <Badge className="bg-beauty-rose text-beauty-rose-foreground border-0">
-                -{discount}%
-              </Badge>
-            )}
-            {stock <= 0 && (
-              <Badge variant="outline" className="bg-gray-100 border-gray-300 text-gray-700">
-                {t("product.out_of_stock")}
-              </Badge>
-            )}
+          <div className="absolute left-3 top-3 flex flex-col gap-2">
+            {isNew && <Badge className="rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] uppercase tracking-[.14em] text-white">{t('product.new_badge')}</Badge>}
+            {isSale && discount && <Badge className="rounded-none border-0 bg-[#a04e62] px-3 py-1 text-[9px] tracking-[.14em] text-white">-{discount}%</Badge>}
           </div>
         </div>
-        
-        <div>
-          <h3 className="font-medium text-lg mb-1 group-hover:text-beauty-magenta transition-colors">{t(name)}</h3>
-          <p className="text-muted-foreground mb-2">{t(category)}</p>
-          
-          {/* Star rating */}
-          {rating > 0 && (
-            <div className="flex mb-2">
-              {[...Array(5)].map((_, i) => (
-                <Star 
-                  key={i}
-                  className={`h-4 w-4 ${i < rating ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
-                />
-              ))}
+
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="mb-1 text-[9px] font-medium uppercase tracking-[.2em] text-[#9c7d87]">{t(category)}</p>
+            <Link to={productUrl} className="font-serif text-xl text-[#281922] transition group-hover:text-[#9c5967]">{t(name)}</Link>
+            <div className="mt-2 flex items-center gap-2 text-sm">
+              <span className="font-medium text-[#281922]">{finalPrice.toFixed(2)} lei</span>
+              {isSale && discount && <span className="text-xs text-[#9b8d92] line-through">{price.toFixed(2)} lei</span>}
             </div>
-          )}
-          
-          {/* Price display */}
-          <div className="flex items-center">
-            {isSale && discount ? (
-              <>
-                <span className="font-bold mr-2">{finalPrice.toFixed(2)} lei</span>
-                <span className="text-muted-foreground text-sm line-through">{price.toFixed(2)} lei</span>
-              </>
-            ) : (
-              <span className="font-bold">{price.toFixed(2)} lei</span>
-            )}
           </div>
-          
-          {/* Stock info */}
-          <div className="text-sm text-muted-foreground mt-1">
-            {stock > 0 ? `${stock} ${t("product.available")}` : t("product.out_of_stock")}
-          </div>
+          <Link to={productUrl} className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#281922]/15 text-[#281922] transition hover:border-[#281922]" aria-label={language === 'ro' ? 'Detalii produs' : 'Product details'}>
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
         </div>
-      </Link>
-      
+      </article>
+
       {isPopupOpen && (
         <ProductDetailsPopup
-          id={id}
-          name={name}
-          price={price}
-          image={image}
-          category={category}
-          isNew={isNew}
-          isSale={isSale}
-          discount={discount}
-          rating={rating}
-          description={description}
-          stock={stock}
+          id={id} name={name} price={price} image={image} category={category} isNew={isNew}
+          isSale={isSale} discount={discount} rating={rating} description={description} stock={stock}
           onClose={() => setIsPopupOpen(false)}
         />
       )}

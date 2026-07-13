@@ -8,6 +8,7 @@ import { LockKeyhole, User, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { api } from '@/services/api';
 
 const AdminLogin = () => {
   const [username, setUsername] = useState('');
@@ -19,35 +20,30 @@ const AdminLogin = () => {
 
   // Check if already authenticated on load
   useEffect(() => {
-    const isAuthenticated = localStorage.getItem('adminAuth') === 'true';
-    if (isAuthenticated) {
-      navigate('/admin/dashboard');
-    }
+    api.session().then(() => navigate('/admin/dashboard')).catch(() => undefined);
   }, [navigate]);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      if (username === 'admin' && password === '1234') {
-        localStorage.setItem('adminAuth', 'true');
+    try {
+        await api.login(username, password);
         toast({
           title: t('admin.login.success'),
           description: t('admin.login.welcome'),
           variant: "default",
         });
         navigate('/admin/dashboard');
-      } else {
+    } catch (error) {
         toast({
           title: t('admin.login.failed'),
-          description: t('admin.login.invalid_credentials'),
+          description: error instanceof Error ? error.message : t('admin.login.invalid_credentials'),
           variant: "destructive",
         });
-      }
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -75,7 +71,9 @@ const AdminLogin = () => {
                   <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="username"
-                    placeholder="admin"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="admin@glam-essence.local"
                     className="pl-10"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -90,6 +88,7 @@ const AdminLogin = () => {
                   <Input
                     id="password"
                     type="password"
+                    autoComplete="current-password"
                     placeholder="••••"
                     className="pl-10"
                     value={password}

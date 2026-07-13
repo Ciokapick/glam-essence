@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 const FeaturedProducts = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const products = [
     {
@@ -85,16 +85,25 @@ const FeaturedProducts = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-[#FAFCFD] to-[#FAFCFD]/10">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('featured.title')}</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+    <section id="featured" className="bg-[#fffdfb] py-24 md:py-32">
+      <div className="container mx-auto px-5 md:px-8">
+        <div className="mb-12 flex flex-col gap-6 border-b border-[#281922]/10 pb-8 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="mb-4 text-[10px] font-semibold uppercase tracking-[.3em] text-[#9c5967]">
+              {t('featured.title')}
+            </p>
+            <h2 className="max-w-2xl font-serif text-4xl font-medium leading-[1.02] tracking-[-.035em] text-[#281922] md:text-6xl">
+              {language === 'ro'
+                ? 'Esențiale pentru ritualul tău zilnic.'
+                : 'Essentials for your daily ritual.'}
+            </h2>
+          </div>
+          <p className="max-w-md text-sm leading-7 text-[#74666d]">
             {t('featured_products.subtitle')}
           </p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {products.map((product) => (
             <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
               <ProductCard {...product} />
@@ -102,9 +111,9 @@ const FeaturedProducts = () => {
           ))}
         </div>
         
-        <div className="text-center mt-12">
+        <div className="mt-14 text-center">
           <Link to="/parfumuri">
-            <Button className="bg-beauty-coral hover:bg-beauty-coral/90 text-white">
+            <Button className="h-12 rounded-none bg-[#281922] px-7 text-[11px] uppercase tracking-[.16em] text-white hover:bg-[#4a2d3b]">
               {t('featured_products.view_all')}
             </Button>
           </Link>

@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Card, CardContent } from '@/components/ui/card';
-import { getFromDb, saveToDb, updateProductStock, getAllProducts, stockUpdateEmitter } from '@/utils/jsonDb';
+import { api } from '@/services/api';
 
 type Product = {
   id: string;
@@ -40,25 +40,11 @@ const AdminProducts = () => {
 
   useEffect(() => {
     loadProducts();
-    
-    // Subscribe to stock updates
-    const unsubscribe = stockUpdateEmitter.subscribe((productId, newStock) => {
-      setProductsList(prevList => 
-        prevList.map(product => 
-          product.id === productId ? { ...product, stock: newStock } : product
-        )
-      );
-    });
-    
-    return () => {
-      unsubscribe(); // Clean up subscription
-    };
   }, []);
   
   const loadProducts = async () => {
-    const storedProducts = await getAllProducts();
-    
-    const productsArray = Object.entries(storedProducts).map(([slug, product]: [string, any]) => ({
+    const storedProducts = await api.products();
+    const productsArray = storedProducts.map((product) => ({
       id: product.id,
       name: product.name,
       price: product.price,
@@ -77,7 +63,7 @@ const AdminProducts = () => {
       product.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddProduct = () => {
+  const handleAddProduct = async () => {
     if (!newProduct.name || !newProduct.price || !newProduct.category || newProduct.stock === undefined) {
       toast({
         title: t('admin.products.error'),
@@ -87,44 +73,16 @@ const AdminProducts = () => {
       return;
     }
 
-    const newId = `product-${Date.now()}`;
-    const productToAdd = {
-      id: newId,
+    try {
+      const productToAdd = await api.createProduct({
       name: newProduct.name,
       price: Number(newProduct.price),
       category: newProduct.category,
       stock: Number(newProduct.stock),
       image: newProduct.image || 'https://placehold.co/400x400/png'
-    };
+      });
 
     setProductsList([...productsList, productToAdd]);
-    
-    getAllProducts().then(products => {
-      const productsCopy = { ...products };
-      const newSlug = newProduct.name.toLowerCase().replace(/\s+/g, '-');
-      
-      productsCopy[newSlug] = {
-        id: newId,
-        slug: newSlug,
-        name: newProduct.name,
-        price: Number(newProduct.price),
-        image: newProduct.image || 'https://placehold.co/400x400/png',
-        gallery: [newProduct.image || 'https://placehold.co/400x400/png'],
-        category: newProduct.category,
-        rating: 0,
-        reviewCount: 0,
-        description: "Un produs nou adăugat în catalog.",
-        details: "Detalii despre acest produs vor fi adăugate în curând.",
-        features: ["Caracteristică 1", "Caracteristică 2"],
-        sku: `SKU-${newId}`,
-        stock: Number(newProduct.stock)
-      };
-      
-      saveToDb('products', productsCopy);
-      
-      // Emit stock update
-      stockUpdateEmitter.emit(newId, Number(newProduct.stock));
-    });
     
     setNewProduct({
       name: '',
@@ -139,35 +97,16 @@ const AdminProducts = () => {
       title: t('admin.products.success'),
       description: t('admin.products.added_success'),
     });
+    } catch (error) {
+      toast({ title: t('admin.products.error'), description: error instanceof Error ? error.message : t('common.error'), variant: 'destructive' });
+    }
   };
 
-  const handleEditProduct = () => {
+  const handleEditProduct = async () => {
     if (!editingProduct) return;
     
-    const updatedProducts = productsList.map(product => 
-      product.id === editingProduct.id ? editingProduct : product
-    );
-    
-    setProductsList(updatedProducts);
-    
-    getAllProducts().then(storedProducts => {
-      const productKey = Object.keys(storedProducts).find(
-        key => storedProducts[key].id === editingProduct.id
-      );
-      
-      if (productKey) {
-        storedProducts[productKey].name = editingProduct.name;
-        storedProducts[productKey].price = editingProduct.price;
-        storedProducts[productKey].category = editingProduct.category;
-        storedProducts[productKey].stock = editingProduct.stock;
-        storedProducts[productKey].image = editingProduct.image;
-        
-        saveToDb('products', storedProducts);
-        
-        // Emit stock update
-        stockUpdateEmitter.emit(editingProduct.id, editingProduct.stock);
-      }
-    });
+    const updated = await api.updateProduct(editingProduct.id, editingProduct);
+    setProductsList(current => current.map(product => product.id === updated.id ? updated : product));
     
     setIsEditDialogOpen(false);
     
@@ -177,21 +116,10 @@ const AdminProducts = () => {
     });
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = async (id: string) => {
     if (window.confirm(t('admin.products.confirm_delete'))) {
-      const updatedProducts = productsList.filter(product => product.id !== id);
-      setProductsList(updatedProducts);
-      
-      getAllProducts().then(storedProducts => {
-        const productKey = Object.keys(storedProducts).find(
-          key => storedProducts[key].id === id
-        );
-        
-        if (productKey) {
-          delete storedProducts[productKey];
-          saveToDb('products', storedProducts);
-        }
-      });
+      await api.deleteProduct(id);
+      setProductsList(current => current.filter(product => product.id !== id));
       
       toast({
         title: t('admin.products.success'),
@@ -200,15 +128,11 @@ const AdminProducts = () => {
     }
   };
 
-  const handleUpdateStock = (id: string, newStock: number) => {
-    const updatedProducts = productsList.map(product => 
-      product.id === id ? { ...product, stock: newStock } : product
-    );
-    
-    setProductsList(updatedProducts);
-    
-    // Use our centralized stock update function
-    updateProductStock(id, newStock);
+  const handleUpdateStock = async (id: string, newStock: number) => {
+    const product = productsList.find(item => item.id === id);
+    if (!product) return;
+    const updated = await api.updateProduct(id, { ...product, stock: newStock });
+    setProductsList(current => current.map(item => item.id === id ? updated : item));
     
     toast({
       title: t('admin.products.stock_updated'),
