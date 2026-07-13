@@ -12,6 +12,7 @@ import {
   Menu
 } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { api } from '@/services/api';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -51,8 +52,8 @@ const AdminSidebar: React.FC = () => {
     return location.pathname === path;
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminAuth');
+  const handleLogout = async () => {
+    await api.logout().catch(() => undefined);
     toast({
       title: t('admin.sidebar.logout_success'),
       description: t('admin.sidebar.logout_message'),

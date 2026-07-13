@@ -4,20 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import AdminLayout from '@/components/AdminLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { ShoppingBag, Package, BarChart } from 'lucide-react';
-import { getAllOrders, getAllProducts } from '@/utils/jsonDb';
+import { api, type Order } from '@/services/api';
 
 // Component for showing recent orders
 const RecentOrders = () => {
   const { t } = useLanguage();
-  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const navigate = useNavigate();
   
   useEffect(() => {
-    const loadOrders = () => {
-      const orders = getAllOrders();
+    const loadOrders = async () => {
+      const orders = await api.orders();
       // Take only the first 5 orders (they're already sorted by date)
       setRecentOrders(orders.slice(0, 5));
     };
@@ -88,12 +87,11 @@ const Dashboard = () => {
   
   useEffect(() => {
     const loadStats = async () => {
-      const orders = getAllOrders();
-      const products = await getAllProducts();
+      const [orders, products] = await Promise.all([api.orders(), api.products()]);
       
       // Calculate stats
       setOrderCount(orders.length);
-      setProductCount(Object.keys(products).length);
+      setProductCount(products.length);
       
       // Calculate total revenue
       const totalRevenue = orders.reduce((total, order) => total + order.total, 0);
@@ -192,16 +190,11 @@ const Dashboard = () => {
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { toast } = useToast();
   
   useEffect(() => {
-    const authStatus = localStorage.getItem('adminAuth') === 'true';
-    setIsAuthenticated(authStatus);
-
-    // If not authenticated, redirect to login
-    if (!authStatus) {
-      navigate('/admin');
-    }
+    api.session()
+      .then(() => setIsAuthenticated(true))
+      .catch(() => navigate('/admin', { replace: true }));
   }, [navigate]);
   
   // Return the Dashboard only if authenticated

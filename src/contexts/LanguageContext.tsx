@@ -466,7 +466,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const t = (key: string): string => {
     const translation = translations[key];
     if (!translation) {
-      console.warn(`Translation missing for key: ${key}`);
+      if (key.includes('.')) console.warn(`Translation missing for key: ${key}`);
       return key;
     }
     return translation[language] || translation.en || key;

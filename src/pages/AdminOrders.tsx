@@ -15,10 +15,7 @@ import {
 } from '@/components/ui/dialog';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Order } from '@/pages/Checkout';
-import { getFromDb, saveToDb, getAllOrders } from '@/utils/jsonDb';
-
-type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
+import { api, type Order, type OrderStatus } from '@/services/api';
 
 const AdminOrders = () => {
   const { t } = useLanguage();
@@ -43,11 +40,11 @@ const AdminOrders = () => {
   }, []);
   
   // Function to load orders from the database
-  const loadOrders = () => {
+  const loadOrders = async () => {
     setIsLoading(true);
     
     try {
-      const savedOrders = getAllOrders();
+      const savedOrders = await api.orders();
       console.log('Loaded orders:', savedOrders);
       setOrders(savedOrders);
     } catch (error) {
@@ -69,31 +66,24 @@ const AdminOrders = () => {
       order.customer.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
-    const updatedOrders = orders.map(order => 
-      order.id === orderId ? { ...order, status: newStatus } : order
-    );
-    
-    setOrders(updatedOrders);
-    
-    saveToDb('orders', updatedOrders);
-    
-    if (selectedOrder && selectedOrder.id === orderId) {
-      setSelectedOrder({ ...selectedOrder, status: newStatus });
+  const handleStatusChange = async (orderId: string, newStatus: OrderStatus) => {
+    try {
+      const updated = await api.updateOrderStatus(orderId, newStatus);
+      setOrders(current => current.map(order => order.id === orderId ? updated : order));
+      if (selectedOrder?.id === orderId) setSelectedOrder(updated);
+      toast({
+        title: t('admin.orders.status_updated'),
+        description: t('admin.orders.status_update_message').replace('{orderId}', orderId).replace('{status}', getStatusLabel(newStatus)),
+      });
+    } catch (error) {
+      toast({ title: t('common.error'), description: error instanceof Error ? error.message : t('common.error'), variant: 'destructive' });
     }
-    
-    toast({
-      title: t('admin.orders.status_updated'),
-      description: t('admin.orders.status_update_message').replace('{orderId}', orderId).replace('{status}', getStatusLabel(newStatus)),
-    });
   };
 
-  const handleDeleteOrder = (orderId: string) => {
+  const handleDeleteOrder = async (orderId: string) => {
     if (window.confirm(t('admin.orders.confirm_delete'))) {
-      const updatedOrders = orders.filter(order => order.id !== orderId);
-      setOrders(updatedOrders);
-      
-      saveToDb('orders', updatedOrders);
+      await api.deleteOrder(orderId);
+      setOrders(current => current.filter(order => order.id !== orderId));
       
       toast({
         title: t('admin.orders.deleted'),

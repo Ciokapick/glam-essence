@@ -1,69 +1,67 @@
-# Welcome to your Lovable project
+# Glam Essence
 
-## Project info
+Magazin online de beauty construit cu React, TypeScript, Vite și Tailwind. Proiectul include un backend Node, catalog și comenzi persistente în SQLite, actualizare tranzacțională a stocului și un panou de administrare protejat prin sesiune server-side.
 
-**URL**: https://lovable.dev/projects/7421125d-0e7e-45ab-9067-7b9f5fe3944d
+## Pornire locală
 
-## How can I edit this code?
+Cerință: Node.js 22.13+ (recomandat Node 24) și npm.
 
-There are several ways of editing your application.
+```bash
+npm install
+cp .env.example .env
+```
 
-**Use Lovable**
+În două terminale:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/7421125d-0e7e-45ab-9067-7b9f5fe3944d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+npm run dev:api
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Aplicația este disponibilă la `http://localhost:8080`, iar API-ul la `http://localhost:3001`. Vite redirecționează automat cererile `/api` către backend.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Pentru o rulare de producție:
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+npm start
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Serverul livrează aplicația din `dist` și expune API-ul pe același port.
 
-## What technologies are used for this project?
+## Baza de date
 
-This project is built with .
+La prima pornire, backend-ul creează automat `data/glam-essence.sqlite` și însămânțează cele 18 produse din `server/seed-products.json`. Fișierul bazei și jurnalele SQLite sunt ignorate de Git.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Schema include:
 
-## How can I deploy this project?
+- `products` — catalog, preț, media și stoc;
+- `orders` — client, total și status;
+- `order_items` — produsele și prețurile fixate în momentul comenzii.
 
-Simply open [Lovable](https://lovable.dev/projects/7421125d-0e7e-45ab-9067-7b9f5fe3944d) and click on Share -> Publish.
+Plasarea unei comenzi și scăderea stocului au loc într-o singură tranzacție SQLite. Prețul și disponibilitatea sunt recalculate pe server, nu sunt acceptate direct din browser.
 
-## I want to use a custom domain - is that possible?
+Dacă modifici `src/data/products.ts`, regenerează seed-ul:
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+```bash
+npm run seed:generate
+```
+
+## Administrare
+
+Configurează `ADMIN_EMAIL` și `ADMIN_PASSWORD` în mediul de rulare. Autentificarea folosește un cookie `HttpOnly`, `SameSite=Strict`; parola nu ajunge în bundle-ul frontend.
+
+În dezvoltare, dacă variabilele nu sunt setate, contul demo este:
+
+- email: `admin@glam-essence.local`
+- parolă: `glam-demo-2026`
+
+Nu folosi datele demo într-un deployment public.
+
+## Comenzi utile
+
+```bash
+npm run lint
+npm run build
+npm run seed:generate
+```

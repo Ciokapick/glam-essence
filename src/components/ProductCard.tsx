@@ -104,8 +104,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Calculate discounted price if on sale
   const finalPrice = isSale && discount ? price * (1 - discount / 100) : price;
 
-  console.log(`ProductCard image for ${name}: ${image}`);
-
   return (
     <>
       <Link to={productUrl} className="group block">

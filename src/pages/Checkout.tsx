@@ -5,31 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useCart } from '@/contexts/CartContext';
 import { useToast } from '@/components/ui/use-toast';
-import { getFromDb, saveToDb, updateProductStock, saveOrder } from '@/utils/jsonDb';
-
-interface CustomerInfo {
-  name: string;
-  email: string;
-  address: string;
-  phone: string;
-}
-
-export interface Order {
-  id: string;
-  items: Array<{
-    id: string;
-    name: string;
-    price: number;
-    quantity: number;
-    image: string;
-    category: string;
-    discount?: number;
-  }>;
-  total: number;
-  customer: CustomerInfo;
-  status: 'pending' | 'processing' | 'completed' | 'canceled';
-  date: string;
-}
+import { api } from '@/services/api';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -45,28 +21,20 @@ const Checkout = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
     try {
-      // Create order object
-      const order: Order = {
-        id: generateOrderId(),
+      await api.placeOrder({
         items: items,
-        total: subtotal + 15, // Including shipping
         customer: {
           name: formData.name,
           email: formData.email,
           address: formData.address,
           phone: formData.phone
-        },
-        status: 'pending',
-        date: new Date().toLocaleDateString('ro-RO')
-      };
-  
-      // Save the order using our utility function
-      saveOrder(order);
+        }
+      });
       
       // Clear cart and show success message
       clearCart();
@@ -81,17 +49,12 @@ const Checkout = () => {
       console.error('Error submitting order:', error);
       toast({
         title: "Eroare",
-        description: "A apărut o eroare la plasarea comenzii. Vă rugăm să încercați din nou.",
+        description: error instanceof Error ? error.message : "A apărut o eroare la plasarea comenzii.",
         variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const generateOrderId = (): string => {
-    // Generate a 4 digit order ID
-    return String(1000 + Math.floor(Math.random() * 9000));
   };
 
   if (items.length === 0) {
