@@ -1,5 +1,5 @@
 
-import React, { createContext, useCallback, useContext, useState, useEffect } from 'react';
+import React, { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react';
 
 export interface CartItem {
   id: string;
@@ -29,8 +29,6 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [totalItems, setTotalItems] = useState(0);
-  const [subtotal, setSubtotal] = useState(0);
 
   // Load cart from localStorage on mount
   useEffect(() => {
@@ -47,21 +45,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Save cart to localStorage on change
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(items));
-    calculateTotals();
   }, [items]);
 
-  const calculateTotals = () => {
-    const itemCount = items.reduce((total, item) => total + item.quantity, 0);
-    setTotalItems(itemCount);
-
-    const cartSubtotal = items.reduce((total, item) => {
+  const totalItems = useMemo(
+    () => items.reduce((total, item) => total + item.quantity, 0),
+    [items],
+  );
+  const subtotal = useMemo(
+    () => items.reduce((total, item) => {
       const price = item.discount 
         ? item.price * (1 - item.discount / 100) 
         : item.price;
       return total + (price * item.quantity);
-    }, 0);
-    setSubtotal(cartSubtotal);
-  };
+    }, 0),
+    [items],
+  );
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);

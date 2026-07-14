@@ -6,7 +6,8 @@ Editorial beauty e-commerce storefront with a complete shopping flow and a trans
 
 ## Case study
 
-A full write-up of the design and build is available at [lumax.agency/work/glam-essence](https://www.lumax.agency/work/glam-essence).
+- **Live demo:** [glam-essence.netlify.app](https://glam-essence.netlify.app/)
+- **Design and build case study:** [lumax.agency/work/glam-essence](https://www.lumax.agency/work/glam-essence)
 
 ## Status
 
@@ -96,8 +97,11 @@ Do not use the demo credentials in any public deployment.
 ```bash
 npm run lint
 npm run build
+npm test
 npm run seed:generate
 ```
+
+`npm test` builds the production app and exercises the real HTTP server against an isolated temporary SQLite database, including health, SPA fallback, production auth, and server-owned checkout totals.
 
 ## License / Portfolio use
 
