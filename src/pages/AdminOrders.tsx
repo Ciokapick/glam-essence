@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import AdminLayout from '@/components/AdminLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,27 +25,12 @@ const AdminOrders = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  // Load orders from database on component mount and set up a polling interval
-  useEffect(() => {
-    // Initial load
-    loadOrders();
-    
-    // Set up polling to check for new orders every 15 seconds
-    const intervalId = setInterval(() => {
-      loadOrders();
-    }, 15000);
-    
-    // Clean up interval on component unmount
-    return () => clearInterval(intervalId);
-  }, []);
-  
   // Function to load orders from the database
-  const loadOrders = async () => {
+  const loadOrders = useCallback(async () => {
     setIsLoading(true);
     
     try {
       const savedOrders = await api.orders();
-      console.log('Loaded orders:', savedOrders);
       setOrders(savedOrders);
     } catch (error) {
       console.error('Error loading orders:', error);
@@ -57,7 +42,14 @@ const AdminOrders = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [t, toast]);
+
+  // Load orders from database on component mount and set up a polling interval
+  useEffect(() => {
+    loadOrders();
+    const intervalId = setInterval(loadOrders, 15000);
+    return () => clearInterval(intervalId);
+  }, [loadOrders]);
 
   const filteredOrders = orders.filter(
     order => 
