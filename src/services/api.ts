@@ -1,4 +1,9 @@
-import type { Product } from '@/data/products';
+import { products as staticProducts, type Product } from '@/data/products';
+
+// Static-hosting fallback: on deployments without the Node backend (e.g. the
+// Netlify demo) the read-only catalogue is served from the bundled data so
+// product pages keep working. Orders/admin still require the real API.
+const staticCatalogue = Object.values(staticProducts);
 
 export type OrderStatus = 'pending' | 'processing' | 'completed' | 'canceled';
 
@@ -34,8 +39,29 @@ async function request<T>(url: string, options: RequestInit = {}): Promise<T> {
 }
 
 export const api = {
-  products: () => request<Product[]>('/api/products'),
-  product: (slug: string) => request<Product>(`/api/products/${encodeURIComponent(slug)}`),
+  products: async () => {
+    try {
+      // On static hosting the SPA fallback answers /api/* with index.html and
+      // status 200, so a missing backend surfaces as a null/invalid payload,
+      // not as a thrown error — validate the shape before trusting it.
+      const list = await request<Product[]>('/api/products');
+      if (Array.isArray(list)) return list;
+    } catch {
+      /* fall through to static catalogue */
+    }
+    return staticCatalogue;
+  },
+  product: async (slug: string) => {
+    try {
+      const product = await request<Product>(`/api/products/${encodeURIComponent(slug)}`);
+      if (product?.slug) return product;
+    } catch {
+      /* fall through to static catalogue */
+    }
+    const product = staticCatalogue.find((p) => p.slug === slug);
+    if (product) return product;
+    throw new Error('Product not found.');
+  },
   placeOrder: (input: Pick<Order, 'customer' | 'items'>) => request<Order>('/api/orders', { method: 'POST', body: JSON.stringify(input) }),
   checkoutConfig: () => request<{ cardPayments: boolean }>('/api/checkout/config'),
   createCheckoutSession: (input: Pick<Order, 'customer' | 'items'>) => request<{ id: string; url: string }>('/api/checkout/session', { method: 'POST', body: JSON.stringify(input) }),
