@@ -15,18 +15,10 @@ const Creme = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Filter cream products from the main products data
-  const creamProducts = Object.values(products).filter(product =>
-    product.category.includes('Cremă') ||
-    product.category.includes('Ulei') ||
-    product.category.includes('Ser') ||
-    product.category.includes('Mască') ||
-    product.category.includes('Curățare') ||
-    product.category.includes('Tonic')
-  );
-  
-  // Take first 6 products for display
-  const displayProducts = creamProducts.slice(0, 6);
+  const displayProducts = Object.values(products).filter(product => {
+    const id = Number(product.id);
+    return id >= 7 && id <= 17;
+  });
 
   return (
     <div className="min-h-screen">
@@ -35,20 +27,26 @@ const Creme = () => {
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Banner */}
-          <div className="rounded-2xl bg-gradient-to-r from-beauty-coral/30 to-beauty-coral/10 p-8 md:p-12 mb-12 animate-fade-in">
-            <div className="max-w-2xl">
+          <div className="grid overflow-hidden rounded-3xl border border-beauty-coral/20 bg-[#f6e9e5] md:grid-cols-[0.95fr_1.05fr] mb-12 animate-fade-in">
+            <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#7b263d]">Glam Essence Skincare</p>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('creme.title')}</h1>
               <p className="text-lg text-gray-700 mb-6">
                 {t('creme.subtitle')}
               </p>
-              <Button className="bg-beauty-coral text-white hover:bg-beauty-coral/90">
+              <Button className="w-fit bg-[#7b263d] text-white hover:bg-[#641d31]" onClick={() => document.getElementById('skincare-collection')?.scrollIntoView({ behavior: 'smooth' })}>
                 {t('creme.discover_collection')}
               </Button>
             </div>
+            <img
+              src="/products/skincare/family-reference.webp"
+              alt="Colecția Glam Essence pentru îngrijirea pielii"
+              className="h-full min-h-[340px] w-full object-cover"
+            />
           </div>
           
           {/* Filter section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div id="skincare-collection" className="flex scroll-mt-28 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
               <h2 className="text-2xl font-bold">{t('creme.all_creams')}</h2>
               <p className="text-muted-foreground">{t('creme.hydration_solutions')}</p>

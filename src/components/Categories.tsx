@@ -10,21 +10,21 @@ const Categories = () => {
       name: t('nav.perfumes'),
       kicker: language === 'ro' ? 'Semnătura ta invizibilă' : 'Your invisible signature',
       description: t('categories.perfumes_desc'),
-      image: 'https://images.unsplash.com/photo-1563170351-be82bc888aa4?auto=format&fit=crop&w=1200&q=88',
+      image: '/ParfumFloralExtravagance.jpg',
     },
     {
       id: 'creme',
       name: t('nav.creams'),
       kicker: language === 'ro' ? 'Texturi care îngrijesc' : 'Textures that care',
       description: t('categories.creams_desc'),
-      image: 'https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?auto=format&fit=crop&w=1200&q=88',
+      image: '/products/skincare/family-reference.webp',
     },
     {
       id: 'ingrijire',
       name: t('nav.skincare'),
       kicker: language === 'ro' ? 'Ritualuri pentru fiecare zi' : 'Everyday rituals',
       description: t('categories.skincare_desc'),
-      image: 'https://images.unsplash.com/photo-1585652757141-8837d676fac8?auto=format&fit=crop&w=1200&q=88',
+      image: '/products/skincare/face-serum.webp',
     },
   ];
 

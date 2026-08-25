@@ -25,7 +25,7 @@ const SeturiPage = () => {
             <div className="bg-beauty-rose/5 rounded-xl p-8 flex flex-col md:flex-row gap-8">
               <div className="md:w-1/3">
                 <img 
-                  src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=800&auto=format&fit=crop&q=80" 
+                  src="/products/skincare/family-reference.webp" 
                   alt="Set cadou premium" 
                   className="w-full h-64 md:h-full object-cover rounded-lg"
                 />
@@ -57,7 +57,7 @@ const SeturiPage = () => {
             <div className="bg-beauty-mint/5 rounded-xl p-8 flex flex-col md:flex-row gap-8">
               <div className="md:w-1/3">
                 <img 
-                  src="https://images.unsplash.com/photo-1617897903246-719242758050?w=800&auto=format&fit=crop&q=80" 
+                  src="/products/skincare/face-serum.webp" 
                   alt="Set cadou îngrijire" 
                   className="w-full h-64 md:h-full object-cover rounded-lg"
                 />
