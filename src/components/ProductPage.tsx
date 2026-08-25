@@ -32,8 +32,15 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   const { t } = useLanguage();
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(initialProduct.image);
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+
+  const productImages = Array.from(new Set([product.image, ...(product.gallery || [])]));
+
+  useEffect(() => {
+    setSelectedImage(initialProduct.image);
+  }, [initialProduct.id, initialProduct.image]);
   
   useEffect(() => {
     const fetchStockInfo = async () => {
@@ -132,6 +139,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   };
   
   const isFavorite = isInWishlist(product?.id);
+  const isPerfume = Number(product.id) <= 6;
   
   console.log(`ProductPage image for ${product?.name}: ${product?.image}`);
 
@@ -145,7 +153,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             <ol className="flex items-center">
               <li><a href="/" className="hover:text-foreground">{t('product.breadcrumb.home')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li><a href="/parfumuri" className="hover:text-foreground">{t('product.breadcrumb.perfumes')}</a></li>
+              <li><a href={isPerfume ? '/parfumuri' : '/creme'} className="hover:text-foreground">{isPerfume ? t('product.breadcrumb.perfumes') : t('nav.creams')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
               <li className="text-foreground font-medium truncate">{t(product?.name)}</li>
             </ol>
@@ -155,7 +163,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             <div>
               <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
                 <img
-                  src={product?.image}
+                  src={selectedImage}
                   alt={product?.name}
                   className="w-full h-full object-cover"
                 />
@@ -172,6 +180,21 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </Badge>
                 )}
               </div>
+              {productImages.length > 1 && (
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  {productImages.map((image, index) => (
+                    <button
+                      key={image}
+                      type="button"
+                      onClick={() => setSelectedImage(image)}
+                      className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-[#f2ece9] transition ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent hover:border-[#7b263d]/35'}`}
+                      aria-label={`${t(product.name)} — ${index === 0 ? 'editorial' : 'packshot'}`}
+                    >
+                      <img src={image} alt="" className="h-full w-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             
             <div>
@@ -205,7 +228,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               </div>
               
               <p className="text-muted-foreground mb-8">
-                {product?.description}
+                {t(product?.description)}
               </p>
               
               <div className="flex items-center space-x-4 mb-6">

@@ -38,11 +38,19 @@ const Creme = () => {
                 {t('creme.discover_collection')}
               </Button>
             </div>
-            <img
-              src="/products/skincare/family-reference.webp"
-              alt="Colecția Glam Essence pentru îngrijirea pielii"
-              className="h-full min-h-[340px] w-full object-cover"
-            />
+            <div className="grid min-h-[340px] grid-cols-2 bg-[#281922]" aria-label="Lumile cromatice Glam Essence">
+              {[
+                ['/products/skincare/editorial/face-cream.webp', 'Hydrate'],
+                ['/products/skincare/editorial/face-serum.webp', 'Radiance'],
+                ['/products/skincare/editorial/detox-mask.webp', 'Purify'],
+                ['/products/skincare/editorial/night-cream.webp', 'Night Repair'],
+              ].map(([image, label]) => (
+                <div key={label} className="group relative min-h-[170px] overflow-hidden">
+                  <img src={image} alt={label} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
+                  <span className="absolute bottom-3 left-3 text-[9px] font-semibold uppercase tracking-[.22em] text-white drop-shadow">{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
           
           {/* Filter section */}

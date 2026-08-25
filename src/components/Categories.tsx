@@ -24,7 +24,7 @@ const Categories = () => {
       name: t('nav.skincare'),
       kicker: language === 'ro' ? 'Ritualuri pentru fiecare zi' : 'Everyday rituals',
       description: t('categories.skincare_desc'),
-      image: '/products/skincare/face-serum.webp',
+      image: '/products/skincare/editorial/face-serum.webp',
     },
   ];
 

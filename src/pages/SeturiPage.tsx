@@ -57,7 +57,7 @@ const SeturiPage = () => {
             <div className="bg-beauty-mint/5 rounded-xl p-8 flex flex-col md:flex-row gap-8">
               <div className="md:w-1/3">
                 <img 
-                  src="/products/skincare/face-serum.webp" 
+                  src="/products/skincare/editorial/face-serum.webp"
                   alt="Set cadou îngrijire" 
                   className="w-full h-64 md:h-full object-cover rounded-lg"
                 />
