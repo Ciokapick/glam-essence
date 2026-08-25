@@ -7,10 +7,7 @@
     "oldPrice": 399.99,
     "image": "/ParfumFloralExtravagance.jpg",
     "gallery": [
-      "https://images.unsplash.com/photo-1563170351-be82bc888aa4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&auto=format&fit=crop&q=80"
+      "/ParfumFloralExtravagance.jpg"
     ],
     "category": "parfumuri.floral_category",
     "isNew": true,
@@ -37,10 +34,7 @@
     "price": 399.99,
     "image": "/ParfumOrientalMystique.png",
     "gallery": [
-      "https://images.unsplash.com/photo-1590736704728-f4730bb30770?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1541643600914-78b084683601?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1595425970377-75accd411a5a?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1615526675651-91ee6f2e35b7?w=800&auto=format&fit=crop&q=80"
+      "/ParfumOrientalMystique.png"
     ],
     "category": "parfumuri.oriental_category",
     "isSale": true,
@@ -68,10 +62,7 @@
     "price": 299.99,
     "image": "/ParfumFreshCitrus.png",
     "gallery": [
-      "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1617897903246-719242758050?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1611414129830-44e5563c0091?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1588618575327-95834477028b?w=800&auto=format&fit=crop&q=80"
+      "/ParfumFreshCitrus.png"
     ],
     "category": "parfumuri.citrus_category",
     "rating": 4,
@@ -97,10 +88,7 @@
     "price": 419.99,
     "image": "/ParfumWoodyElegance.jpg",
     "gallery": [
-      "https://images.unsplash.com/photo-1592914610354-fd354ea45e48?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1594033677177-39908202d630?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1551446339-5501f611e9a8?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1566150308864-39049370d85e?w=800&auto=format&fit=crop&q=80"
+      "/ParfumWoodyElegance.jpg"
     ],
     "category": "parfumuri.woody_category",
     "rating": 5,
@@ -126,10 +114,7 @@
     "price": 329.99,
     "image": "/ParfumAquaticBreeze.avif",
     "gallery": [
-      "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1576073719676-aa95576db207?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1531022493105-969fe1d18187?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1578996834254-13d1b661a5ed?w=800&auto=format&fit=crop&q=80"
+      "/ParfumAquaticBreeze.avif"
     ],
     "category": "parfumuri.aquatic_category",
     "isSale": true,
@@ -157,10 +142,7 @@
     "price": 449.99,
     "image": "/ParfumSpicyNoir.avif",
     "gallery": [
-      "https://images.unsplash.com/photo-1547887538-e3a2f32cb1cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1591375782226-461d9a617541?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1575330933415-cea1e7ce53eb?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1558730174-cc150ae8949f?w=800&auto=format&fit=crop&q=80"
+      "/ParfumSpicyNoir.avif"
     ],
     "category": "parfumuri.spicy_category",
     "isNew": true,
@@ -186,12 +168,9 @@
     "name": "creme.luxury_cream",
     "price": 129.99,
     "oldPrice": 152.99,
-    "image": "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/face-cream.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1580870069867-74c57ee1bb07?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1590393802688-ab3fd5499aae?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1567721913486-6585f069b332?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1578083881005-040fc7572338?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/face-cream.webp"
     ],
     "category": "creme.face_category",
     "isSale": true,
@@ -217,12 +196,9 @@
     "slug": "crema-contur-ochi-anti-age",
     "name": "creme.eye_contour_cream",
     "price": 149.99,
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/eye-cream.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1591019052241-e4d95a5dc3fc?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1607602132700-068258431c6c?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/eye-cream.webp"
     ],
     "category": "Cremă ochi",
     "rating": 5,
@@ -246,12 +222,9 @@
     "slug": "crema-de-maini-silk",
     "name": "Cremă de mâini Silk",
     "price": 59.99,
-    "image": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/hand-cream.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1604417589065-0bf5a8c1cf8a?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1584949514486-e41a89cc8c5f?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1614622823813-5ea94ae8e71c?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/hand-cream.webp"
     ],
     "category": "Cremă mâini",
     "rating": 4,
@@ -275,12 +248,9 @@
     "slug": "crema-de-corp-intense",
     "name": "Cremă de corp Intense",
     "price": 89.99,
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/body-cream.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1598454444466-9e698fe928f2?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1601049413574-272fdde8203e?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/body-cream.webp"
     ],
     "category": "Cremă corp",
     "isNew": true,
@@ -305,12 +275,9 @@
     "slug": "crema-nutritiva-de-noapte",
     "name": "Cremă nutritivă de noapte",
     "price": 139.99,
-    "image": "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/night-cream.webp",
     "gallery": [
-      "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1573575154902-f3865f297edf?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1629198735626-2aa3500e9321?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/night-cream.webp"
     ],
     "category": "Cremă față",
     "rating": 5,
@@ -334,12 +301,9 @@
     "slug": "crema-anticelulitică",
     "name": "Cremă anticelulitică",
     "price": 109.99,
-    "image": "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/body-treatment.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1571781926291-c477ebfd024b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1582056509381-33c1ce732b2a?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1570194065650-d99fb4abbd90?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/body-treatment.webp"
     ],
     "category": "Cremă corp",
     "isSale": true,
@@ -365,12 +329,9 @@
     "slug": "ser-facial-radiance",
     "name": "Ser facial Radiance",
     "price": 189.99,
-    "image": "https://images.unsplash.com/photo-1619451427882-6aaaded0cc61?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/face-serum.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1619451427882-6aaaded0cc61?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1556229010-6c3f2c9ca5f8?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1546552356-3fae876a61ca?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1570194065650-d99fb4abbd90?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/face-serum.webp"
     ],
     "category": "Ser",
     "rating": 5,
@@ -394,12 +355,9 @@
     "slug": "masca-faciala-detox",
     "name": "Mască facială detox",
     "price": 79.99,
-    "image": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/detox-mask.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1570194065650-d99fb4abbd90?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/detox-mask.webp"
     ],
     "category": "Mască",
     "isNew": true,
@@ -424,12 +382,9 @@
     "slug": "spuma-de-curatare",
     "name": "Spumă de curățare",
     "price": 69.99,
-    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/cleansing-foam.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1597354984706-fac992d9306f?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1556227834-09f1de7a7d14?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1598662972299-5408ddb8a3dc?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/cleansing-foam.webp"
     ],
     "category": "Curățare",
     "rating": 4,
@@ -453,12 +408,9 @@
     "slug": "tonic-purificator",
     "name": "Tonic purificator",
     "price": 59.99,
-    "image": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+    "image": "/products/skincare/toner.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1608248516420-0a337a5f1587?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1598662972299-5408ddb8a3dc?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/toner.webp"
     ],
     "category": "Tonic",
     "rating": 4,
@@ -482,12 +434,9 @@
     "slug": "ulei-de-fata-nutritiv",
     "name": "Ulei de față nutritiv",
     "price": 129.99,
-    "image": "https://images.unsplash.com/photo-1532413992378-f169ac26fff0?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/face-oil.webp",
     "gallery": [
-      "https://images.unsplash.com/photo-1532413992378-f169ac26fff0?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1605637465697-e8a9f2511816?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1608248533428-7c51fe77be21?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1618330834871-dd22122b59e4?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/face-oil.webp"
     ],
     "category": "Ulei",
     "isSale": true,
@@ -513,12 +462,9 @@
     "slug": "crema-nutritiva-de-noapte-ingrjire",
     "name": "Cremă nutritivă de noapte",
     "price": 89.99,
-    "image": "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
+    "image": "/products/skincare/night-cream.webp",
     "gallery": [
-      "https://plus.unsplash.com/premium_photo-1661520861264-f1ece30dbfbf?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1573575154902-f3865f297edf?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1629198735626-2aa3500e9321?w=800&auto=format&fit=crop&q=80"
+      "/products/skincare/night-cream.webp"
     ],
     "category": "Cremă",
     "rating": 4,
