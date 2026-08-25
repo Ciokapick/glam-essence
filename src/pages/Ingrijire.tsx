@@ -34,8 +34,8 @@ const Ingrijire = () => {
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
           {/* Hero Banner */}
-          <div className="rounded-2xl bg-gradient-to-r from-beauty-hotpink/30 to-beauty-hotpink/10 p-8 md:p-12 mb-12 animate-fade-in">
-            <div className="max-w-2xl">
+          <div className="mb-12 grid overflow-hidden rounded-3xl border border-[#281922]/10 bg-[#f4eee9] animate-fade-in md:grid-cols-[0.95fr_1.05fr]">
+            <div className="flex max-w-2xl flex-col justify-center p-8 md:p-12">
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('ingrijire.title')}</h1>
               <p className="text-lg text-gray-700 mb-6">
                 {t('ingrijire.subtitle')}
@@ -43,6 +43,10 @@ const Ingrijire = () => {
               <Button className="bg-beauty-hotpink text-white hover:bg-beauty-hotpink/90">
                 {t('ingrijire.discover_collection')}
               </Button>
+            </div>
+            <div className="grid min-h-[330px] grid-cols-2 bg-[#281922]">
+              <img src="/products/skincare/editorial/toner.webp" alt="Hydrate and cleanse" className="h-full w-full object-cover" />
+              <img src="/products/skincare/editorial/face-serum.webp" alt="Radiance care" className="h-full w-full object-cover" />
             </div>
           </div>
           

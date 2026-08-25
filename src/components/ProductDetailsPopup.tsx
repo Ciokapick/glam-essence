@@ -209,7 +209,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
               {/* Description */}
               {description && (
                 <p className="text-muted-foreground mb-6">
-                  {description}
+                  {t(description)}
                 </p>
               )}
               

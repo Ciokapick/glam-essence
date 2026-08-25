@@ -6,7 +6,7 @@ import { useCart } from '@/contexts/CartContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from '@/hooks/use-toast';
 import ProductDetailsPopup from './ProductDetailsPopup';
-import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
+import { getProductStock, getProductStockSnapshot, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductCardProps {
   id: string;
@@ -20,20 +20,29 @@ interface ProductCardProps {
   discount?: number;
   rating?: number;
   description?: string;
+  stock?: number;
 }
 
-const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, discount, rating = 0, description }: ProductCardProps) => {
+const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, discount, rating = 0, description, stock: initialStock }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { t, language } = useLanguage();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [stock, setStock] = useState(0);
+  const [stock, setStock] = useState(() => initialStock ?? getProductStockSnapshot(id));
 
   useEffect(() => {
-    getProductStock(id).then(setStock);
-    return stockUpdateEmitter.subscribe((productId, nextStock) => {
+    let active = true;
+    setStock(initialStock ?? getProductStockSnapshot(id));
+    getProductStock(id).then((nextStock) => {
+      if (active) setStock(nextStock);
+    });
+    const unsubscribe = stockUpdateEmitter.subscribe((productId, nextStock) => {
       if (id === productId) setStock(nextStock);
     });
-  }, [id]);
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [id, initialStock]);
 
   const handleAddToCart = () => {
     if (stock <= 0) {
