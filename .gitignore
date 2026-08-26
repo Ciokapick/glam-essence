@@ -24,3 +24,6 @@ data/*.sqlite*
 *.njsproj
 *.sln
 *.sw?
+
+# TypeScript incremental build artifacts
+*.tsbuildinfo

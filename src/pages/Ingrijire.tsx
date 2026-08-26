@@ -16,12 +16,18 @@ const Ingrijire = () => {
   }, []);
 
   // Filter skincare products from the main products data
+  // Categoriile sunt chei de traducere, nu text afisabil - filtram pe chei,
+  // altfel lista se goleste la fiecare schimbare de limba sau de formulare.
+  const SKINCARE_CATEGORIES = [
+    'creme.serum_category',
+    'creme.mask_category',
+    'creme.cleanser_category',
+    'creme.toner_category',
+    'creme.oil_category',
+  ];
+
   const skincareProducts = Object.values(products).filter(product =>
-    product.category.includes('Ser') ||
-    product.category.includes('Mască') ||
-    product.category.includes('Curățare') ||
-    product.category.includes('Tonic') ||
-    product.category.includes('Ulei')
+    SKINCARE_CATEGORIES.includes(product.category)
   );
   
   // Take first 6 products for display

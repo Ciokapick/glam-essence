@@ -1,92 +1,24 @@
-
 import React from 'react';
 import ProductCard from './ProductCard';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { products as catalogue } from '@/data/products';
+
+// Produsele vitrinei vin din catalog, nu redefinite aici: altfel ProductCard
+// nu primeste slug si deduce unul din nume, care nu exista in catalog.
+// Ordinea alterneaza lumile de culoare - magenta, albastru, chihlimbar, bleumarin.
+const FEATURED_SLUGS = [
+  'parfum-floral-extravagance',
+  'crema-hidratanta-luxury',
+  'ser-facial-radiance',
+  'crema-nutritiva-de-noapte',
+] as const;
 
 const FeaturedProducts = () => {
   const { t, language } = useLanguage();
-  
-  const products = [
-    {
-      id: "1",
-      name: t('products.floral_extravagance'),
-      price: 349.99,
-      image: "/ParfumFloralExtravagance.jpg",
-      category: "Parfum",
-      isNew: true,
-      rating: 5,
-      reviewCount: 12,
-      stock: 15,
-      description: t('products.floral_extravagance_desc'),
-      features: [
-        t('products.top_notes'),
-        t('products.middle_notes'),
-        t('products.base_notes'),
-        t('products.concentration'),
-        t('products.longevity')
-      ]
-    },
-    {
-      id: "2",
-      name: t('products.luxury_cream'),
-      price: 129.99,
-      image: "/products/skincare/editorial/face-cream.webp",
-      category: "Cremă",
-      isSale: true,
-      discount: 15,
-      rating: 4,
-      reviewCount: 28,
-      stock: 25,
-      description: t('products.luxury_cream_desc'),
-      features: [
-        t('products.intensive_hydration'),
-        t('products.non_greasy'),
-        t('products.hyaluronic_acid'),
-        t('products.skin_barrier'),
-        t('products.dermatologically_tested')
-      ]
-    },
-    {
-      id: "3",
-      name: t('products.radiance_serum'),
-      price: 189.99,
-      image: "/products/skincare/editorial/face-serum.webp",
-      category: "Îngrijire",
-      rating: 5,
-      reviewCount: 19,
-      stock: 18,
-      description: t('products.radiance_serum_desc'),
-      features: [
-        t('products.stabilized_vitamin_c'),
-        t('products.pigment_spots'),
-        t('products.luminosity'),
-        t('products.antioxidant'),
-        t('products.light_texture')
-      ]
-    },
-    {
-      id: "4",
-      name: t('products.intense_body_cream'),
-      price: 399.99,
-      image: "/products/skincare/editorial/body-cream.webp",
-      category: "Cremă",
-      isSale: true,
-      discount: 10,
-      rating: 4,
-      reviewCount: 16,
-      stock: 22,
-      description: t('products.intense_body_cream_desc'),
-      features: [
-        t('products.dry_skin'),
-        t('products.shea_argan'),
-        t('products.delicate_fragrance'),
-        t('products.quick_absorption'),
-        t('products.premium_packaging')
-      ]
-    }
-  ];
+
+  const products = FEATURED_SLUGS.map((slug) => catalogue[slug]).filter(Boolean);
 
   return (
     <section id="featured" className="bg-[#fffdfb] py-24 md:py-32">
@@ -108,8 +40,8 @@ const FeaturedProducts = () => {
         </div>
         
         <div className="grid grid-cols-1 gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
+          {products.map((product, index) => (
+            <div key={product.slug} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
               <ProductCard {...product} />
             </div>
           ))}
