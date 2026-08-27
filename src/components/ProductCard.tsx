@@ -61,7 +61,7 @@ const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, di
           <Link to={productUrl} aria-label={`${language === 'ro' ? 'Vezi' : 'View'} ${t(name)}`}>
             <img src={image} alt={t(name)} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.035]" loading="lazy" />
           </Link>
-          <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0">
+          <div className="absolute inset-x-0 bottom-0 flex translate-y-0 items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 sm:translate-y-full sm:group-hover:translate-y-0 sm:group-focus-within:translate-y-0">
             <button
               onClick={handleAddToCart}
               disabled={stock <= 0}
