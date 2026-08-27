@@ -13,7 +13,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ShoppingBag,
-  Check,
   Sparkles,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -24,9 +23,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
 import FragranceNotes from '@/components/FragranceNotes';
+import SkinRitualFeatures from '@/components/SkinRitualFeatures';
 import { similarProducts, type Product } from '@/data/products';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
-import { localizeProductCopy, localizeProductFeature } from '@/utils/productCopy';
+import { localizeProductCopy } from '@/utils/productCopy';
 
 interface ProductPageProps {
   product: Product;
@@ -418,20 +418,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </div>
               </TabsContent>
               <TabsContent value="features" className="mt-5">
-                {isPerfume ? <FragranceNotes features={product?.features} productSlug={product.slug} /> : (
-                  <div className="rounded-[1.5rem] border border-[#281922]/10 bg-[#281922] p-6 text-white shadow-[0_18px_50px_rgba(40,25,34,.14)] md:p-10">
-                    <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
-                      <div><p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d9aebb]">{language === 'ro' ? 'De ce îl vei păstra' : 'Why you will keep it'}</p><h3 className="mt-4 font-serif text-4xl tracking-[-.04em]">{t('product.features')}</h3></div>
-                      <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'Detalii clare, fără promisiuni inutile — exact ce trebuie să știi înainte să-l integrezi în ritual.' : 'Clear details, without unnecessary promises — exactly what you need to know before making it part of your ritual.'}</p>
-                    </div>
-                    {product?.features && (
-                      <ul className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-                        {product.features.map((feature: string, index: number) => (
-                          <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{localizeProductFeature(feature, language)}</span></li>
-                        ))}
-                      </ul>
-                    )}
-                  </div>
+                {isPerfume ? (
+                  <FragranceNotes features={product?.features} productSlug={product.slug} />
+                ) : (
+                  <SkinRitualFeatures
+                    features={product?.features}
+                    images={productImages}
+                    productName={t(product.name)}
+                  />
                 )}
               </TabsContent>
               <TabsContent value="reviews" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-[#fffdfb] p-6 shadow-[0_18px_50px_rgba(40,25,34,.04)] md:p-10">
