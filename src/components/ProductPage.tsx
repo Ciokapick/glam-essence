@@ -12,7 +12,9 @@ import {
   Minus,
   Plus,
   ChevronRight,
-  ShoppingBag
+  ShoppingBag,
+  Check,
+  Sparkles,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -29,7 +31,7 @@ interface ProductPageProps {
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(initialProduct.image);
@@ -147,11 +149,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   console.log(`ProductPage image for ${product?.name}: ${product?.image}`);
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-[#fbf8f5] text-[#281922]">
       <Navbar />
 
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
+      <main className="pb-20 pt-28 sm:pt-32">
+        <div className="container mx-auto max-w-[1440px] px-5 md:px-8">
           <nav className="flex text-sm text-muted-foreground mb-6">
             <ol className="flex items-center">
               <li><a href="/" className="hover:text-foreground">{t('product.breadcrumb.home')}</a></li>
@@ -353,39 +355,41 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             </div>
           </div>
           
-          <div className="mb-16">
+          <div className="mb-20">
             <Tabs defaultValue="details">
-              <TabsList className="w-full grid grid-cols-3 mb-6">
-                <TabsTrigger value="details">{t('product.product_details')}</TabsTrigger>
-                <TabsTrigger value="features">{t('product.features')}</TabsTrigger>
-                <TabsTrigger value="reviews">{t('product.reviews_title')} ({product?.reviewCount || 0})</TabsTrigger>
+              <TabsList className="grid h-auto w-full grid-cols-3 rounded-2xl border border-[#281922]/10 bg-[#f1ebe8] p-1.5">
+                <TabsTrigger value="details" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.product_details')}</TabsTrigger>
+                <TabsTrigger value="features" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.features')}</TabsTrigger>
+                <TabsTrigger value="reviews" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.reviews_title')} ({product?.reviewCount || 0})</TabsTrigger>
               </TabsList>
-              <TabsContent value="details" className="p-6 rounded-lg bg-gray-50/50">
-                <h3 className="text-xl font-semibold mb-4">{t('product.description')}</h3>
-                <p className="mb-4">{product?.details}</p>
-                <p className="mb-4">
-                  {product?.name} {t('language') === 'ro' ? 'este un produs premium, creat cu cele mai bune ingrediente pentru a oferi o experiență de utilizare deosebită. Calitatea sa excepțională se reflectă în fiecare detaliu, de la compoziție la ambalaj.' : 'is a premium product, created with the finest ingredients to provide an exceptional user experience. Its exceptional quality is reflected in every detail, from composition to packaging.'}
-                </p>
-                <p>
-                  {t('language') === 'ro' ? 'Acest produs este perfect pentru utilizare zilnică, oferind rezultate remarkable și satisfacție garantată. Fiecare utilizare vă va convinge de calitatea sa superioară și de valoarea investiției în frumusețea și încrederea personală.' : 'This product is perfect for daily use, offering remarkable results and guaranteed satisfaction. Each use will convince you of its superior quality and the value of investing in beauty and personal confidence.'}
-                </p>
+              <TabsContent value="details" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-white p-6 shadow-[0_18px_50px_rgba(40,25,34,.04)] md:p-10">
+                <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr]">
+                  <div>
+                    <div className="mb-5 grid h-11 w-11 place-items-center rounded-full bg-[#f5e5e4] text-[#9b5668]"><Sparkles className="h-5 w-5" strokeWidth={1.5} /></div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#a05a6c]">{language === 'ro' ? 'Despre produs' : 'About the product'}</p>
+                    <h3 className="mt-4 max-w-sm font-serif text-4xl leading-[.98] tracking-[-.04em]">{t('product.description')}</h3>
+                  </div>
+                  <div className="max-w-3xl text-sm leading-8 text-[#67545c] md:text-base">
+                    <p>{product?.details}</p>
+                    <div className="mt-8 grid gap-3 border-t border-[#281922]/10 pt-6 sm:grid-cols-2">
+                      <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#9c7d87]">{t('product.sku')}</p><p className="mt-2 font-medium text-[#281922]">{product?.sku}</p></div>
+                      <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#9c7d87]">{t('product.category')}</p><p className="mt-2 font-medium text-[#281922]">{t(product?.category)}</p></div>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
-              <TabsContent value="features" className="p-6 rounded-lg bg-gray-50/50">
-                <h3 className="text-xl font-semibold mb-4">{t('product.features')}</h3>
+              <TabsContent value="features" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-[#281922] p-6 text-white shadow-[0_18px_50px_rgba(40,25,34,.14)] md:p-10">
+                <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
+                  <div><p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d9aebb]">{language === 'ro' ? 'De ce îl vei păstra' : 'Why you will keep it'}</p><h3 className="mt-4 font-serif text-4xl tracking-[-.04em]">{t('product.features')}</h3></div>
+                  <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'Detalii clare, fără promisiuni inutile — exact ce trebuie să știi înainte să-l integrezi în ritual.' : 'Clear details, without unnecessary promises — exactly what you need to know before making it part of your ritual.'}</p>
+                </div>
                 {product?.features && (
-                  <ul className="space-y-2">
+                  <ul className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
                     {product.features.map((feature: string, index: number) => (
-                      <li key={index} className="flex items-start">
-                        <div className="h-2 w-2 rounded-full bg-beauty-magenta mt-1.5 mr-3"></div>
-                        <span>{feature}</span>
-                      </li>
+                      <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{feature}</span></li>
                     ))}
                   </ul>
                 )}
-                <div className="mt-6 pt-6 border-t">
-                  <h4 className="font-medium mb-2">{t('product.sku')} {product?.sku}</h4>
-                  <p className="text-sm text-muted-foreground">{t('product.category')} {product?.category}</p>
-                </div>
               </TabsContent>
               <TabsContent value="reviews" className="p-6 rounded-lg bg-gray-50/50">
                 <div className="flex items-center justify-between mb-6">
