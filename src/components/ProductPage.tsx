@@ -8,7 +8,6 @@ import {
   Clock,
   ShieldCheck,
   Heart,
-  Share2,
   Minus,
   Plus,
   ChevronLeft,
@@ -392,12 +391,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </div>
               </div>
               
-              <div className="mt-6 flex items-center">
-                <button className="inline-flex items-center gap-2 rounded-full px-1 py-1 text-[10px] font-semibold uppercase tracking-[.16em] text-[#806d74] transition hover:text-[#a04e62]">
-                  <Share2 className="h-4 w-4" />
-                  {t('product.share')}
-                </button>
-              </div>
             </div>
           </div>
           
