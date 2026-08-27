@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Eye, ShoppingBag } from 'lucide-react';
+import { ArrowUpRight, ShoppingBag } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useCart } from '@/contexts/CartContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from '@/hooks/use-toast';
-import ProductDetailsPopup from './ProductDetailsPopup';
 import { getProductStock, getProductStockSnapshot, stockUpdateEmitter } from '@/utils/jsonDb';
 
 interface ProductCardProps {
@@ -26,7 +25,6 @@ interface ProductCardProps {
 const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, discount, rating = 0, description, stock: initialStock }: ProductCardProps) => {
   const { addToCart } = useCart();
   const { t, language } = useLanguage();
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [stock, setStock] = useState(() => initialStock ?? getProductStockSnapshot(id));
 
   useEffect(() => {
@@ -65,13 +63,6 @@ const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, di
           </Link>
           <div className="absolute inset-x-0 bottom-0 flex translate-y-full items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 group-hover:translate-y-0 group-focus-within:translate-y-0">
             <button
-              onClick={() => setIsPopupOpen(true)}
-              className="grid h-11 w-11 place-items-center rounded-full bg-white text-[#281922] transition hover:bg-[#f2e7e3]"
-              aria-label={language === 'ro' ? 'Previzualizare rapidă' : 'Quick view'}
-            >
-              <Eye className="h-4 w-4" />
-            </button>
-            <button
               onClick={handleAddToCart}
               disabled={stock <= 0}
               className="flex h-11 flex-1 items-center justify-center gap-2 bg-white px-4 text-[10px] font-semibold uppercase tracking-[.14em] text-[#281922] transition hover:bg-[#f2e7e3] disabled:cursor-not-allowed disabled:opacity-55"
@@ -100,14 +91,6 @@ const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, di
           </Link>
         </div>
       </article>
-
-      {isPopupOpen && (
-        <ProductDetailsPopup
-          id={id} name={name} price={price} image={image} category={category} isNew={isNew}
-          isSale={isSale} discount={discount} rating={rating} description={description} stock={stock}
-          onClose={() => setIsPopupOpen(false)}
-        />
-      )}
     </>
   );
 };
