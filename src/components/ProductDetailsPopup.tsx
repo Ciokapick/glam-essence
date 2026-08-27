@@ -78,7 +78,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
       role="presentation"
       onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}
     >
-      <section className="relative flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden rounded-t-[1.75rem] bg-[#fffdfb] text-[#281922] shadow-2xl sm:flex-row sm:rounded-[1.75rem]" role="dialog" aria-modal="true" aria-labelledby="quick-view-title">
+      <section className="relative grid max-h-[92dvh] w-[min(100%,64rem)] grid-cols-1 overflow-hidden rounded-t-[1.75rem] bg-[#fffdfb] text-[#281922] shadow-2xl sm:grid-cols-[minmax(0,46%)_minmax(0,54%)] sm:rounded-[1.75rem]" role="dialog" aria-modal="true" aria-labelledby="quick-view-title">
         <button type="button" onClick={onClose} className="absolute right-4 top-4 z-20 grid h-10 w-10 place-items-center rounded-full border border-white/70 bg-white/80 text-[#281922] shadow-sm backdrop-blur transition hover:bg-white" aria-label={language === 'ro' ? 'Închide previzualizarea' : 'Close quick view'}>
           <X className="h-5 w-5" />
         </button>
@@ -93,7 +93,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
           </div>
         </div>
 
-        <div className="min-h-0 flex-1 overflow-y-auto p-6 sm:p-9">
+        <div className="min-h-0 min-w-0 overflow-y-auto p-6 sm:p-9">
           <p className="mb-3 text-[10px] font-semibold uppercase tracking-[.2em] text-[#9c7d87]">{t(category)}</p>
           <h2 id="quick-view-title" className="max-w-lg font-serif text-3xl leading-[.98] tracking-[-.03em] sm:text-4xl">{t(name)}</h2>
 
