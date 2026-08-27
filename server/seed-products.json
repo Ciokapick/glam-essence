@@ -174,8 +174,9 @@
     "name": "creme.luxury_cream",
     "price": 129.99,
     "oldPrice": 152.99,
-    "image": "/products/skincare/editorial/face-cream.webp",
+    "image": "/products/skincare/campaign/face-cream.webp",
     "gallery": [
+      "/products/skincare/campaign/face-cream.webp",
       "/products/skincare/editorial/face-cream.webp",
       "/products/skincare/face-cream.webp"
     ],
@@ -203,8 +204,9 @@
     "slug": "crema-contur-ochi-anti-age",
     "name": "creme.eye_contour_cream",
     "price": 149.99,
-    "image": "/products/skincare/editorial/eye-cream.webp",
+    "image": "/products/skincare/campaign/eye-cream.webp",
     "gallery": [
+      "/products/skincare/campaign/eye-cream.webp",
       "/products/skincare/editorial/eye-cream.webp",
       "/products/skincare/eye-cream.webp"
     ],
@@ -230,8 +232,9 @@
     "slug": "crema-de-maini-silk",
     "name": "Cremă de mâini Silk",
     "price": 59.99,
-    "image": "/products/skincare/editorial/hand-cream.webp",
+    "image": "/products/skincare/campaign/hand-cream.webp",
     "gallery": [
+      "/products/skincare/campaign/hand-cream.webp",
       "/products/skincare/editorial/hand-cream.webp",
       "/products/skincare/hand-cream.webp"
     ],
@@ -257,8 +260,9 @@
     "slug": "crema-de-corp-intense",
     "name": "Cremă de corp Intense",
     "price": 89.99,
-    "image": "/products/skincare/editorial/body-cream.webp",
+    "image": "/products/skincare/campaign/body-cream.webp",
     "gallery": [
+      "/products/skincare/campaign/body-cream.webp",
       "/products/skincare/editorial/body-cream.webp",
       "/products/skincare/body-cream.webp"
     ],
@@ -285,8 +289,9 @@
     "slug": "crema-nutritiva-de-noapte",
     "name": "Cremă nutritivă de noapte",
     "price": 139.99,
-    "image": "/products/skincare/editorial/night-cream.webp",
+    "image": "/products/skincare/campaign/night-cream.webp",
     "gallery": [
+      "/products/skincare/campaign/night-cream.webp",
       "/products/skincare/editorial/night-cream.webp",
       "/products/skincare/night-cream.webp"
     ],
@@ -312,8 +317,9 @@
     "slug": "crema-anticelulitică",
     "name": "Cremă anticelulitică",
     "price": 109.99,
-    "image": "/products/skincare/editorial/body-treatment.webp",
+    "image": "/products/skincare/campaign/body-treatment.webp",
     "gallery": [
+      "/products/skincare/campaign/body-treatment.webp",
       "/products/skincare/editorial/body-treatment.webp",
       "/products/skincare/body-treatment.webp"
     ],
@@ -341,8 +347,9 @@
     "slug": "ser-facial-radiance",
     "name": "Ser facial Radiance",
     "price": 189.99,
-    "image": "/products/skincare/editorial/face-serum.webp",
+    "image": "/products/skincare/campaign/face-serum.webp",
     "gallery": [
+      "/products/skincare/campaign/face-serum.webp",
       "/products/skincare/editorial/face-serum.webp",
       "/products/skincare/face-serum.webp"
     ],
@@ -368,8 +375,9 @@
     "slug": "masca-faciala-detox",
     "name": "Mască facială detox",
     "price": 79.99,
-    "image": "/products/skincare/editorial/detox-mask.webp",
+    "image": "/products/skincare/campaign/detox-mask.webp",
     "gallery": [
+      "/products/skincare/campaign/detox-mask.webp",
       "/products/skincare/editorial/detox-mask.webp",
       "/products/skincare/detox-mask.webp"
     ],
@@ -396,8 +404,9 @@
     "slug": "spuma-de-curatare",
     "name": "Spumă de curățare",
     "price": 69.99,
-    "image": "/products/skincare/editorial/cleansing-foam.webp",
+    "image": "/products/skincare/campaign/cleansing-foam.webp",
     "gallery": [
+      "/products/skincare/campaign/cleansing-foam.webp",
       "/products/skincare/editorial/cleansing-foam.webp",
       "/products/skincare/cleansing-foam.webp"
     ],
@@ -423,8 +432,9 @@
     "slug": "tonic-purificator",
     "name": "Tonic purificator",
     "price": 59.99,
-    "image": "/products/skincare/editorial/toner.webp",
+    "image": "/products/skincare/campaign/toner.webp",
     "gallery": [
+      "/products/skincare/campaign/toner.webp",
       "/products/skincare/editorial/toner.webp",
       "/products/skincare/toner.webp"
     ],
@@ -450,8 +460,9 @@
     "slug": "ulei-de-fata-nutritiv",
     "name": "Ulei de față nutritiv",
     "price": 129.99,
-    "image": "/products/skincare/editorial/face-oil.webp",
+    "image": "/products/skincare/campaign/face-oil.webp",
     "gallery": [
+      "/products/skincare/campaign/face-oil.webp",
       "/products/skincare/editorial/face-oil.webp",
       "/products/skincare/face-oil.webp"
     ],

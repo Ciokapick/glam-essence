@@ -44,8 +44,8 @@ const BodyCare = () => {
               </Button>
             </div>
             <div className="grid min-h-[330px] grid-cols-2 bg-[#281922]">
-              <img src="/products/skincare/editorial/hand-cream.webp" alt="Hand care" className="h-full w-full object-cover" />
-              <img src="/products/skincare/editorial/body-cream.webp" alt="Body care" className="h-full w-full object-cover" />
+              <img src="/products/skincare/campaign/hand-cream.webp" alt="Hand care" className="h-full w-full object-cover" />
+              <img src="/products/skincare/campaign/body-cream.webp" alt="Body care" className="h-full w-full object-cover" />
             </div>
           </div>
           

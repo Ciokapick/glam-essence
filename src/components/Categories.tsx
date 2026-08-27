@@ -17,14 +17,14 @@ const Categories = () => {
       name: t('nav.face_care'),
       kicker: language === 'ro' ? 'Ritualul tenului' : 'The face ritual',
       description: language === 'ro' ? 'Curățare, hidratare și tratament' : 'Cleanse, hydrate and treat',
-      image: '/products/skincare/editorial/face-serum.webp',
+      image: '/products/skincare/campaign/face-serum.webp',
     },
     {
       id: 'body-care',
       name: t('nav.body_care'),
       kicker: language === 'ro' ? 'Confort pentru piele' : 'Comfort for skin',
       description: language === 'ro' ? 'Texturi pentru mâini și corp' : 'Textures for hands and body',
-      image: '/products/skincare/editorial/body-cream.webp',
+      image: '/products/skincare/campaign/body-cream.webp',
     },
     {
       id: 'seturi',
