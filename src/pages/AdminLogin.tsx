@@ -29,7 +29,15 @@ const AdminLogin = () => {
       toast({ title: t('admin.login.success'), description: t('admin.login.welcome') });
       navigate('/admin/dashboard');
     } catch (error) {
-      toast({ title: t('admin.login.failed'), description: error instanceof Error ? error.message : t('admin.login.invalid_credentials'), variant: 'destructive' });
+      const errorMessage = error instanceof Error ? error.message : '';
+      const apiUnavailable = !errorMessage || errorMessage === 'Cererea nu a putut fi procesată.' || errorMessage.toLowerCase().includes('failed to fetch');
+      toast({
+        title: t('admin.login.failed'),
+        description: apiUnavailable
+          ? (language === 'ro' ? 'API-ul local nu rulează. Pornește „npm run dev:api” într-un al doilea terminal și încearcă din nou.' : 'The local API is not running. Start “npm run dev:api” in a second terminal and try again.')
+          : errorMessage,
+        variant: 'destructive',
+      });
     } finally { setIsLoading(false); }
   };
 
