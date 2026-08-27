@@ -8,17 +8,25 @@ import { Filter, SlidersHorizontal } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { products } from '@/data/products';
 
-const Creme = () => {
+const FACE_CARE_SLUGS = [
+  'crema-hidratanta-luxury',
+  'crema-contur-ochi-anti-age',
+  'crema-nutritiva-de-noapte',
+  'ser-facial-radiance',
+  'masca-faciala-detox',
+  'spuma-de-curatare',
+  'tonic-purificator',
+  'ulei-de-fata-nutritiv',
+] as const;
+
+const FaceCare = () => {
   const { t } = useLanguage();
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const displayProducts = Object.values(products).filter(product => {
-    const id = Number(product.id);
-    return id >= 7 && id <= 17;
-  });
+  const displayProducts = FACE_CARE_SLUGS.map((slug) => products[slug]);
 
   return (
     <div className="min-h-screen">
@@ -29,7 +37,7 @@ const Creme = () => {
           {/* Hero Banner */}
           <div className="grid overflow-hidden rounded-3xl border border-beauty-coral/20 bg-[#f6e9e5] md:grid-cols-[0.95fr_1.05fr] mb-12 animate-fade-in">
             <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#7b263d]">Glam Essence Skincare</p>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#7b263d]">Glam Essence · Face Care</p>
               <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('creme.title')}</h1>
               <p className="text-lg text-gray-700 mb-6">
                 {t('creme.subtitle')}
@@ -88,4 +96,4 @@ const Creme = () => {
   );
 };
 
-export default Creme;
+export default FaceCare;

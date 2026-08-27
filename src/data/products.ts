@@ -444,30 +444,6 @@ export const products: { [key: string]: Product } = {
     ],
     sku: "UFN-017",
     stock: 15
-  },
-  "crema-nutritiva-de-noapte-ingrjire": {
-    id: "18",
-    slug: "crema-nutritiva-de-noapte-ingrjire",
-    name: "creme.night_nourishing_cream",
-    price: 89.99,
-    image: "/products/skincare/editorial/night-cream.webp",
-    gallery: ["/products/skincare/editorial/night-cream.webp", "/products/skincare/night-cream.webp"],
-    category: "creme.face_category",
-    rating: 4,
-    reviewCount: 22,
-    description: "Crema nutritivă de noapte hrănește și regenerează pielea în timpul somnului. Formula sa bogată, cu retinol, peptide și uleiuri naturale, stimulează reînnoirea celulară și producția de colagen, pentru un ten mai ferm și mai strălucitor.",
-    details: "O cremă de noapte intens nutritivă, dezvoltată pentru a lucra în armonie cu ritmul natural al pielii în timpul somnului. Textura bogată oferă hidratare intensă și nutrienți esențiali pentru regenerarea pielii.",
-    features: [
-      "Retinol pentru stimularea reînnoirii celulare",
-      "Peptide pentru producția de colagen",
-      "Uleiuri naturale pentru nutriție",
-      "Ceramide pentru refacerea barierei cutanate",
-      "Textură bogată și reconfortantă",
-      "Parfum relaxant pentru un somn liniștit",
-      "Fără parabeni și siliconi"
-    ],
-    sku: "CNN-018",
-    stock: 18
   }
 };
 

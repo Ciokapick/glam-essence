@@ -140,6 +140,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   
   const isFavorite = isInWishlist(product?.id);
   const isPerfume = Number(product.id) <= 6;
+  const isBodyCare = ['crema-de-maini-silk', 'crema-de-corp-intense', 'crema-anticelulitică'].includes(product.slug);
+  const collectionHref = isPerfume ? '/parfumuri' : isBodyCare ? '/body-care' : '/face-care';
+  const collectionLabel = isPerfume ? t('product.breadcrumb.perfumes') : isBodyCare ? t('nav.body_care') : t('nav.face_care');
   
   console.log(`ProductPage image for ${product?.name}: ${product?.image}`);
 
@@ -153,7 +156,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             <ol className="flex items-center">
               <li><a href="/" className="hover:text-foreground">{t('product.breadcrumb.home')}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li><a href={isPerfume ? '/parfumuri' : '/creme'} className="hover:text-foreground">{isPerfume ? t('product.breadcrumb.perfumes') : t('nav.creams')}</a></li>
+              <li><a href={collectionHref} className="hover:text-foreground">{collectionLabel}</a></li>
               <li><ChevronRight className="h-4 w-4 mx-2" /></li>
               <li className="text-foreground font-medium truncate">{t(product?.name)}</li>
             </ol>

@@ -79,6 +79,12 @@ if (!orderColumns.has('payment_status')) db.exec("ALTER TABLE orders ADD COLUMN 
 if (!orderColumns.has('payment_reference')) db.exec("ALTER TABLE orders ADD COLUMN payment_reference TEXT NOT NULL DEFAULT ''");
 
 const seedProducts = JSON.parse(readFileSync(path.join(import.meta.dirname, 'seed-products.json'), 'utf8'));
+
+// Remove the legacy duplicate of the night cream from already-initialized catalogues.
+// New databases no longer receive it from seed-products.json.
+db.prepare('DELETE FROM products WHERE slug = ? AND sku = ?')
+  .run('crema-nutritiva-de-noapte-ingrjire', 'CNN-018');
+
 const productCount = db.prepare('SELECT COUNT(*) AS count FROM products').get().count;
 
 if (productCount === 0) {

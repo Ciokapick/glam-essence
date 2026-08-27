@@ -21,6 +21,8 @@ const translations: Translations = {
   // Navigation
   'nav.home': { en: 'Home', ro: 'Acasă' },
   'nav.perfumes': { en: 'Perfumes', ro: 'Parfumuri' },
+  'nav.face_care': { en: 'Face Care', ro: 'Îngrijirea tenului' },
+  'nav.body_care': { en: 'Body Care', ro: 'Îngrijirea corpului' },
   'nav.creams': { en: 'Creams', ro: 'Creme' },
   'nav.skincare': { en: 'Skincare', ro: 'Îngrijire' },
   'nav.wishlist': { en: 'Wishlist', ro: 'Favorite' },
@@ -246,11 +248,11 @@ const translations: Translations = {
   'parfumuri.spicy_category': { en: 'Spicy Perfume', ro: 'Parfum Condimentat' },
   
   // Creme (Creams) page translations
-  'creme.title': { en: 'Creams for perfect care', ro: 'Creme pentru îngrijire perfectă' },
-  'creme.subtitle': { en: 'Our unique formula offers intensive hydration and protection for all skin types.', ro: 'Formula noastră unică oferă hidratare intensă și protecție pentru toate tipurile de piele.' },
+  'creme.title': { en: 'Face care, step by step', ro: 'Îngrijirea tenului, pas cu pas' },
+  'creme.subtitle': { en: 'Cleansing, hydration and targeted textures for a routine that is easy to make your own.', ro: 'Curățare, hidratare și texturi țintite pentru o rutină ușor de adaptat nevoilor tale.' },
   'creme.discover_collection': { en: 'Discover the Collection', ro: 'Descoperă colecția' },
-  'creme.all_creams': { en: 'All Creams', ro: 'Toate cremele' },
-  'creme.hydration_solutions': { en: 'Hydration solutions for all needs', ro: 'Soluții de hidratare pentru toate nevoile' },
+  'creme.all_creams': { en: 'Face Care', ro: 'Produse pentru ten' },
+  'creme.hydration_solutions': { en: 'Eight essentials for cleansing, treating and nourishing', ro: 'Opt produse pentru curățare, tratament și hrănire' },
   'creme.filter': { en: 'Filter', ro: 'Filtrează' },
   'creme.sort': { en: 'Sort', ro: 'Sortează' },
   
@@ -314,11 +316,11 @@ const translations: Translations = {
   'toast.out_of_stock_desc': { en: 'Sorry, this product is no longer available in stock.', ro: 'Ne pare rău, acest produs nu mai este disponibil în stoc.' },
   
   // Skincare (Îngrijire) page translations
-  'ingrijire.title': { en: 'Award-winning skincare products', ro: 'Produse de îngrijire premiate' },
-  'ingrijire.subtitle': { en: 'A complete routine for all the steps needed for perfect and healthy skin.', ro: 'O rutină completă pentru toți pașii necesari unui ten perfect și sănătos.' },
+  'ingrijire.title': { en: 'Daily body care', ro: 'Îngrijire pentru corp, zi de zi' },
+  'ingrijire.subtitle': { en: 'Comforting textures for hands and body, selected for simple daily rituals.', ro: 'Texturi reconfortante pentru mâini și corp, alese pentru ritualuri simple de fiecare zi.' },
   'ingrijire.discover_collection': { en: 'Discover the Collection', ro: 'Descoperă colecția' },
-  'ingrijire.skincare_products': { en: 'Skincare Products', ro: 'Produse de îngrijire' },
-  'ingrijire.complete_routine': { en: 'Complete routine for your beauty', ro: 'Rutina completă pentru frumusețea ta' },
+  'ingrijire.skincare_products': { en: 'Body Care', ro: 'Produse pentru corp' },
+  'ingrijire.complete_routine': { en: 'Three textures for hands and body', ro: 'Trei texturi pentru mâini și corp' },
   'ingrijire.filter': { en: 'Filter', ro: 'Filtrează' },
   'ingrijire.sort': { en: 'Sort', ro: 'Sortează' },
   
