@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { localizeProductFeature } from '@/utils/productCopy';
 
 interface FragranceNotesProps {
   features?: string[];
+  productSlug?: string;
 }
 
 type NoteGroup = {
@@ -50,28 +52,36 @@ const noteDescriptor = (note: string, language: 'ro' | 'en') => {
 const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
   const { language } = useLanguage();
   const [activeKey, setActiveKey] = useState<NoteGroup['key']>('top');
+  const localizedFeatures = features.map((feature) => localizeProductFeature(feature, language));
+  const noteFeatures = (label: 'top' | 'heart' | 'base') => {
+    const pattern = label === 'top' ? /^(?:Note de vârf|Top notes):\s*/i : label === 'heart' ? /^(?:Note de mijloc|Middle notes):\s*/i : /^(?:Note de bază|Base notes):\s*/i;
+    return localizedFeatures
+      .filter((feature) => pattern.test(feature))
+      .flatMap((feature) => feature.replace(pattern, '').split(',').map((note) => note.trim()))
+      .filter(Boolean);
+  };
   const noteGroups: NoteGroup[] = [
     {
       key: 'top',
       label: language === 'ro' ? 'Note de vârf' : 'Top notes',
       title: language === 'ro' ? 'Prima impresie' : 'The first impression',
-      notes: features.filter((feature) => /^Note de vârf:/i.test(feature)).flatMap((feature) => feature.replace(/^Note de vârf:\s*/i, '').split(',').map((note) => note.trim())).filter(Boolean),
+      notes: noteFeatures('top'),
     },
     {
       key: 'heart',
       label: language === 'ro' ? 'Note de mijloc' : 'Middle notes',
       title: language === 'ro' ? 'Inima compoziției' : 'The heart of the composition',
-      notes: features.filter((feature) => /^Note de mijloc:/i.test(feature)).flatMap((feature) => feature.replace(/^Note de mijloc:\s*/i, '').split(',').map((note) => note.trim())).filter(Boolean),
+      notes: noteFeatures('heart'),
     },
     {
       key: 'base',
       label: language === 'ro' ? 'Note de bază' : 'Base notes',
       title: language === 'ro' ? 'Amprenta rămasă' : 'The lasting trace',
-      notes: features.filter((feature) => /^Note de bază:/i.test(feature)).flatMap((feature) => feature.replace(/^Note de bază:\s*/i, '').split(',').map((note) => note.trim())).filter(Boolean),
+      notes: noteFeatures('base'),
     },
   ];
 
-  const supportingDetails = features.filter((feature) => !/^Note de (vârf|mijloc|bază):/i.test(feature));
+  const supportingDetails = localizedFeatures.filter((feature) => !/^(?:Note de (?:vârf|mijloc|bază)|(?:Top|Middle|Base) notes):/i.test(feature));
   const activeGroup = noteGroups.find((group) => group.key === activeKey) || noteGroups[0];
 
   return (

@@ -79,6 +79,7 @@ if (!orderColumns.has('payment_status')) db.exec("ALTER TABLE orders ADD COLUMN 
 if (!orderColumns.has('payment_reference')) db.exec("ALTER TABLE orders ADD COLUMN payment_reference TEXT NOT NULL DEFAULT ''");
 
 const seedProducts = JSON.parse(readFileSync(path.join(import.meta.dirname, 'seed-products.json'), 'utf8'));
+const demoReviewCount = 3;
 
 // Remove the legacy duplicate of the night cream from already-initialized catalogues.
 // New databases no longer receive it from seed-products.json.
@@ -111,6 +112,11 @@ if (productCount === 0) {
     throw error;
   }
 }
+
+// The portfolio currently renders three editorial reviews per product. Keep
+// existing SQLite databases aligned with the seed as well; otherwise an older
+// local database would continue returning the removed placeholder aggregates.
+db.prepare('UPDATE products SET review_count = ? WHERE review_count != ?').run(demoReviewCount, demoReviewCount);
 
 const decodeProduct = (row) => ({
   id: row.id,

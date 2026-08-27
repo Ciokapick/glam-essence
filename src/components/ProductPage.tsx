@@ -27,10 +27,21 @@ import ProductCard from '@/components/ProductCard';
 import FragranceNotes from '@/components/FragranceNotes';
 import { similarProducts, type Product } from '@/data/products';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
+import { localizeProductCopy, localizeProductFeature } from '@/utils/productCopy';
 
 interface ProductPageProps {
   product: Product;
 }
+
+// Keep the count tied to the reviews that are actually rendered. The current
+// portfolio build uses three editorial review examples for every product.
+const productReviews = [
+  { name: 'Maria D.', date: '12 Mai 2023', rating: 5, initial: 'M', text: 'Produs absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl folosesc. Ambalajul este elegant și luxos. Recomand cu încredere!' },
+  { name: 'Alexandru P.', date: '3 Aprilie 2023', rating: 4, initial: 'A', text: 'Un produs deosebit, cu calitate excelentă. Sunt foarte mulțumit de achiziție și îl voi recomanda cu siguranță și prietenilor mei.' },
+  { name: 'Elena M.', date: '17 Martie 2023', rating: 5, initial: 'E', text: 'Am comandat acest produs și sunt încântată! Calitatea este incredibilă și rezultatele sunt vizibile imediat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte.' },
+] as const;
+
+const visibleReviewCount = productReviews.length;
 
 const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) => {
   const { t, language } = useLanguage();
@@ -249,7 +260,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     />
                   ))}
                 </div>
-                <span className="text-xs text-[#806d74]">{product?.reviewCount || 0} {t('product.reviews')}</span>
+                <span className="text-xs text-[#806d74]">{visibleReviewCount} {t('product.reviews')}</span>
               </div>
               
               <div className="mt-6 flex items-center border-b border-[#281922]/10 pb-6">
@@ -268,7 +279,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               </div>
               
               <p className="mt-7 max-w-xl text-base leading-8 text-[#67545c]">
-                {t(product?.description)}
+                {t(localizeProductCopy(product.slug, 'description', product.description, language))}
               </p>
               
               <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -395,7 +406,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               <TabsList className="grid h-auto w-full grid-cols-3 rounded-2xl border border-[#281922]/10 bg-[#f1ebe8] p-1.5">
                 <TabsTrigger value="details" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.product_details')}</TabsTrigger>
                 <TabsTrigger value="features" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.features')}</TabsTrigger>
-                <TabsTrigger value="reviews" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.reviews_title')} ({product?.reviewCount || 0})</TabsTrigger>
+                <TabsTrigger value="reviews" className="rounded-xl py-3 text-xs data-[state=active]:bg-white data-[state=active]:text-[#281922] data-[state=active]:shadow-sm">{t('product.reviews_title')} ({visibleReviewCount})</TabsTrigger>
               </TabsList>
               <TabsContent value="details" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-white p-6 shadow-[0_18px_50px_rgba(40,25,34,.04)] md:p-10">
                 <div className="grid gap-10 lg:grid-cols-[.72fr_1.28fr]">
@@ -405,7 +416,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     <h3 className="mt-4 max-w-sm font-serif text-4xl leading-[.98] tracking-[-.04em]">{t('product.description')}</h3>
                   </div>
                   <div className="max-w-3xl text-sm leading-8 text-[#67545c] md:text-base">
-                    <p>{product?.details}</p>
+                    <p>{localizeProductCopy(product.slug, 'details', product.details, language)}</p>
                     <div className="mt-8 grid gap-3 border-t border-[#281922]/10 pt-6 sm:grid-cols-2">
                       <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#9c7d87]">{t('product.sku')}</p><p className="mt-2 font-medium text-[#281922]">{product?.sku}</p></div>
                       <div><p className="text-[9px] font-semibold uppercase tracking-[.18em] text-[#9c7d87]">{t('product.category')}</p><p className="mt-2 font-medium text-[#281922]">{t(product?.category)}</p></div>
@@ -414,7 +425,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </div>
               </TabsContent>
               <TabsContent value="features" className="mt-5">
-                {isPerfume ? <FragranceNotes features={product?.features} /> : (
+                {isPerfume ? <FragranceNotes features={product?.features} productSlug={product.slug} /> : (
                   <div className="rounded-[1.5rem] border border-[#281922]/10 bg-[#281922] p-6 text-white shadow-[0_18px_50px_rgba(40,25,34,.14)] md:p-10">
                     <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
                       <div><p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d9aebb]">{language === 'ro' ? 'De ce îl vei păstra' : 'Why you will keep it'}</p><h3 className="mt-4 font-serif text-4xl tracking-[-.04em]">{t('product.features')}</h3></div>
@@ -423,7 +434,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     {product?.features && (
                       <ul className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
                         {product.features.map((feature: string, index: number) => (
-                          <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{feature}</span></li>
+                          <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{localizeProductFeature(feature, language)}</span></li>
                         ))}
                       </ul>
                     )}
@@ -434,7 +445,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 <div className="grid gap-8 border-b border-[#281922]/10 pb-8 lg:grid-cols-[.9fr_.55fr_1fr] lg:items-end">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#a05a6c]">{language === 'ro' ? 'Impresii din atelier' : 'Notes from the atelier'}</p>
-                    <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-.04em]">{t('product.reviews_title')} <span className="text-[#a05a6c]">({product?.reviewCount || 0})</span></h3>
+                    <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-.04em]">{t('product.reviews_title')} <span className="text-[#a05a6c]">({visibleReviewCount})</span></h3>
                     <p className="mt-4 max-w-sm text-sm leading-6 text-[#67545c]">{language === 'ro' ? 'Povești scurte de la oameni care și-au făcut loc pentru acest produs în ritualul lor.' : 'Short notes from people who made room for this product in their ritual.'}</p>
                   </div>
 
@@ -443,7 +454,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     <div className="mt-3 flex gap-1" aria-label={`${product?.rating || 0} out of 5 stars`}>
                       {[...Array(5)].map((_, i) => <Star key={i} className={`h-4 w-4 ${i < Math.round(product?.rating || 0) ? 'fill-[#d9aebb] text-[#d9aebb]' : 'text-white/25'}`} />)}
                     </div>
-                    <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.18em] text-white/55">{language === 'ro' ? `Din ${product?.reviewCount || 0} recenzii` : `From ${product?.reviewCount || 0} reviews`}</p>
+                    <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.18em] text-white/55">{language === 'ro' ? `Din ${visibleReviewCount} recenzii` : `From ${visibleReviewCount} reviews`}</p>
                   </div>
 
                   <div className="space-y-3">
@@ -459,11 +470,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 </div>
 
                 <div className="mt-8 grid gap-4 md:grid-cols-3">
-                  {[
-                    { name: 'Maria D.', date: '12 Mai 2023', rating: 5, initial: 'M', text: 'Produs absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl folosesc. Ambalajul este elegant și luxos. Recomand cu încredere!' },
-                    { name: 'Alexandru P.', date: '3 Aprilie 2023', rating: 4, initial: 'A', text: 'Un produs deosebit, cu calitate excelentă. Sunt foarte mulțumit de achiziție și îl voi recomanda cu siguranță și prietenilor mei.' },
-                    { name: 'Elena M.', date: '17 Martie 2023', rating: 5, initial: 'E', text: 'Am comandat acest produs și sunt încântată! Calitatea este incredibilă și rezultatele sunt vizibile imediat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte.' },
-                  ].map((review) => (
+                  {productReviews.map((review) => (
                     <article key={review.name} className="flex min-h-[15rem] flex-col rounded-[1.25rem] border border-[#281922]/10 bg-[#f8f2ef] p-5 transition hover:-translate-y-1 hover:border-[#a05a6c]/40 hover:shadow-[0_14px_30px_rgba(40,25,34,.07)]">
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#e7c6cf] font-serif text-lg text-[#281922]">{review.initial}</span><div><h4 className="font-medium text-[#281922]">{review.name}</h4><p className="text-[10px] uppercase tracking-[.14em] text-[#a05a6c]">{language === 'ro' ? 'Achiziție verificată' : 'Verified purchase'}</p></div></div>

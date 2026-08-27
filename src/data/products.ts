@@ -32,7 +32,7 @@ export const products: { [key: string]: Product } = {
     category: "parfumuri.floral_category",
     isNew: true,
     rating: 5,
-    reviewCount: 47,
+    reviewCount: 3,
     description: "Parfumul Floral Extravagance este o capodoperă olfactivă ce combină note florale prețioase cu accente orientale subtile. Un parfum sofisticat și elegant, perfect pentru ocazii speciale sau pentru utilizare zilnică atunci când doriți să ieșiți în evidență. Persistența îndelungată și siajul remarcabil vă vor înconjura într-un văl de rafinament pe tot parcursul zilei.",
     details: "Un parfum floral elegant cu note de vârf de trandafir de Damasc și iasomie, urmate de note de mijloc de iris și ylang-ylang. Bazele calde de mosc, ambră și vanilie oferă profunzime și persistență parfumului.",
     features: [
@@ -58,7 +58,7 @@ export const products: { [key: string]: Product } = {
     isSale: true,
     discount: 10,
     rating: 4,
-    reviewCount: 35,
+    reviewCount: 3,
     description: "Un parfum oriental sofisticat, cu note calde de vanilie, mosc și lemn de santal. Perfect pentru serile elegante și ocaziile speciale.",
     details: "Parfum Oriental Mystique este o compoziție bogată și misterioasă, perfectă pentru momentele în care doriți să impresionați. Cu o persistență îndelungată, acest parfum vă va însoți pe tot parcursul serii.",
     features: [
@@ -82,7 +82,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/perfumes/editorial/fresh-citrus.webp", "/ParfumFreshCitrus.png"],
     category: "parfumuri.citrus_category",
     rating: 4,
-    reviewCount: 28,
+    reviewCount: 3,
     description: "Un parfum revigorant cu note proaspete de citrice și accente verzi. Perfect pentru utilizarea de zi și pentru zilele călduroase de vară.",
     details: "Parfum Fresh Citrus aduce un val de prospețime în colecția noastră. Note vibrante de citrice combinate cu accente verzi creează o experiență olfactivă revigorantă.",
     features: [
@@ -106,7 +106,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/perfumes/editorial/woody-elegance.webp", "/ParfumWoodyElegance.jpg"],
     category: "parfumuri.woody_category",
     rating: 5,
-    reviewCount: 31,
+    reviewCount: 3,
     description: "Un parfum lemnos sofisticat cu note calde de santal, cedru și vetiver. Ideal pentru bărbații care apreciază eleganța clasică și rafinamentul.",
     details: "Parfum Woody Elegance este o compoziție rafinată care emană masculinitate și încredere. Notele lemnoase oferă profunzime și caracter acestui parfum de excepție.",
     features: [
@@ -132,7 +132,7 @@ export const products: { [key: string]: Product } = {
     isSale: true,
     discount: 15,
     rating: 4,
-    reviewCount: 22,
+    reviewCount: 3,
     description: "Un parfum acvatic proaspăt care evocă briza mării și aerul curat al coastei. Perfect pentru zilele calde de vară și pentru iubitorii de note marine.",
     details: "Parfum Aquatic Breeze captează esența mării într-o sticlă elegantă. Un parfum proaspăt și revigorant care vă va transporta instantaneu la malul mării.",
     features: [
@@ -157,7 +157,7 @@ export const products: { [key: string]: Product } = {
     category: "parfumuri.spicy_category",
     isNew: true,
     rating: 5,
-    reviewCount: 17,
+    reviewCount: 3,
     description: "Un parfum îndrăzneț și seducător, cu note condimentate și accente orientale. Perfect pentru serile speciale și pentru bărbații care nu se tem să iasă în evidență.",
     details: "Parfum Spicy Noir este un parfum intens și misterios, care combină note condimentate cu accente orientale bogate. Un parfum pentru bărbatul care nu se teme să lase o impresie de neuitat.",
     features: [
@@ -184,7 +184,7 @@ export const products: { [key: string]: Product } = {
     isSale: true,
     discount: 15,
     rating: 4,
-    reviewCount: 32,
+    reviewCount: 3,
     description: "products.luxury_cream_desc",
     details: "O cremă luxoasă formulată cu ingrediente premium pentru hidratare intensă. Conține acid hialuronic, ceramide, ulei de argan și extracte botanice care hrănesc și revigorează pielea. Textura ușoară se absoarbe rapid, lăsând pielea catifelată și strălucitoare.",
     features: [
@@ -208,7 +208,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/eye-cream.webp", "/products/skincare/editorial/eye-cream.webp", "/products/skincare/eye-cream.webp"],
     category: "creme.eye_category",
     rating: 5,
-    reviewCount: 24,
+    reviewCount: 3,
     description: "Crema contur ochi Anti-Age combate eficient semnele îmbătrânirii din zona delicată a ochilor. Reduce ridurile, cearcănele și pungile de sub ochi, oferind un aspect mai tânăr și odihnit.",
     details: "O cremă specializată pentru zona delicată din jurul ochilor, formulată pentru a combate ridurile, cearcănele și pungile. Conține peptide, cafeină și extract de ceai verde pentru rezultate vizibile.",
     features: [
@@ -232,7 +232,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/hand-cream.webp", "/products/skincare/editorial/hand-cream.webp", "/products/skincare/hand-cream.webp"],
     category: "creme.hands_category",
     rating: 4,
-    reviewCount: 42,
+    reviewCount: 3,
     description: "Crema de mâini Silk oferă hidratare intensă și protecție pentru mâinile uscate și deteriorate. Formula sa bogată, cu unt de shea, ulei de măsline și vitamina E, hrănește și repară pielea, lăsând mâinile moi și catifelate.",
     details: "O cremă luxoasă pentru mâini care hidratează intens și protejează împotriva factorilor externi. Textura sa mătăsoasă se absoarbe rapid, fără a lăsa o senzație grasă.",
     features: [
@@ -257,7 +257,7 @@ export const products: { [key: string]: Product } = {
     category: "creme.body_category",
     isNew: true,
     rating: 4,
-    reviewCount: 29,
+    reviewCount: 3,
     description: "Crema de corp Intense oferă o hidratare profundă și de lungă durată pentru pielea uscată și deshidratată. Formula sa bogată, cu unt de shea, ulei de cocos și vitamina E, hrănește intens pielea, lăsând-o catifelată, elastică și revitalizată.",
     details: "O cremă luxoasă pentru hidratarea intensă a întregului corp. Conține unt de shea, ulei de cocos și vitamina E pentru nutriție și protecție. Textura bogată și cremoasă se absoarbe rapid, oferind o senzație de confort și hidratare de lungă durată.",
     features: [
@@ -281,7 +281,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/night-cream.webp", "/products/skincare/editorial/night-cream.webp", "/products/skincare/night-cream.webp"],
     category: "creme.face_category",
     rating: 5,
-    reviewCount: 26,
+    reviewCount: 3,
     description: "Crema nutritivă de noapte hrănește și regenerează pielea în timpul somnului. Formula sa bogată, cu retinol, peptide și uleiuri naturale, stimulează reînnoirea celulară și producția de colagen, pentru un ten mai ferm și mai strălucitor.",
     details: "O cremă de noapte intens nutritivă, dezvoltată pentru a lucra în armonie cu ritmul natural al pielii în timpul somnului. Textura bogată oferă hidratare intensă și nutrienți esențiali pentru regenerarea pielii.",
     features: [
@@ -307,7 +307,7 @@ export const products: { [key: string]: Product } = {
     isSale: true,
     discount: 10,
     rating: 4,
-    reviewCount: 33,
+    reviewCount: 3,
     description: "Crema anticelulitică combate eficient aspectul de coajă de portocală și reduce celulita. Formula sa avansată, cu cafeină, extract de centella asiatica și complex de iod marin, îmbunătățește microcirculația și ajută la eliminarea toxinelor.",
     details: "O cremă specializată pentru combaterea celulitei și îmbunătățirea aspectului pielii. Conține ingrediente active care stimulează microcirculația și ajută la reducerea aspectului de coajă de portocală.",
     features: [
@@ -331,7 +331,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/face-serum.webp", "/products/skincare/editorial/face-serum.webp", "/products/skincare/face-serum.webp"],
     category: "creme.serum_category",
     rating: 5,
-    reviewCount: 41,
+    reviewCount: 3,
     description: "Serul facial Radiance este un tratament concentrat care iluminează și uniformizează tenul, reducând aspectul petelor pigmentare și oferind un ten radiant. Formula sa bogată în vitamina C, acid glicolic și extract de arbore de ceai luptă împotriva semnelor de îmbătrânire, stimulând producția de colagen și oferind un aspect întinerit.",
     details: "Un ser concentrat pentru strălucire și uniformizarea tenului. Conține 15% vitamina C stabilizată, acid glicolic și extract de arbore de ceai pentru a combate hiperpigmentarea, ridurile fine și pierderea elasticității pielii.",
     features: [
@@ -356,7 +356,7 @@ export const products: { [key: string]: Product } = {
     category: "creme.mask_category",
     isNew: true,
     rating: 4,
-    reviewCount: 27,
+    reviewCount: 3,
     description: "Masca facială detox purifică profund pielea, eliminând impuritățile și toxinele acumulate. Formula sa bogată în argilă, cărbune activ și extracte botanice, curăță porii, absoarbe excesul de sebum și revigorează tenul.",
     details: "O mască intensă de purificare, ideală pentru tenul gras sau mixt. Conține argilă și cărbune activ pentru a absorbi impuritățile și a decongestiona porii, oferind un ten curat și proaspăt.",
     features: [
@@ -380,7 +380,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/cleansing-foam.webp", "/products/skincare/editorial/cleansing-foam.webp", "/products/skincare/cleansing-foam.webp"],
     category: "creme.cleanser_category",
     rating: 4,
-    reviewCount: 35,
+    reviewCount: 3,
     description: "Spuma de curățare îndepărtează eficient machiajul, impuritățile și excesul de sebum, fără a usca sau irita pielea. Formula sa delicată, cu extracte botanice și acid hialuronic, curăță în profunzime, respectând echilibrul natural al pielii.",
     details: "O spumă de curățare blândă dar eficientă, potrivită pentru utilizare zilnică. Curăță în profunzime pielea, îndepărtând impuritățile și machiajul, fără a perturba bariera naturală a pielii.",
     features: [
@@ -404,7 +404,7 @@ export const products: { [key: string]: Product } = {
     gallery: ["/products/skincare/campaign/toner.webp", "/products/skincare/editorial/toner.webp", "/products/skincare/toner.webp"],
     category: "creme.toner_category",
     rating: 4,
-    reviewCount: 30,
+    reviewCount: 3,
     description: "Tonicul purificator reechilibrează pH-ul pielii după curățare, reduce aspectul porilor și pregătește tenul pentru absorbția optimă a produselor de îngrijire ulterioare. Formula sa revigorantă, cu extract de hamamelis, acid salicilic și niacinamidă, purifică și calmează pielea, oferind o senzație de prospețime.",
     details: "Un tonic revigorant care completează perfect rutina de curățare. Purifică, tonifiază și reechilibrează pH-ul pielii, lăsând-o curată, proaspătă și pregătită pentru absorbția produselor de îngrijire ulterioare.",
     features: [
@@ -430,7 +430,7 @@ export const products: { [key: string]: Product } = {
     isSale: true,
     discount: 20,
     rating: 5,
-    reviewCount: 29,
+    reviewCount: 3,
     description: "Uleiul de față nutritiv hrănește în profunzime pielea uscată și deshidratată. Formula sa bogată, cu uleiuri prețioase de argan, jojoba și trandafir sălbatic, oferă nutrienți esențiali și antioxidanți puternici, lăsând tenul catifelat, elastic și radiant.",
     details: "Un ulei facial luxos, formulat cu uleiuri prețioase pentru nutriție intensă și protecție antioxidantă. Ușor și non-comedogenic, se absoarbe rapid, oferind hidratare profundă fără a lăsa o senzație grasă.",
     features: [
