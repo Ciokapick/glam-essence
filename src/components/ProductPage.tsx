@@ -430,65 +430,49 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="reviews" className="p-6 rounded-lg bg-gray-50/50">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-xl font-semibold">{t('product.reviews_title')} ({product?.reviewCount || 0})</h3>
-                  <button className="px-4 py-2 bg-beauty-magenta hover:bg-beauty-magenta/90 text-white rounded">{t('product.add_review')}</button>
-                </div>
-                <div className="space-y-6">
-                  <div className="border-b pb-6">
-                    <div className="flex justify-between mb-2">
-                      <div>
-                        <h4 className="font-medium">Maria D.</h4>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="h-4 w-4 text-beauty-gold fill-beauty-gold"
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <span className="text-sm text-muted-foreground">12 Mai 2023</span>
-                    </div>
-                    <p className="mt-2">Produs absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl folosesc. Ambalajul este elegant și luxos. Recomand cu încredere!</p>
-                  </div>
-                  
-                  <div className="border-b pb-6">
-                    <div className="flex justify-between mb-2">
-                      <div>
-                        <h4 className="font-medium">Alexandru P.</h4>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className={`h-4 w-4 ${i < 4 ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <span className="text-sm text-muted-foreground">3 Aprilie 2023</span>
-                    </div>
-                    <p className="mt-2">Un produs deosebit, cu calitate excelentă. Sunt foarte mulțumit de achiziție și îl voi recomanda cu siguranță și prietenilor mei.</p>
-                  </div>
-                  
+              <TabsContent value="reviews" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-[#fffdfb] p-6 shadow-[0_18px_50px_rgba(40,25,34,.04)] md:p-10">
+                <div className="grid gap-8 border-b border-[#281922]/10 pb-8 lg:grid-cols-[.9fr_.55fr_1fr] lg:items-end">
                   <div>
-                    <div className="flex justify-between mb-2">
-                      <div>
-                        <h4 className="font-medium">Elena M.</h4>
-                        <div className="flex">
-                          {[...Array(5)].map((_, i) => (
-                            <Star
-                              key={i}
-                              className="h-4 w-4 text-beauty-gold fill-beauty-gold"
-                            />
-                          ))}
-                        </div>
-                      </div>
-                      <span className="text-sm text-muted-foreground">17 Martie 2023</span>
-                    </div>
-                    <p className="mt-2">Am comandat acest produs și sunt încântată! Calitatea este incredibilă și rezultatele sunt vizibile imediat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte. Cu siguranță voi mai comanda de la GlamEssence!</p>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#a05a6c]">{language === 'ro' ? 'Impresii din atelier' : 'Notes from the atelier'}</p>
+                    <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-.04em]">{t('product.reviews_title')} <span className="text-[#a05a6c]">({product?.reviewCount || 0})</span></h3>
+                    <p className="mt-4 max-w-sm text-sm leading-6 text-[#67545c]">{language === 'ro' ? 'Povești scurte de la oameni care și-au făcut loc pentru acest produs în ritualul lor.' : 'Short notes from people who made room for this product in their ritual.'}</p>
                   </div>
+
+                  <div className="rounded-[1.25rem] bg-[#281922] p-5 text-white shadow-[0_12px_30px_rgba(40,25,34,.12)]">
+                    <p className="font-serif text-5xl leading-none">{(product?.rating || 0).toFixed(1)}</p>
+                    <div className="mt-3 flex gap-1" aria-label={`${product?.rating || 0} out of 5 stars`}>
+                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-4 w-4 ${i < Math.round(product?.rating || 0) ? 'fill-[#e8c9a1] text-[#e8c9a1]' : 'text-white/25'}`} />)}
+                    </div>
+                    <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.18em] text-white/55">{language === 'ro' ? `Din ${product?.reviewCount || 0} recenzii` : `From ${product?.reviewCount || 0} reviews`}</p>
+                  </div>
+
+                  <div className="space-y-3">
+                    {[{ score: '5', width: '84%' }, { score: '4', width: '11%' }, { score: '3', width: '5%' }].map(({ score, width }) => (
+                      <div key={score} className="flex items-center gap-3 text-xs text-[#67545c]">
+                        <span className="w-4 font-medium">{score}</span><Star className="h-3.5 w-3.5 fill-[#d5ac72] text-[#d5ac72]" />
+                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#eee5e1]"><div className="h-full rounded-full bg-[#a05a6c]" style={{ width }} /></div>
+                        <span className="w-9 text-right text-[11px] text-[#9c7d87]">{width}</span>
+                      </div>
+                    ))}
+                    <button className="mt-3 inline-flex w-full items-center justify-center rounded-full bg-[#281922] px-5 py-3 text-[10px] font-semibold uppercase tracking-[.16em] text-white transition hover:bg-[#a04e62]">{t('product.add_review')}</button>
+                  </div>
+                </div>
+
+                <div className="mt-8 grid gap-4 md:grid-cols-3">
+                  {[
+                    { name: 'Maria D.', date: '12 Mai 2023', rating: 5, initial: 'M', text: 'Produs absolut minunat! Persistă toată ziua și primesc complimente ori de câte ori îl folosesc. Ambalajul este elegant și luxos. Recomand cu încredere!' },
+                    { name: 'Alexandru P.', date: '3 Aprilie 2023', rating: 4, initial: 'A', text: 'Un produs deosebit, cu calitate excelentă. Sunt foarte mulțumit de achiziție și îl voi recomanda cu siguranță și prietenilor mei.' },
+                    { name: 'Elena M.', date: '17 Martie 2023', rating: 5, initial: 'E', text: 'Am comandat acest produs și sunt încântată! Calitatea este incredibilă și rezultatele sunt vizibile imediat. Livrarea a fost rapidă, iar produsul a ajuns în condiții perfecte.' },
+                  ].map((review) => (
+                    <article key={review.name} className="flex min-h-[15rem] flex-col rounded-[1.25rem] border border-[#281922]/10 bg-[#f8f2ef] p-5 transition hover:-translate-y-1 hover:border-[#a05a6c]/40 hover:shadow-[0_14px_30px_rgba(40,25,34,.07)]">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#e7c6cf] font-serif text-lg text-[#281922]">{review.initial}</span><div><h4 className="font-medium text-[#281922]">{review.name}</h4><p className="text-[10px] uppercase tracking-[.14em] text-[#a05a6c]">{language === 'ro' ? 'Achiziție verificată' : 'Verified purchase'}</p></div></div>
+                        <span className="text-right text-[10px] uppercase tracking-[.08em] text-[#9c7d87]">{review.date}</span>
+                      </div>
+                      <div className="mt-5 flex gap-1">{[...Array(5)].map((_, i) => <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? 'fill-[#d5ac72] text-[#d5ac72]' : 'text-[#d8c9c5]'}`} />)}</div>
+                      <p className="mt-4 text-sm leading-6 text-[#67545c]">{review.text}</p>
+                    </article>
+                  ))}
                 </div>
               </TabsContent>
             </Tabs>
