@@ -28,8 +28,8 @@ export function Navbar() {
   useEffect(() => setIsMobileMenuOpen(false), [location.pathname]);
 
   const navClass = isDarkHeroTop
-    ? 'border-white/15 bg-transparent text-white'
-    : 'border-[#2a1b23]/10 bg-[#fbf8f5]/92 text-[#271a21] shadow-[0_8px_30px_rgba(39,26,33,.06)] backdrop-blur-xl';
+    ? 'border-white/15 bg-[rgba(31,19,26,.88)] text-white shadow-[0_8px_30px_rgba(10,5,8,.12)] backdrop-blur-xl'
+    : 'border-[#2a1b23]/10 bg-[#fbf8f5] text-[#271a21] shadow-[0_8px_30px_rgba(39,26,33,.08)]';
 
   const links = [
     ['/parfumuri', t('nav.perfumes')],
@@ -40,7 +40,7 @@ export function Navbar() {
   ];
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50">
+    <header className="fixed inset-x-0 top-0 z-[100]">
       <div className="flex h-8 items-center justify-center bg-[#281922] px-4 text-center text-[9px] font-medium uppercase tracking-[.18em] text-white/80 sm:text-[10px]">
         {language === 'ro' ? 'Livrare gratuită pentru comenzi peste 200 lei' : 'Complimentary delivery on orders over 200 lei'}
       </div>
