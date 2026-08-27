@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Card, CardContent } from '@/components/ui/card';
-import { Search, Eye, Trash2, RefreshCw } from 'lucide-react';
+import { Search, Eye, Trash2, RefreshCw, ClipboardList } from 'lucide-react';
 import { 
   Dialog, 
   DialogContent, 
@@ -96,10 +96,10 @@ const AdminOrders = () => {
 
   const getStatusClass = (status: OrderStatus): string => {
     const statusClasses = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      processing: 'bg-blue-100 text-blue-800',
-      completed: 'bg-green-100 text-green-800',
-      canceled: 'bg-red-100 text-red-800'
+      pending: 'bg-[#f4e6d5] text-[#8c5a2d]',
+      processing: 'bg-[#e5edf1] text-[#456776]',
+      completed: 'bg-[#e3eee8] text-[#4f7562]',
+      canceled: 'bg-[#f3e0e3] text-[#944b5b]'
     };
     return statusClasses[status];
   };
@@ -116,15 +116,17 @@ const AdminOrders = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
+      <div className="space-y-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('admin.orders.title')}</h1>
-            <p className="text-gray-500 mt-1">{t('admin.orders.subtitle').replace('{count}', orders.length.toString())}</p>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[.22em] text-[#a04e62]">Atelier operations</p>
+            <h1 className="font-serif text-4xl tracking-[-.03em] text-[#281922] sm:text-5xl">{t('admin.orders.title')}</h1>
+            <p className="mt-2 text-sm text-[#806d74]">{t('admin.orders.subtitle').replace('{count}', orders.length.toString())}</p>
           </div>
           
           <Button 
             variant="outline" 
+            className="h-11 rounded-full border-[#281922]/15 bg-[#fffaf8] px-5 text-[10px] font-semibold uppercase tracking-[.14em] text-[#67545c] hover:bg-white"
             onClick={loadOrders}
             disabled={isLoading}
           >
@@ -137,43 +139,43 @@ const AdminOrders = () => {
           </Button>
         </div>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="relative mb-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+          <CardContent className="p-5 sm:p-7">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="relative w-full sm:max-w-sm"><Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[#a88f96]" />
               <Input 
                 placeholder={t('admin.orders.search_orders')} 
-                className="pl-10" 
+                className="h-11 rounded-full border-[#281922]/12 bg-white pl-11"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              /></div><div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-[.14em] text-[#9c7d87]"><ClipboardList className="h-4 w-4 text-[#a04e62]" /> {filteredOrders.length} matching</div>
             </div>
 
-            <div className="rounded-md border">
+            <div className="overflow-x-auto rounded-[1rem] border border-[#281922]/10">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>{t('admin.orders.order_id')}</TableHead>
-                    <TableHead>{t('admin.orders.customer')}</TableHead>
-                    <TableHead className="text-right">{t('admin.orders.total')}</TableHead>
-                    <TableHead>{t('admin.orders.date')}</TableHead>
-                    <TableHead>{t('admin.orders.status')}</TableHead>
-                    <TableHead className="text-right">{t('admin.orders.actions')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.orders.order_id')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.orders.customer')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-right text-[10px] uppercase tracking-[.14em]">{t('admin.orders.total')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.orders.date')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.orders.status')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-right text-[10px] uppercase tracking-[.14em]">{t('admin.orders.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {sortedOrders.length > 0 ? (
                     sortedOrders.map((order) => (
-                      <TableRow key={order.id}>
-                        <TableCell className="font-medium">#{order.id}</TableCell>
+                      <TableRow key={order.id} className="border-[#281922]/10 hover:bg-[#fffaf8]">
+                        <TableCell className="font-medium text-[#a04e62]">#{order.id}</TableCell>
                         <TableCell>
                           <div>
-                            <p className="font-medium">{order.customer.name}</p>
-                            <p className="text-sm text-muted-foreground">{order.customer.email}</p>
+                            <p className="font-medium text-[#281922]">{order.customer.name}</p>
+                            <p className="text-xs text-[#9c7d87]">{order.customer.email}</p>
                           </div>
                         </TableCell>
-                        <TableCell className="text-right">{order.total.toFixed(2)} lei</TableCell>
-                        <TableCell>{formatDate(order.date)}</TableCell>
+                        <TableCell className="text-right font-medium">{order.total.toFixed(2)} lei</TableCell>
+                        <TableCell className="text-sm text-[#806d74]">{formatDate(order.date)}</TableCell>
                         <TableCell>
                           <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(order.status as OrderStatus)}`}>
                             {getStatusLabel(order.status as OrderStatus)}
@@ -190,7 +192,7 @@ const AdminOrders = () => {
                                 <Eye size={16} className="mr-1" /> {t('admin.orders.details')}
                               </Button>
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[525px]">
+                            <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[1.25rem] bg-[#fffaf8] sm:max-w-[680px]">
                               <DialogHeader>
                                 <DialogTitle>{t('admin.orders.details_title').replace('{orderId}', selectedOrder?.id || '')}</DialogTitle>
                               </DialogHeader>
@@ -241,10 +243,10 @@ const OrderDetails = ({
   const { t } = useLanguage();
   
   return (
-    <div className="space-y-6 py-4">
+    <div className="space-y-7 py-4">
       <div className="space-y-2">
         <h4 className="font-medium">{t('admin.orders.customer_info')}</h4>
-        <div className="rounded-md bg-muted p-4 text-sm">
+        <div className="rounded-[1rem] border border-[#281922]/10 bg-[#f8eeec] p-4 text-sm leading-7">
           <p><strong>{t('admin.orders.name')}</strong> {order.customer.name}</p>
           <p><strong>{t('admin.orders.email')}</strong> {order.customer.email}</p>
           <p><strong>{t('admin.orders.phone')}</strong> {order.customer.phone}</p>
@@ -254,7 +256,7 @@ const OrderDetails = ({
       
       <div className="space-y-2">
         <h4 className="font-medium">{t('admin.orders.ordered_products')}</h4>
-        <div className="rounded-md border">
+        <div className="overflow-x-auto rounded-[1rem] border border-[#281922]/10">
           <Table>
             <TableHeader>
               <TableRow>
@@ -290,7 +292,7 @@ const OrderDetails = ({
           <Button 
             variant={order.status === 'pending' ? 'default' : 'outline'}
             size="sm"
-            className={order.status === 'pending' ? 'bg-yellow-500 hover:bg-yellow-600' : ''}
+            className={order.status === 'pending' ? 'bg-[#a8753c] text-white hover:bg-[#8c5a2d]' : 'border-[#281922]/15 hover:bg-[#f8eeec]'}
             onClick={() => onStatusChange(order.id, 'pending')}
           >
             {t('admin.orders.pending')}
@@ -298,7 +300,7 @@ const OrderDetails = ({
           <Button 
             variant={order.status === 'processing' ? 'default' : 'outline'}
             size="sm"
-            className={order.status === 'processing' ? 'bg-blue-500 hover:bg-blue-600' : ''}
+            className={order.status === 'processing' ? 'bg-[#527887] text-white hover:bg-[#456776]' : 'border-[#281922]/15 hover:bg-[#f8eeec]'}
             onClick={() => onStatusChange(order.id, 'processing')}
           >
             {t('admin.orders.processing')}
@@ -306,7 +308,7 @@ const OrderDetails = ({
           <Button 
             variant={order.status === 'completed' ? 'default' : 'outline'}
             size="sm"
-            className={order.status === 'completed' ? 'bg-green-500 hover:bg-green-600' : ''}
+            className={order.status === 'completed' ? 'bg-[#5c846e] text-white hover:bg-[#4f7562]' : 'border-[#281922]/15 hover:bg-[#f8eeec]'}
             onClick={() => onStatusChange(order.id, 'completed')}
           >
             {t('admin.orders.completed')}
@@ -314,7 +316,7 @@ const OrderDetails = ({
           <Button 
             variant={order.status === 'canceled' ? 'default' : 'outline'}
             size="sm"
-            className={order.status === 'canceled' ? 'bg-red-500 hover:bg-red-600' : ''}
+            className={order.status === 'canceled' ? 'bg-[#a04e62] text-white hover:bg-[#944b5b]' : 'border-[#281922]/15 hover:bg-[#f8eeec]'}
             onClick={() => onStatusChange(order.id, 'canceled')}
           >
             {t('admin.orders.canceled')}

@@ -106,7 +106,7 @@ const EditorialCollectionPage = ({ config }: { config: EditorialCollectionConfig
       <Navbar />
 
       <main>
-        <section className={`relative grid min-h-[88svh] overflow-hidden pt-[104px] text-white lg:grid-cols-[.86fr_1.14fr] ${theme.hero}`}>
+        <section className={`relative grid min-h-[80svh] overflow-hidden pt-[104px] text-white lg:grid-cols-[.94fr_1.06fr] ${theme.hero}`}>
           <div className="relative z-10 flex flex-col justify-end px-6 pb-14 pt-24 sm:px-10 lg:px-[7vw] lg:pb-[9vh]">
             <p className={`mb-7 text-[10px] font-semibold uppercase tracking-[.28em] ${theme.accent}`} data-collection-reveal>{content.eyebrow}</p>
             <h1 className="max-w-[760px] font-serif text-[clamp(3.5rem,7vw,7.6rem)] font-medium leading-[.88] tracking-[-.058em]" data-collection-reveal>{content.title}</h1>
@@ -116,11 +116,13 @@ const EditorialCollectionPage = ({ config }: { config: EditorialCollectionConfig
             </a>
           </div>
 
-          <div className="relative min-h-[58svh] overflow-hidden lg:min-h-0">
-            <div className={`absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(0,0,0,.72)_0%,transparent_30%),linear-gradient(0deg,rgba(0,0,0,.5)_0%,transparent_35%)]`} />
-            <img src={config.heroImage} alt={config.heroImageAlt} className="story-hero-image h-full w-full object-cover" />
-            <img src={config.floatingImage} alt={config.floatingImageAlt} className="story-floating-card absolute bottom-7 right-5 z-20 hidden h-[34%] w-[25%] rounded-[1.6rem] border border-white/25 object-cover shadow-2xl sm:block lg:bottom-[7vh] lg:right-[4vw]" />
-            <div className="glam-grain absolute inset-0 z-20" />
+          <div className="relative min-h-[52svh] lg:min-h-0">
+            <div className="absolute inset-4 overflow-hidden rounded-[1.8rem] sm:inset-6 lg:inset-8 lg:rounded-[2.2rem]">
+              <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(0,0,0,.62)_0%,transparent_26%),linear-gradient(0deg,rgba(0,0,0,.42)_0%,transparent_32%)]" />
+              <img src={config.heroImage} alt={config.heroImageAlt} className="story-hero-image h-full w-full object-cover" />
+              <img src={config.floatingImage} alt={config.floatingImageAlt} className="story-floating-card absolute bottom-5 right-5 z-20 hidden h-[31%] w-[24%] rounded-[1.4rem] border border-white/25 object-cover shadow-2xl sm:block lg:bottom-8 lg:right-8" />
+              <div className="glam-grain absolute inset-0 z-20" />
+            </div>
           </div>
         </section>
 

@@ -115,7 +115,7 @@ const AboutPage = () => {
       <Navbar />
 
       <main>
-        <section className="relative grid min-h-[94svh] overflow-hidden bg-[#23151d] pt-[104px] text-white lg:grid-cols-[.92fr_1.08fr]">
+        <section className="relative grid min-h-[80svh] overflow-hidden bg-[#23151d] pt-[104px] text-white lg:grid-cols-[.94fr_1.06fr]">
           <div className="relative z-10 flex flex-col justify-end px-6 pb-16 pt-24 sm:px-10 lg:px-[7vw] lg:pb-[10vh]">
             <p className="mb-8 text-[10px] font-semibold uppercase tracking-[.28em] text-[#d9aebb]" data-story-reveal>{content.eyebrow}</p>
             <h1 className="max-w-[780px] font-serif text-[clamp(3.15rem,7vw,7.8rem)] font-medium leading-[.9] tracking-[-.055em]" data-story-reveal>{content.title}</h1>
@@ -125,11 +125,13 @@ const AboutPage = () => {
             </a>
           </div>
 
-          <div className="relative min-h-[58svh] overflow-hidden lg:min-h-0">
-            <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,#23151d_0%,transparent_27%),linear-gradient(0deg,#23151d_0%,transparent_30%)] lg:bg-[linear-gradient(90deg,#23151d_0%,transparent_24%)]" />
-            <img src="/products/perfumes/editorial/floral-extravagance.webp" alt="Floral Extravagance — universul floral Glam Essence" className="story-hero-image h-full w-full object-cover object-center" />
-            <img src="/products/skincare/campaign/face-oil.webp" alt="Face Oil — ritual Glam Essence" className="story-floating-card absolute bottom-7 right-5 z-20 hidden h-[36%] w-[26%] rounded-[1.6rem] border border-white/20 object-cover shadow-2xl sm:block lg:bottom-[8vh] lg:right-[4vw]" />
-            <div className="glam-grain absolute inset-0 z-20" />
+          <div className="relative min-h-[52svh] lg:min-h-0">
+            <div className="absolute inset-4 overflow-hidden rounded-[1.8rem] sm:inset-6 lg:inset-8 lg:rounded-[2.2rem]">
+              <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,#23151d_0%,transparent_27%),linear-gradient(0deg,#23151d_0%,transparent_30%)] lg:bg-[linear-gradient(90deg,#23151d_0%,transparent_24%)]" />
+              <img src="/products/perfumes/editorial/floral-extravagance.webp" alt="Floral Extravagance — universul floral Glam Essence" className="story-hero-image h-full w-full object-cover object-center" />
+              <img src="/products/skincare/campaign/face-oil.webp" alt="Face Oil — ritual Glam Essence" className="story-floating-card absolute bottom-5 right-5 z-20 hidden h-[32%] w-[24%] rounded-[1.4rem] border border-white/20 object-cover shadow-2xl sm:block lg:bottom-8 lg:right-8" />
+              <div className="glam-grain absolute inset-0 z-20" />
+            </div>
           </div>
         </section>
 

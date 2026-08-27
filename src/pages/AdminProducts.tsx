@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Edit, Plus, Search, Trash2 } from 'lucide-react';
+import { Edit, Plus, Search, Trash2, PackageCheck } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -142,19 +142,20 @@ const AdminProducts = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
+      <div className="space-y-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{t('admin.products.title')}</h1>
-            <p className="text-gray-500 mt-1">{t('admin.products.subtitle')}</p>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-[.22em] text-[#a04e62]">Collection management</p>
+            <h1 className="font-serif text-4xl tracking-[-.03em] text-[#281922] sm:text-5xl">{t('admin.products.title')}</h1>
+            <p className="mt-2 text-sm text-[#806d74]">{t('admin.products.subtitle')}</p>
           </div>
           <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
+              <Button className="h-11 rounded-full bg-[#281922] px-5 text-[10px] font-semibold uppercase tracking-[.14em] text-white hover:bg-[#593044]">
                 <Plus className="mr-2 h-4 w-4" /> {t('admin.products.add_product')}
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[1.25rem] bg-[#fffaf8]">
               <DialogHeader>
                 <DialogTitle>{t('admin.products.add_new_product')}</DialogTitle>
               </DialogHeader>
@@ -204,8 +205,8 @@ const AdminProducts = () => {
                 </div>
                 <div className="flex justify-end space-x-2 pt-4">
                   <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>{t('admin.products.cancel')}</Button>
-                  <Button 
-                    className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white" 
+                    <Button
+                    className="bg-[#281922] text-white hover:bg-[#593044]"
                     onClick={handleAddProduct}
                   >
                     {t('admin.products.add')}
@@ -216,43 +217,43 @@ const AdminProducts = () => {
           </Dialog>
         </div>
 
-        <Card>
-          <CardContent className="p-6">
-            <div className="relative mb-6">
-              <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+        <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+          <CardContent className="p-5 sm:p-7">
+            <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="relative w-full sm:max-w-sm"><Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[#a88f96]" />
               <Input 
                 placeholder={t('admin.products.search_products')} 
-                className="pl-10" 
+                className="h-11 rounded-full border-[#281922]/12 bg-white pl-11"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-              />
+              /></div><div className="flex items-center gap-2 text-[10px] font-medium uppercase tracking-[.14em] text-[#9c7d87]"><PackageCheck className="h-4 w-4 text-[#a04e62]" /> {filteredProducts.length} products</div>
             </div>
 
-            <div className="rounded-md border">
+            <div className="overflow-x-auto rounded-[1rem] border border-[#281922]/10">
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">{t('admin.products.image')}</TableHead>
-                    <TableHead>{t('admin.products.product_name_header')}</TableHead>
-                    <TableHead>{t('admin.products.category_header')}</TableHead>
-                    <TableHead className="text-right">{t('admin.products.price_header')}</TableHead>
-                    <TableHead className="text-center">{t('admin.products.stock_header')}</TableHead>
-                    <TableHead className="text-right">{t('admin.products.actions')}</TableHead>
+                    <TableHead className="w-[100px] bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.products.image')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.products.product_name_header')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-[10px] uppercase tracking-[.14em]">{t('admin.products.category_header')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-right text-[10px] uppercase tracking-[.14em]">{t('admin.products.price_header')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-center text-[10px] uppercase tracking-[.14em]">{t('admin.products.stock_header')}</TableHead>
+                    <TableHead className="bg-[#f8eeec] text-right text-[10px] uppercase tracking-[.14em]">{t('admin.products.actions')}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {filteredProducts.map((product) => (
-                    <TableRow key={product.id}>
+                    <TableRow key={product.id} className="border-[#281922]/10 hover:bg-[#fffaf8]">
                       <TableCell>
                         <img 
                           src={product.image} 
                           alt={product.name} 
-                          className="h-10 w-10 rounded-md object-cover" 
+                            className="h-12 w-12 rounded-[.7rem] object-cover"
                         />
                       </TableCell>
-                      <TableCell className="font-medium">{product.name}</TableCell>
-                      <TableCell>{product.category}</TableCell>
-                      <TableCell className="text-right">{product.price.toFixed(2)} lei</TableCell>
+                      <TableCell className="min-w-[190px] font-medium text-[#281922]">{product.name}</TableCell>
+                      <TableCell className="text-[#806d74]">{product.category}</TableCell>
+                      <TableCell className="text-right font-medium text-[#281922]">{product.price.toFixed(2)} lei</TableCell>
                       <TableCell>
                         <div className="flex items-center justify-center space-x-2">
                           <Button 
@@ -287,7 +288,7 @@ const AdminProducts = () => {
                                 <Edit size={16} />
                               </Button>
                             </DialogTrigger>
-                            <DialogContent>
+                            <DialogContent className="max-h-[88vh] overflow-y-auto rounded-[1.25rem] bg-[#fffaf8]">
                               <DialogHeader>
                                 <DialogTitle>{t('admin.products.edit_product')}</DialogTitle>
                               </DialogHeader>
@@ -338,7 +339,7 @@ const AdminProducts = () => {
                                   <div className="flex justify-end space-x-2 pt-4">
                                     <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>{t('admin.products.cancel')}</Button>
                                     <Button 
-                                      className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white" 
+                                      className="bg-[#281922] text-white hover:bg-[#593044]"
                                       onClick={handleEditProduct}
                                     >
                                       {t('admin.products.save')}
