@@ -23,7 +23,7 @@ const Testimonials = () => {
       <div className="grid min-h-[680px] lg:grid-cols-2">
         <div className="relative min-h-[460px] overflow-hidden lg:min-h-full">
           <img
-            src="/ParfumWoodyElegance.jpg"
+            src="/products/perfumes/editorial/woody-elegance.webp"
             alt="Parfum Woody Elegance într-o compoziție editorială"
             className="absolute inset-0 h-full w-full object-cover transition duration-[1800ms] hover:scale-[1.025]"
             loading="lazy"

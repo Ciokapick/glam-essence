@@ -10,7 +10,7 @@ const Categories = () => {
       name: t('nav.perfumes'),
       kicker: language === 'ro' ? 'Semnătura ta invizibilă' : 'Your invisible signature',
       description: t('categories.perfumes_desc'),
-      image: '/ParfumFloralExtravagance.jpg',
+      image: '/products/perfumes/editorial/floral-extravagance.webp',
     },
     {
       id: 'face-care',
