@@ -138,7 +138,7 @@ const SeturiPage = () => {
       <Navbar />
 
       <main>
-        <section className="relative grid min-h-[88svh] overflow-hidden bg-[#241820] pt-[104px] text-white lg:grid-cols-[.86fr_1.14fr]">
+        <section className="relative grid min-h-[78svh] overflow-hidden bg-[#241820] pt-[104px] text-white lg:grid-cols-[.86fr_1.14fr]">
           <div className="relative z-10 flex flex-col justify-end px-6 pb-14 pt-24 sm:px-10 lg:px-[7vw] lg:pb-[9vh]">
             <p className="mb-7 text-[10px] font-semibold uppercase tracking-[.28em] text-[#e4bcc8]" data-collection-reveal>{content.eyebrow}</p>
             <h1 className="max-w-[760px] font-serif text-[clamp(3.5rem,7vw,7.6rem)] font-medium leading-[.88] tracking-[-.058em]" data-collection-reveal>{content.title}</h1>
@@ -148,7 +148,7 @@ const SeturiPage = () => {
             </a>
           </div>
 
-          <div className="relative min-h-[58svh] overflow-hidden lg:min-h-0">
+          <div className="relative min-h-[48svh] overflow-hidden lg:min-h-0">
             <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(36,24,32,1)_0%,transparent_34%),linear-gradient(0deg,rgba(36,24,32,.65)_0%,transparent_38%)]" />
             <img src="/products/skincare/family-reference.webp" alt="Selecția completă Glam Essence" className="story-hero-image h-full w-full object-cover" />
             <div className="story-floating-card absolute bottom-[7vh] right-[4vw] z-20 hidden rounded-[1.4rem] border border-white/20 bg-[#241820]/72 p-5 text-white shadow-2xl backdrop-blur-xl sm:block">
@@ -189,12 +189,12 @@ const SeturiPage = () => {
             <h2 className="mt-5 font-serif text-[clamp(3rem,5vw,5.7rem)] leading-[.94] tracking-[-.052em]">{content.collectionTitle}</h2>
           </div>
 
-          <div className="mt-16 space-y-6">
+          <div className="mx-auto mt-16 max-w-6xl space-y-6">
             {giftSets.map((set, index) => {
               const localized = set[language];
               return (
-                <article key={set.id} className="grid overflow-hidden rounded-[2rem] border border-[#281922]/10 bg-white lg:grid-cols-[1.08fr_.92fr]" data-collection-reveal>
-                  <div className={`grid min-h-[430px] gap-px bg-[#281922] ${set.images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 grid-rows-2'}`}>
+                <article key={set.id} className="grid overflow-hidden rounded-[1.75rem] border border-[#281922]/10 bg-white lg:grid-cols-[.94fr_1.06fr]" data-collection-reveal>
+                  <div className={`grid min-h-[350px] gap-px bg-[#281922] sm:min-h-[390px] ${set.images.length === 2 ? 'grid-cols-2' : 'grid-cols-2 grid-rows-2'}`}>
                     {set.images.map((image, imageIndex) => (
                       <img
                         key={image}
