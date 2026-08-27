@@ -33,6 +33,21 @@ const noteVisual = (note: string) => {
   return { Icon: Sparkles, tint: 'from-[#d4c1d8] via-[#7b627f] to-[#302337]', ring: 'border-[#d9c9df]/40' };
 };
 
+const noteDescriptor = (note: string, language: 'ro' | 'en') => {
+  const normalized = note.toLowerCase();
+  if (/piper|pepper/.test(normalized)) return language === 'ro' ? 'vibrant' : 'vibrant';
+  if (/nucșoară|nutmeg/.test(normalized)) return language === 'ro' ? 'uscată' : 'dry';
+  if (/scorțișoară|cinnamon/.test(normalized)) return language === 'ro' ? 'caldă' : 'warm';
+  if (/cuișoare|clove/.test(normalized)) return language === 'ro' ? 'aromată' : 'aromatic';
+  if (/oud|lemn|wood/.test(normalized)) return language === 'ro' ? 'dens' : 'deep';
+  if (/tabac|tobacco/.test(normalized)) return language === 'ro' ? 'catifelat' : 'velvety';
+  if (/vanilie|vanilla/.test(normalized)) return language === 'ro' ? 'catifelată' : 'soft';
+  if (/ambră|amber/.test(normalized)) return language === 'ro' ? 'rășinoasă' : 'resinous';
+  if (/bergamotă|lămâie|lime|grapefruit|citr|lemon/.test(normalized)) return language === 'ro' ? 'luminoasă' : 'bright';
+  if (/trandafir|iasomie|iris|flor|rose|jasmine|floral/.test(normalized)) return language === 'ro' ? 'florală' : 'floral';
+  return language === 'ro' ? 'semnătură' : 'signature';
+};
+
 const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
   const { language } = useLanguage();
   const noteGroups: NoteGroup[] = [
@@ -62,6 +77,7 @@ const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
     <div className="relative overflow-hidden rounded-[1.5rem] bg-[#241820] p-6 text-white shadow-[0_24px_70px_rgba(40,25,34,.16)] md:p-10">
       <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#a04e62]/25 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-32 left-1/3 h-64 w-64 rounded-full bg-[#d9aebb]/10 blur-3xl" />
+      <div className="glam-grain absolute inset-0" />
 
       <div className="relative flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
         <div>
@@ -87,9 +103,9 @@ const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
               {group.notes.length > 0 ? group.notes.map((note) => {
                 const { Icon, tint, ring } = noteVisual(note);
                 return (
-                  <div key={note} className="group/note flex min-w-[7.5rem] items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-3 py-3 transition duration-300 hover:-translate-y-1 hover:bg-white/[.11] sm:min-w-0 sm:flex-1 sm:basis-[9rem]">
-                    <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-gradient-to-br ${tint} ${ring} shadow-inner`}><Icon className="h-5 w-5 text-white/85" strokeWidth={1.35} /></span>
-                    <span className="text-sm font-medium leading-5 text-white/80">{note}</span>
+                  <div key={note} title={`${note} · ${noteDescriptor(note, language)}`} className="group/note flex min-w-[7.5rem] items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-3 py-3 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[.11] sm:min-w-0 sm:flex-1 sm:basis-[9rem]">
+                    <span className={`relative grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-gradient-to-br ${tint} ${ring} shadow-inner`}><span className="absolute inset-1 rounded-full border border-white/20 opacity-0 transition group-hover/note:opacity-100" /><Icon className="relative h-5 w-5 text-white/85" strokeWidth={1.35} /></span>
+                    <span className="min-w-0"><span className="block truncate text-sm font-medium leading-5 text-white/80">{note}</span><span className="mt-0.5 block text-[9px] uppercase tracking-[.16em] text-white/35">{noteDescriptor(note, language)}</span></span>
                   </div>
                 );
               }) : <p className="text-sm text-white/45">{language === 'ro' ? 'Note în curs de compunere.' : 'Notes are being composed.'}</p>}
