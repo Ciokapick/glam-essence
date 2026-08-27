@@ -1,92 +1,118 @@
-import { ArrowDown, ArrowRight, Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 
+type HeroWorld = {
+  id: 'perfume' | 'face' | 'body';
+  image: string;
+  imagePosition: string;
+  href: string;
+  accent: string;
+  wash: string;
+  copy: {
+    ro: { label: string; eyebrow: string; title: string; subtitle: string; cta: string; detail: string };
+    en: { label: string; eyebrow: string; title: string; subtitle: string; cta: string; detail: string };
+  };
+};
+
+const worlds: HeroWorld[] = [
+  {
+    id: 'perfume',
+    image: '/products/perfumes/editorial/floral-extravagance.webp',
+    imagePosition: 'object-[64%_center] md:object-center',
+    href: '/parfumuri',
+    accent: '#e2aebd',
+    wash: 'radial-gradient(circle at 78% 34%,rgba(165,74,105,.22),transparent 36%),linear-gradient(90deg,rgba(30,13,22,.94) 0%,rgba(54,23,37,.68) 43%,rgba(40,13,25,.08) 73%)',
+    copy: {
+      ro: { label: 'Parfum', eyebrow: 'Universul olfactiv · 2026', title: 'O prezență care rămâne în aer.', subtitle: 'Compoziții memorabile, construite în straturi — lumină, textură și o urmă care devine semnătura ta.', cta: 'Descoperă parfumurile', detail: 'Burgundy · chihlimbar · flori nocturne' },
+      en: { label: 'Fragrance', eyebrow: 'The fragrance world · 2026', title: 'A presence that lingers in the air.', subtitle: 'Memorable compositions built in layers — light, texture and a trail that becomes your signature.', cta: 'Discover fragrances', detail: 'Burgundy · amber · nocturnal florals' },
+    },
+  },
+  {
+    id: 'face',
+    image: '/products/skincare/campaign/face-serum.webp',
+    imagePosition: 'object-[62%_center] md:object-center',
+    href: '/face-care',
+    accent: '#acd8e3',
+    wash: 'radial-gradient(circle at 74% 30%,rgba(127,197,214,.24),transparent 38%),linear-gradient(90deg,rgba(12,31,42,.95) 0%,rgba(25,60,72,.65) 43%,rgba(22,52,61,.05) 74%)',
+    copy: {
+      ro: { label: 'Îngrijirea tenului', eyebrow: 'Ritualuri pentru ten · apă și lumină', title: 'Pielea nu cere perfecțiune. Cere consecvență.', subtitle: 'Texturi limpezi și pași cu rol precis, de la prima atingere de apă până la ritualul lent al serii.', cta: 'Construiește ritualul', detail: 'Albastru mineral · sticlă · hidratare' },
+      en: { label: 'Face care', eyebrow: 'Face rituals · water and light', title: 'Skin does not ask for perfection. It asks for consistency.', subtitle: 'Clear textures and purposeful steps, from the first touch of water to the slower evening ritual.', cta: 'Build your ritual', detail: 'Mineral blue · glass · hydration' },
+    },
+  },
+  {
+    id: 'body',
+    image: '/products/skincare/rituals/body-cream-formula.jpg',
+    imagePosition: 'object-center',
+    href: '/body-care',
+    accent: '#e0c1a3',
+    wash: 'radial-gradient(circle at 76% 38%,rgba(194,124,83,.22),transparent 40%),linear-gradient(90deg,rgba(45,28,22,.95) 0%,rgba(82,52,37,.67) 43%,rgba(52,30,22,.08) 74%)',
+    copy: {
+      ro: { label: 'Îngrijirea corpului', eyebrow: 'Ritualuri tactile · ingrediente naturale', title: 'Îngrijirea devine un gest pe care îl simți.', subtitle: 'Satin, unturi botanice și texturi bogate pentru momentele în care alegi să încetinești intenționat.', cta: 'Explorează îngrijirea corpului', detail: 'Champagne · terracotta · texturi calde' },
+      en: { label: 'Body care', eyebrow: 'Tactile rituals · natural ingredients', title: 'Care becomes a gesture you can feel.', subtitle: 'Satin, botanical butters and rich textures for the moments when you choose to slow down intentionally.', cta: 'Explore body care', detail: 'Champagne · terracotta · warm textures' },
+    },
+  },
+];
+
 const Hero = () => {
   const { language } = useLanguage();
-  const copy = language === 'ro' ? {
-    eyebrow: 'Colecția signature · 2026',
-    title: 'Frumusețea care rămâne cu tine.',
-    subtitle: 'Parfumuri memorabile și ritualuri de îngrijire alese pentru textură, prezență și plăcerea fiecărei zile.',
-    primary: 'Descoperă parfumurile',
-    secondary: 'Explorează ritualurile',
-    note: 'Esențe atent selecționate',
-    detail: 'Parfum · Îngrijire · Cadouri',
-    scroll: 'Descoperă colecția',
-  } : {
-    eyebrow: 'The signature collection · 2026',
-    title: 'Beauty that stays with you.',
-    subtitle: 'Memorable fragrances and considered care rituals, selected for texture, presence, and everyday pleasure.',
-    primary: 'Discover fragrances',
-    secondary: 'Explore the rituals',
-    note: 'Considered essentials',
-    detail: 'Fragrance · Care · Gifting',
-    scroll: 'Discover the collection',
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = worlds[activeIndex];
+  const content = active.copy[language];
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
+    const interval = window.setInterval(() => setActiveIndex((current) => (current + 1) % worlds.length), 7800);
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
-    <section className="glam-hero relative min-h-[760px] h-[100svh] flex items-end overflow-hidden bg-[#d6b9b8]">
-      <picture className="absolute inset-0">
-        <source media="(max-width: 767px)" srcSet="/hero-mobile.jpg" />
-        <img
-          src="/hero.jpg"
-          alt="Flacon de parfum Glam Essence în tonuri delicate de roz"
-          className="h-full w-full object-cover object-center"
-        />
-      </picture>
-
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(35,19,28,.84)_0%,rgba(59,31,42,.48)_43%,rgba(59,31,42,.06)_72%)] md:bg-[linear-gradient(90deg,rgba(35,19,28,.82)_0%,rgba(35,19,28,.38)_42%,transparent_70%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(14,9,12,.18)_0%,transparent_38%,rgba(20,10,15,.42)_100%)]" />
-      <div className="glam-grain absolute inset-0 pointer-events-none" />
-
-      <div className="container relative z-10 mx-auto px-5 md:px-8 pb-16 pt-40 md:pb-20 lg:pb-24">
-        <div className="max-w-3xl text-white">
-          <div className="mb-6 flex items-center gap-3 text-[11px] font-medium uppercase tracking-[.3em] text-white/75">
-            <span className="h-px w-10 bg-white/55" />
-            {copy.eyebrow}
+    <section className="glam-hero relative flex h-[100svh] min-h-[720px] items-end overflow-hidden bg-[#24151d] text-white" aria-roledescription={language === 'ro' ? 'prezentare automată' : 'automatic showcase'} aria-label={language === 'ro' ? 'Universurile Glam Essence' : 'Glam Essence worlds'}>
+      <div className="absolute inset-0" aria-hidden="true">
+        {worlds.map((world, index) => (
+          <div key={world.id} className={`absolute inset-0 transition-[opacity,transform] [transition-duration:1600ms] [transition-timing-function:cubic-bezier(.22,.61,.36,1)] motion-reduce:transform-none motion-reduce:transition-none ${index === activeIndex ? 'scale-100 opacity-100' : 'scale-[1.035] opacity-0'}`}>
+            <img src={world.image} alt="" className={`h-full w-full object-cover ${world.imagePosition}`} loading={index === 0 ? 'eager' : 'lazy'} />
           </div>
+        ))}
+      </div>
 
-          <h1 className="max-w-3xl font-serif text-[clamp(3.35rem,8.2vw,7.8rem)] font-medium leading-[.88] tracking-[-.045em] text-white">
-            {copy.title}
-          </h1>
+      <div className="absolute inset-0 transition-[background] [transition-duration:1400ms] motion-reduce:transition-none" style={{ background: active.wash }} />
+      <div className="absolute inset-0 bg-[#160d13]/55 md:bg-transparent" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(12,8,10,.2)_0%,transparent_34%,rgba(17,9,13,.54)_100%)]" />
+      <div className="glam-grain absolute inset-0" />
 
-          <p className="mt-7 max-w-xl text-base leading-7 text-white/82 md:text-lg md:leading-8">
-            {copy.subtitle}
-          </p>
-
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <Link
-              to="/parfumuri"
-              className="group inline-flex min-h-12 items-center justify-center gap-3 bg-white px-6 text-xs font-semibold uppercase tracking-[.16em] text-[#281922] transition hover:bg-[#f4e8e7]"
-            >
-              {copy.primary}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/face-care"
-              className="inline-flex min-h-12 items-center justify-center border border-white/45 bg-white/5 px-6 text-xs font-semibold uppercase tracking-[.16em] text-white backdrop-blur-sm transition hover:bg-white/12"
-            >
-              {copy.secondary}
-            </Link>
+      <div className="container relative z-10 mx-auto px-5 pb-14 pt-40 md:px-8 md:pb-20 lg:pb-24">
+        <div key={`${active.id}-${language}`} className="max-w-[850px] animate-fade-in motion-reduce:animate-none">
+          <div className="mb-6 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[.3em] text-white/74">
+            <span className="h-px w-10" style={{ backgroundColor: active.accent }} />
+            {content.eyebrow}
           </div>
-
-          <div className="mt-10 flex items-center gap-4 text-white/70">
-            <span className="grid h-9 w-9 place-items-center rounded-full border border-white/30">
-              <Sparkles className="h-4 w-4" />
-            </span>
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[.18em] text-white/90">{copy.note}</p>
-              <p className="mt-1 text-xs tracking-wide">{copy.detail}</p>
-            </div>
+          <h1 className="max-w-[820px] font-serif text-[clamp(3.25rem,7.8vw,7.6rem)] font-medium leading-[.89] tracking-[-.052em] text-white">{content.title}</h1>
+          <p className="mt-7 max-w-xl text-sm leading-7 text-white/78 sm:text-base md:text-lg md:leading-8">{content.subtitle}</p>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <Link to={active.href} className="group inline-flex min-h-12 items-center justify-center gap-3 px-6 text-[10px] font-semibold uppercase tracking-[.17em] text-[#281922] transition duration-300 hover:-translate-y-0.5 hover:bg-white" style={{ backgroundColor: active.accent }}>
+              {content.cta}<ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <span className="px-1 py-2 text-[9px] font-medium uppercase tracking-[.2em] text-white/56 sm:px-4">{content.detail}</span>
           </div>
         </div>
 
-        <a
-          href="#categories"
-          className="absolute bottom-8 right-6 hidden items-center gap-3 text-[10px] font-medium uppercase tracking-[.22em] text-white/70 transition hover:text-white md:flex"
-        >
-          {copy.scroll}
-          <ArrowDown className="h-4 w-4 animate-bounce" />
+        <div className="mt-10 flex items-center gap-2" role="tablist" aria-label={language === 'ro' ? 'Alege universul' : 'Choose a world'}>
+          {worlds.map((world, index) => {
+            const selected = index === activeIndex;
+            return (
+              <button key={world.id} type="button" role="tab" aria-selected={selected} aria-label={world.copy[language].label} onClick={() => setActiveIndex(index)} className={`group flex items-center gap-2 py-3 text-[9px] font-semibold uppercase tracking-[.18em] transition-colors ${selected ? 'text-white' : 'text-white/44 hover:text-white/78'}`}>
+                <span className={`block h-px transition-all duration-500 motion-reduce:transition-none ${selected ? 'w-10' : 'w-5 group-hover:w-7'}`} style={{ backgroundColor: selected ? world.accent : 'rgba(255,255,255,.34)' }} />
+                <span className="hidden sm:inline">{world.copy[language].label}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        <a href="#categories" className="absolute bottom-8 right-6 hidden items-center gap-3 text-[9px] font-semibold uppercase tracking-[.22em] text-white/60 transition hover:text-white md:flex">
+          {language === 'ro' ? 'Descoperă colecțiile' : 'Discover the collections'}
+          <ArrowDown className="h-4 w-4 animate-bounce motion-reduce:animate-none" />
         </a>
       </div>
     </section>

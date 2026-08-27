@@ -24,6 +24,9 @@ import ProductPages from '@/pages/ProductPages';
 import InitApp from '@/components/InitApp';
 import NotFound from '@/pages/NotFound';
 import CheckoutSuccess from '@/pages/CheckoutSuccess';
+import RitualFinder from '@/pages/RitualFinder';
+import IngredientAtlas from '@/pages/IngredientAtlas';
+import PageTransition from '@/components/PageTransition';
 
 function App() {
   return (
@@ -33,6 +36,7 @@ function App() {
           <WishlistProvider>
             <InitApp />
             <Cart />
+            <PageTransition>
             <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/parfumuri" element={<ParfumuriPage />} />
@@ -47,6 +51,8 @@ function App() {
             <Route path="/checkout/success" element={<CheckoutSuccess />} />
             <Route path="/wishlist" element={<WishlistPage />} />
             <Route path="/seturi" element={<SeturiPage />} />
+            <Route path="/ritual-finder" element={<RitualFinder />} />
+            <Route path="/ingredient-atlas" element={<IngredientAtlas />} />
             
             {/* Admin routes */}
             <Route path="/admin" element={<AdminLogin />} />
@@ -60,6 +66,7 @@ function App() {
             {/* Catch-all route for 404 */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </PageTransition>
           <Toaster />
           </WishlistProvider>
         </CartProvider>

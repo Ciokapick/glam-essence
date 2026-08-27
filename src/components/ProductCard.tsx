@@ -57,21 +57,21 @@ const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, di
   return (
     <>
       <article className="group">
-        <div className="relative mb-5 aspect-[4/5] overflow-hidden bg-[#f2ece9]">
+        <div className="tactile-media relative mb-5 aspect-[4/5] overflow-hidden bg-[#f2ece9]">
           <Link to={productUrl} aria-label={`${language === 'ro' ? 'Vezi' : 'View'} ${t(name)}`}>
-            <img src={image} alt={t(name)} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.035]" loading="lazy" />
+            <img src={image} alt={t(name)} className="tactile-media__image h-full w-full object-cover" loading="lazy" />
           </Link>
-          <div className="absolute inset-x-0 bottom-0 flex translate-y-0 items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 sm:translate-y-full sm:group-hover:translate-y-0 sm:group-focus-within:translate-y-0">
+          <div className="absolute inset-x-0 bottom-0 z-10 flex translate-y-0 items-center gap-2 bg-gradient-to-t from-black/50 to-transparent p-4 pt-14 transition-transform duration-300 sm:translate-y-full sm:group-hover:translate-y-0 sm:group-focus-within:translate-y-0">
             <button
               onClick={handleAddToCart}
               disabled={stock <= 0}
-              className="flex h-11 flex-1 items-center justify-center gap-2 bg-white px-4 text-[10px] font-semibold uppercase tracking-[.14em] text-[#281922] transition hover:bg-[#f2e7e3] disabled:cursor-not-allowed disabled:opacity-55"
+              className="tactile-button flex h-11 flex-1 items-center justify-center gap-2 bg-white px-4 text-[10px] font-semibold uppercase tracking-[.14em] text-[#281922] hover:bg-[#f2e7e3] disabled:cursor-not-allowed disabled:opacity-55"
             >
               <ShoppingBag className="h-4 w-4" />
               {stock > 0 ? t('common.add_to_cart') : t('product.out_of_stock')}
             </button>
           </div>
-          <div className="absolute left-3 top-3 flex flex-col gap-2">
+          <div className="absolute left-3 top-3 z-10 flex flex-col gap-2">
             {isNew && <Badge className="rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] uppercase tracking-[.14em] text-white">{t('product.new_badge')}</Badge>}
             {isSale && discount && <Badge className="rounded-none border-0 bg-[#a04e62] px-3 py-1 text-[9px] tracking-[.14em] text-white">-{discount}%</Badge>}
           </div>
@@ -86,7 +86,7 @@ const ProductCard = ({ id, slug, name, price, image, category, isNew, isSale, di
               {isSale && discount && <span className="text-xs text-[#9b8d92] line-through">{price.toFixed(2)} lei</span>}
             </div>
           </div>
-          <Link to={productUrl} className="mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#281922]/15 text-[#281922] transition hover:border-[#281922]" aria-label={language === 'ro' ? 'Detalii produs' : 'Product details'}>
+          <Link to={productUrl} className="tactile-button mt-1 grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#281922]/15 text-[#281922] hover:border-[#281922]" aria-label={language === 'ro' ? 'Detalii produs' : 'Product details'}>
             <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>

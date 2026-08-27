@@ -14,7 +14,7 @@ export function Navbar() {
   const { totalItems: wishlistItems } = useWishlist();
   const { t, language } = useLanguage();
   const location = useLocation();
-  const darkHeroRoutes = ['/', '/about', '/parfumuri', '/face-care', '/body-care', '/seturi'];
+  const darkHeroRoutes = ['/', '/about', '/parfumuri', '/face-care', '/body-care', '/seturi', '/ritual-finder', '/ingredient-atlas'];
   const hasDarkHero = darkHeroRoutes.includes(location.pathname);
   const isDarkHeroTop = hasDarkHero && !isScrolled;
 
@@ -36,6 +36,8 @@ export function Navbar() {
     ['/face-care', t('nav.face_care')],
     ['/body-care', t('nav.body_care')],
     ['/seturi', language === 'ro' ? 'Seturi cadou' : 'Gift sets'],
+    ['/ritual-finder', language === 'ro' ? 'Ritual Finder' : 'Ritual Finder'],
+    ['/ingredient-atlas', language === 'ro' ? 'Atlas ingrediente' : 'Ingredient Atlas'],
     ['/about', language === 'ro' ? 'Povestea noastră' : 'Our story'],
   ];
 
@@ -52,7 +54,7 @@ export function Navbar() {
             <span className="mt-1 text-[7px] font-medium uppercase tracking-[.42em] opacity-65">Beauty atelier</span>
           </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Navigație principală">
+          <nav className="hidden items-center gap-5 xl:flex" aria-label="Navigație principală">
             {links.map(([to, label]) => (
               <Link
                 key={to}
@@ -78,7 +80,7 @@ export function Navbar() {
               {totalItems > 0 && <Badge className="absolute -right-1 -top-1 grid h-5 w-5 place-items-center rounded-full border-0 bg-[#a04e62] p-0 text-[10px] text-white">{totalItems}</Badge>}
             </button>
             <button
-              className="rounded-full p-2.5 lg:hidden"
+              className="rounded-full p-2.5 xl:hidden"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
               aria-label={isMobileMenuOpen ? 'Închide meniul' : 'Deschide meniul'}
               aria-expanded={isMobileMenuOpen}
@@ -90,7 +92,7 @@ export function Navbar() {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="border-b border-[#281922]/10 bg-[#fbf8f5] px-5 py-7 text-[#281922] shadow-xl lg:hidden">
+        <div className="border-b border-[#281922]/10 bg-[#fbf8f5] px-5 py-7 text-[#281922] shadow-xl xl:hidden">
           <nav className="flex flex-col" aria-label="Navigație mobilă">
             {links.map(([to, label]) => (
               <Link key={to} to={to} className="border-b border-[#281922]/10 py-3.5 font-serif text-2xl">

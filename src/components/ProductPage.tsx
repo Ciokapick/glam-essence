@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import {
@@ -47,20 +47,36 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   const [product, setProduct] = useState<Product>(initialProduct);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(initialProduct.image);
+  const [previousImage, setPreviousImage] = useState<string | null>(null);
+  const [galleryTransitionId, setGalleryTransitionId] = useState(0);
+  const galleryTimerRef = useRef<ReturnType<typeof setTimeout>>();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const productImages = Array.from(new Set([product.image, ...(product.gallery || [])]));
   const selectedImageIndex = Math.max(productImages.indexOf(selectedImage), 0);
 
+  const selectGalleryImage = (nextImage: string) => {
+    if (!nextImage || nextImage === selectedImage) return;
+
+    window.clearTimeout(galleryTimerRef.current);
+    setPreviousImage(selectedImage);
+    setSelectedImage(nextImage);
+    setGalleryTransitionId((id) => id + 1);
+    galleryTimerRef.current = window.setTimeout(() => setPreviousImage(null), 820);
+  };
+
   const showGalleryImage = (index: number) => {
     if (productImages.length === 0) return;
     const normalizedIndex = (index + productImages.length) % productImages.length;
-    setSelectedImage(productImages[normalizedIndex]);
+    selectGalleryImage(productImages[normalizedIndex]);
   };
 
   useEffect(() => {
+    window.clearTimeout(galleryTimerRef.current);
+    setPreviousImage(null);
     setSelectedImage(initialProduct.image);
+    return () => window.clearTimeout(galleryTimerRef.current);
   }, [initialProduct.id, initialProduct.image]);
   
   useEffect(() => {
@@ -185,20 +201,30 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
 
           <div className="mb-20 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,.92fr)] lg:gap-14">
             <div>
-              <div className="relative aspect-[.98] overflow-hidden rounded-[1.75rem] bg-[#f0e8e4] shadow-[0_24px_70px_rgba(40,25,34,.08)]">
+              <div className="product-gallery-frame tactile-media relative aspect-[.98] overflow-hidden rounded-[1.75rem] bg-[#f0e8e4] shadow-[0_24px_70px_rgba(40,25,34,.08)]">
+                {previousImage && (
+                  <img
+                    key={`previous-${galleryTransitionId}`}
+                    src={previousImage}
+                    alt=""
+                    className="product-gallery-image product-gallery-image--previous absolute inset-0 h-full w-full object-cover"
+                    aria-hidden="true"
+                  />
+                )}
                 <img
-                  key={selectedImage}
+                  key={`${selectedImage}-${galleryTransitionId}`}
                   src={selectedImage}
                   alt={product?.name}
-                  className="h-full w-full animate-fade-in object-cover"
+                  className="product-gallery-image product-gallery-image--current absolute inset-0 h-full w-full object-cover"
                 />
+                <span key={`veil-${galleryTransitionId}`} className="product-gallery-reveal-veil" aria-hidden="true" />
 
                 {productImages.length > 1 && (
                   <>
                     <button
                       type="button"
                       onClick={() => showGalleryImage(selectedImageIndex - 1)}
-                      className="absolute left-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur transition hover:bg-white"
+                      className="tactile-button absolute left-4 top-1/2 z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur hover:bg-white"
                       aria-label={language === 'ro' ? 'Imaginea anterioară' : 'Previous image'}
                     >
                       <ChevronLeft className="h-5 w-5" />
@@ -206,25 +232,25 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     <button
                       type="button"
                       onClick={() => showGalleryImage(selectedImageIndex + 1)}
-                      className="absolute right-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur transition hover:bg-white"
+                      className="tactile-button absolute right-4 top-1/2 z-20 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur hover:bg-white"
                       aria-label={language === 'ro' ? 'Imaginea următoare' : 'Next image'}
                     >
                       <ChevronRight className="h-5 w-5" />
                     </button>
-                    <span className="absolute bottom-4 right-4 rounded-full bg-[#281922]/75 px-3 py-1.5 text-[9px] font-semibold tracking-[.16em] text-white backdrop-blur">
+                    <span className="absolute bottom-4 right-4 z-20 rounded-full bg-[#281922]/75 px-3 py-1.5 text-[9px] font-semibold tracking-[.16em] text-white backdrop-blur">
                       {String(selectedImageIndex + 1).padStart(2, '0')} / {String(productImages.length).padStart(2, '0')}
                     </span>
                   </>
                 )}
                 
                 {product?.isNew && (
-                  <Badge className="absolute left-5 top-5 rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] font-semibold uppercase tracking-[.16em] text-white">
+                  <Badge className="absolute left-5 top-5 z-20 rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] font-semibold uppercase tracking-[.16em] text-white">
                     {t('product.new_badge')}
                   </Badge>
                 )}
                 
                 {product?.isSale && (
-                  <Badge className="absolute left-5 top-5 rounded-none border-0 bg-[#a04e62] px-3 py-1 text-[9px] font-semibold tracking-[.16em] text-white">
+                  <Badge className="absolute left-5 top-5 z-20 rounded-none border-0 bg-[#a04e62] px-3 py-1 text-[9px] font-semibold tracking-[.16em] text-white">
                     -{product.discount}%
                   </Badge>
                 )}
@@ -235,8 +261,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     <button
                       key={image}
                       type="button"
-                      onClick={() => setSelectedImage(image)}
-                      className={`relative aspect-square w-24 shrink-0 overflow-hidden rounded-[1rem] border-2 bg-[#f2ece9] transition sm:w-28 ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent opacity-72 hover:border-[#7b263d]/35 hover:opacity-100'}`}
+                      onClick={() => selectGalleryImage(image)}
+                      className={`tactile-thumbnail relative aspect-square w-24 shrink-0 overflow-hidden rounded-[1rem] border-2 bg-[#f2ece9] sm:w-28 ${selectedImage === image ? 'is-active border-[#7b263d]' : 'border-transparent opacity-72 hover:border-[#7b263d]/35 hover:opacity-100'}`}
                       aria-label={`${t(product.name)} — ${index === 0 ? 'editorial' : 'packshot'}`}
                     >
                       <img src={image} alt="" className="h-full w-full object-cover" />
@@ -285,7 +311,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 <span className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#806d74]">{t('product.quantity')}</span>
                 <div className="flex items-center rounded-full border border-[#281922]/15 bg-white">
                   <button
-                    className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-[#f3e8e6]"
+                    className="tactile-button grid h-10 w-10 place-items-center rounded-full hover:bg-[#f3e8e6]"
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
                   >
@@ -293,7 +319,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </button>
                   <span className="w-10 text-center text-sm font-medium">{quantity}</span>
                   <button
-                    className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-[#f3e8e6]"
+                    className="tactile-button grid h-10 w-10 place-items-center rounded-full hover:bg-[#f3e8e6]"
                     onClick={() => setQuantity(q => Math.min((product?.stock || 0), q + 1))}
                     disabled={quantity >= (product?.stock || 0)}
                   >
@@ -307,7 +333,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               
               <div className="mt-7 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
                 <button
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-[#281922] px-5 text-[10px] font-semibold uppercase tracking-[.16em] text-white transition hover:bg-[#a04e62]"
+                  className="tactile-button inline-flex h-12 items-center justify-center rounded-full bg-[#281922] px-5 text-[10px] font-semibold uppercase tracking-[.16em] text-white hover:bg-[#a04e62]"
                   onClick={() => {
                     if (!product?.stock || product.stock <= 0) {
                       toast({
@@ -339,7 +365,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   {product?.stock && product.stock > 0 ? t('product.add_to_cart') : t('product.out_of_stock')}
                 </button>
                 <button
-                  className={`inline-flex min-h-12 items-center justify-center rounded-full border px-5 text-[10px] font-semibold uppercase tracking-[.12em] transition ${
+                  className={`tactile-button inline-flex min-h-12 items-center justify-center rounded-full border px-5 text-[10px] font-semibold uppercase tracking-[.12em] ${
                     isInWishlist(product?.id)
                       ? "border-[#a04e62] bg-[#f8e7e9] text-[#a04e62] hover:bg-[#f3dce0]"
                       : "border-[#281922]/15 text-[#67545c] hover:border-[#a04e62] hover:text-[#a04e62]"

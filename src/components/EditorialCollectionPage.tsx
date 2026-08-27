@@ -54,6 +54,7 @@ const themes = {
     closing: 'bg-[#3b202d] text-white',
     closingMuted: 'text-white/62',
     button: 'bg-[#d9aebb] text-[#281922] hover:bg-white',
+    ambient: 'bg-[radial-gradient(circle_at_88%_12%,rgba(184,109,69,.12),transparent_24%),linear-gradient(#fbf8f5,#fbf8f5)]',
   },
   face: {
     hero: 'bg-[#15232d]',
@@ -64,6 +65,7 @@ const themes = {
     closing: 'bg-[#d9e9ed] text-[#172630]',
     closingMuted: 'text-[#172630]/62',
     button: 'bg-[#172630] text-white hover:bg-[#31505c]',
+    ambient: 'bg-[radial-gradient(circle_at_88%_12%,rgba(79,135,149,.15),transparent_25%),linear-gradient(#fbfdfd,#fbfdfd)]',
   },
   body: {
     hero: 'bg-[#30221c]',
@@ -74,6 +76,7 @@ const themes = {
     closing: 'bg-[#49352a] text-white',
     closingMuted: 'text-white/62',
     button: 'bg-[#d8bda4] text-[#30221c] hover:bg-white',
+    ambient: 'bg-[radial-gradient(circle_at_88%_12%,rgba(184,116,75,.14),transparent_25%),linear-gradient(#fcf9f5,#fcf9f5)]',
   },
 } as const;
 
@@ -158,7 +161,7 @@ const EditorialCollectionPage = ({ config }: { config: EditorialCollectionConfig
           </div>
         </section>
 
-        <section id={config.collectionId} className="scroll-mt-24 bg-[#fbf8f5] px-5 py-24 sm:px-8 lg:px-[7vw] lg:py-32">
+        <section id={config.collectionId} className={`scroll-mt-24 px-5 py-24 sm:px-8 lg:px-[7vw] lg:py-32 ${theme.ambient}`}>
           <div className="grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-end" data-collection-reveal>
             <div>
               <p className={`text-[10px] font-semibold uppercase tracking-[.24em] ${theme.number}`}>{content.collectionLabel}</p>

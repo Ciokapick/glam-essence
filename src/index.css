@@ -279,26 +279,215 @@
     animation: story-orbit 15s linear infinite reverse;
   }
 
-  /* Page transition */
-  .page-transition {
-    @apply transition-opacity duration-300 ease-in-out;
+  /* Cinematic route veil. PageTransition mounts it only during navigation. */
+  .page-transition-stage {
+    position: relative;
   }
 
-  .page-enter {
-    @apply opacity-0;
+  .page-transition-content.is-transitioning {
+    animation: page-content-arrival 820ms cubic-bezier(.2, .72, .2, 1) both;
   }
 
-  .page-enter-active {
-    @apply opacity-100 transition-opacity duration-300;
+  .page-transition-veil {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    pointer-events: none;
+    isolation: isolate;
   }
 
-  .page-exit {
-    @apply opacity-100;
+  .page-transition-veil__ivory,
+  .page-transition-veil__burgundy {
+    position: absolute;
+    inset: -5%;
+    display: block;
+    will-change: transform;
   }
 
-  .page-exit-active {
-    @apply opacity-0 transition-opacity duration-300;
+  .page-transition-veil__ivory {
+    z-index: 1;
+    background:
+      radial-gradient(circle at 72% 30%, rgba(255, 255, 255, .82), transparent 23%),
+      #f5eee9;
+    animation: page-veil-ivory 880ms cubic-bezier(.76, 0, .24, 1) both;
   }
+
+  .page-transition-veil__burgundy {
+    z-index: 2;
+    background:
+      linear-gradient(105deg, transparent 0 8%, rgba(255, 255, 255, .07) 8.15% 8.35%, transparent 8.5%),
+      radial-gradient(circle at 28% 65%, #7f344a 0, #4a1d2d 38%, #281922 76%);
+    clip-path: polygon(0 0, 91% 0, 100% 100%, 9% 100%);
+    animation: page-veil-burgundy 820ms cubic-bezier(.76, 0, .24, 1) 40ms both;
+  }
+
+  .page-transition-veil__mark {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 3;
+    color: #fff8f3;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.2rem, 2.2vw, 2rem);
+    letter-spacing: .07em;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    animation: page-veil-mark 680ms ease 80ms both;
+    white-space: nowrap;
+  }
+
+  /* Shared restrained, tactile motion language. */
+  .tactile-button {
+    transition:
+      color 240ms ease,
+      background-color 240ms ease,
+      border-color 240ms ease,
+      box-shadow 240ms ease,
+      transform 240ms cubic-bezier(.2, .75, .25, 1);
+  }
+
+  .tactile-button:active:not(:disabled) {
+    transform: scale(.975);
+  }
+
+  .tactile-media {
+    isolation: isolate;
+  }
+
+  .tactile-media::after {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset: -35%;
+    pointer-events: none;
+    background: linear-gradient(108deg, transparent 35%, rgba(255, 248, 243, .28) 48%, transparent 60%);
+    opacity: 0;
+    transform: translate3d(-15%, 0, 0) rotate(3deg);
+    transition: opacity 280ms ease, transform 700ms cubic-bezier(.2, .72, .2, 1);
+  }
+
+  .tactile-media__image {
+    transform: scale(1);
+    transition: transform 700ms cubic-bezier(.2, .72, .2, 1), filter 280ms ease;
+  }
+
+  .tactile-thumbnail {
+    transition:
+      opacity 240ms ease,
+      border-color 240ms ease,
+      transform 240ms cubic-bezier(.2, .75, .25, 1),
+      box-shadow 240ms ease;
+  }
+
+  .tactile-thumbnail.is-active {
+    box-shadow: 0 8px 22px rgba(69, 30, 44, .13);
+  }
+
+  .tactile-thumbnail img {
+    transition: transform 480ms cubic-bezier(.2, .72, .2, 1);
+  }
+
+  /* Product gallery: old image dissolves while the new scene is uncovered. */
+  .product-gallery-frame {
+    contain: paint;
+  }
+
+  .product-gallery-image {
+    will-change: clip-path, filter, opacity, transform;
+  }
+
+  .product-gallery-image--previous {
+    z-index: 0;
+    animation: product-gallery-exit 760ms cubic-bezier(.2, .72, .2, 1) both;
+  }
+
+  .product-gallery-image--current {
+    z-index: 1;
+    animation: product-gallery-reveal 760ms cubic-bezier(.2, .72, .2, 1) both;
+  }
+
+  .product-gallery-reveal-veil {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 10%, rgba(250, 239, 234, .6) 48%, rgba(85, 34, 49, .22) 61%, transparent 82%);
+    mix-blend-mode: screen;
+    transform: translateX(-120%);
+    animation: product-gallery-light-sweep 820ms cubic-bezier(.2, .72, .2, 1) both;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tactile-button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(40, 25, 34, .09);
+    }
+
+    .tactile-media:hover::after {
+      opacity: 1;
+      transform: translate3d(18%, 0, 0) rotate(3deg);
+    }
+
+    .tactile-media:hover .tactile-media__image {
+      transform: scale(1.035);
+    }
+
+    .tactile-thumbnail:hover {
+      transform: translateY(-2px);
+    }
+
+    .tactile-thumbnail:hover img {
+      transform: scale(1.04);
+    }
+  }
+}
+
+@keyframes page-veil-ivory {
+  0% { transform: translate3d(-112%, 0, 0); }
+  38%, 62% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(112%, 0, 0); }
+}
+
+@keyframes page-veil-burgundy {
+  0% { transform: translate3d(-118%, 0, 0); }
+  40%, 58% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(118%, 0, 0); }
+}
+
+@keyframes page-veil-mark {
+  0%, 24% { opacity: 0; transform: translate(-50%, calc(-50% + 10px)); }
+  40%, 58% { opacity: .92; transform: translate(-50%, -50%); }
+  78%, 100% { opacity: 0; transform: translate(-50%, calc(-50% - 8px)); }
+}
+
+@keyframes page-content-arrival {
+  0%, 38% { opacity: .66; transform: translateY(8px) scale(.998); }
+  100% { opacity: 1; transform: none; }
+}
+
+@keyframes product-gallery-reveal {
+  0% {
+    clip-path: inset(0 0 0 100% round 1.75rem);
+    filter: blur(9px) saturate(.86);
+    transform: scale(1.055);
+  }
+  100% {
+    clip-path: inset(0 0 0 0 round 1.75rem);
+    filter: blur(0) saturate(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes product-gallery-exit {
+  0% { filter: blur(0); opacity: 1; transform: scale(1); }
+  100% { filter: blur(8px); opacity: .34; transform: scale(1.035); }
+}
+
+@keyframes product-gallery-light-sweep {
+  0% { opacity: 0; transform: translateX(-120%); }
+  32% { opacity: .8; }
+  100% { opacity: 0; transform: translateX(120%); }
 }
 
 @keyframes story-drift {

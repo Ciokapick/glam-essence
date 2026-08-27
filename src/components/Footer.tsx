@@ -32,8 +32,9 @@ const Footer = () => {
           ]} />
           <FooterColumn title={copy.info} links={[
             ['/about', language === 'ro' ? 'Povestea noastră' : 'Our story'],
+            ['/ritual-finder', language === 'ro' ? 'Găsește-ți ritualul' : 'Find your ritual'],
+            ['/ingredient-atlas', language === 'ro' ? 'Atlasul ingredientelor' : 'Ingredient atlas'],
             ['/contact', 'Contact'],
-            ['/parfumuri', language === 'ro' ? 'Ghid de parfum' : 'Fragrance guide'],
           ]} />
           <FooterColumn title={copy.account} links={[
             ['/account', language === 'ro' ? 'Cont' : 'Account'],

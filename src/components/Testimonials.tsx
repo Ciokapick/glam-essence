@@ -25,7 +25,8 @@ const Testimonials = () => {
           <img
             src="/products/perfumes/editorial/woody-elegance.webp"
             alt="Parfum Woody Elegance într-o compoziție editorială"
-            className="absolute inset-0 h-full w-full object-cover transition duration-[1800ms] hover:scale-[1.025]"
+            className="absolute inset-0 h-full w-full object-cover transition hover:scale-[1.025]"
+            style={{ transitionDuration: '1800ms' }}
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
