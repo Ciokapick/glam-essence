@@ -11,6 +11,7 @@ import {
   Share2,
   Minus,
   Plus,
+  ChevronLeft,
   ChevronRight,
   ShoppingBag,
   Check,
@@ -23,6 +24,7 @@ import { useWishlist } from '@/contexts/WishlistContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from "@/hooks/use-toast";
 import ProductCard from '@/components/ProductCard';
+import FragranceNotes from '@/components/FragranceNotes';
 import { similarProducts, type Product } from '@/data/products';
 import { getProductStock, stockUpdateEmitter } from '@/utils/jsonDb';
 
@@ -39,6 +41,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   const productImages = Array.from(new Set([product.image, ...(product.gallery || [])]));
+  const selectedImageIndex = Math.max(productImages.indexOf(selectedImage), 0);
+
+  const showGalleryImage = (index: number) => {
+    if (productImages.length === 0) return;
+    const normalizedIndex = (index + productImages.length) % productImages.length;
+    setSelectedImage(productImages[normalizedIndex]);
+  };
 
   useEffect(() => {
     setSelectedImage(initialProduct.image);
@@ -168,10 +177,35 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
             <div>
               <div className="relative aspect-[.98] overflow-hidden rounded-[1.75rem] bg-[#f0e8e4] shadow-[0_24px_70px_rgba(40,25,34,.08)]">
                 <img
+                  key={selectedImage}
                   src={selectedImage}
                   alt={product?.name}
-                  className="w-full h-full object-cover"
+                  className="h-full w-full animate-fade-in object-cover"
                 />
+
+                {productImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => showGalleryImage(selectedImageIndex - 1)}
+                      className="absolute left-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur transition hover:bg-white"
+                      aria-label={language === 'ro' ? 'Imaginea anterioară' : 'Previous image'}
+                    >
+                      <ChevronLeft className="h-5 w-5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => showGalleryImage(selectedImageIndex + 1)}
+                      className="absolute right-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full border border-white/55 bg-white/80 text-[#281922] shadow-sm backdrop-blur transition hover:bg-white"
+                      aria-label={language === 'ro' ? 'Imaginea următoare' : 'Next image'}
+                    >
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                    <span className="absolute bottom-4 right-4 rounded-full bg-[#281922]/75 px-3 py-1.5 text-[9px] font-semibold tracking-[.16em] text-white backdrop-blur">
+                      {String(selectedImageIndex + 1).padStart(2, '0')} / {String(productImages.length).padStart(2, '0')}
+                    </span>
+                  </>
+                )}
                 
                 {product?.isNew && (
                   <Badge className="absolute left-5 top-5 rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] font-semibold uppercase tracking-[.16em] text-white">
@@ -186,13 +220,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 )}
               </div>
               {productImages.length > 1 && (
-                <div className="mt-4 grid grid-cols-2 gap-3">
+                <div className="mt-4 flex gap-3 overflow-x-auto pb-2 [scrollbar-width:thin] [scrollbar-color:rgba(40,25,34,.22)_transparent]">
                   {productImages.map((image, index) => (
                     <button
                       key={image}
                       type="button"
                       onClick={() => setSelectedImage(image)}
-                      className={`relative aspect-square overflow-hidden rounded-[1.1rem] border-2 bg-[#f2ece9] transition ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent hover:border-[#7b263d]/35'}`}
+                      className={`relative aspect-square w-24 shrink-0 overflow-hidden rounded-[1rem] border-2 bg-[#f2ece9] transition sm:w-28 ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent opacity-72 hover:border-[#7b263d]/35 hover:opacity-100'}`}
                       aria-label={`${t(product.name)} — ${index === 0 ? 'editorial' : 'packshot'}`}
                     >
                       <img src={image} alt="" className="h-full w-full object-cover" />
@@ -379,17 +413,21 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   </div>
                 </div>
               </TabsContent>
-              <TabsContent value="features" className="mt-5 rounded-[1.5rem] border border-[#281922]/10 bg-[#281922] p-6 text-white shadow-[0_18px_50px_rgba(40,25,34,.14)] md:p-10">
-                <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
-                  <div><p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d9aebb]">{language === 'ro' ? 'De ce îl vei păstra' : 'Why you will keep it'}</p><h3 className="mt-4 font-serif text-4xl tracking-[-.04em]">{t('product.features')}</h3></div>
-                  <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'Detalii clare, fără promisiuni inutile — exact ce trebuie să știi înainte să-l integrezi în ritual.' : 'Clear details, without unnecessary promises — exactly what you need to know before making it part of your ritual.'}</p>
-                </div>
-                {product?.features && (
-                  <ul className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
-                    {product.features.map((feature: string, index: number) => (
-                      <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{feature}</span></li>
-                    ))}
-                  </ul>
+              <TabsContent value="features" className="mt-5">
+                {isPerfume ? <FragranceNotes features={product?.features} /> : (
+                  <div className="rounded-[1.5rem] border border-[#281922]/10 bg-[#281922] p-6 text-white shadow-[0_18px_50px_rgba(40,25,34,.14)] md:p-10">
+                    <div className="flex flex-col justify-between gap-6 border-b border-white/15 pb-7 md:flex-row md:items-end">
+                      <div><p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#d9aebb]">{language === 'ro' ? 'De ce îl vei păstra' : 'Why you will keep it'}</p><h3 className="mt-4 font-serif text-4xl tracking-[-.04em]">{t('product.features')}</h3></div>
+                      <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'Detalii clare, fără promisiuni inutile — exact ce trebuie să știi înainte să-l integrezi în ritual.' : 'Clear details, without unnecessary promises — exactly what you need to know before making it part of your ritual.'}</p>
+                    </div>
+                    {product?.features && (
+                      <ul className="mt-7 grid gap-x-8 gap-y-4 sm:grid-cols-2">
+                        {product.features.map((feature: string, index: number) => (
+                          <li key={index} className="flex items-start gap-3 border-b border-white/10 pb-4 text-sm leading-6 text-white/78"><span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-[#d9aebb] text-[#281922]"><Check className="h-3.5 w-3.5" strokeWidth={2.5} /></span><span>{feature}</span></li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 )}
               </TabsContent>
               <TabsContent value="reviews" className="p-6 rounded-lg bg-gray-50/50">
