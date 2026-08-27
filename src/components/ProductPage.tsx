@@ -425,6 +425,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     features={product?.features}
                     images={productImages}
                     productName={t(product.name)}
+                    productSlug={product.slug}
                   />
                 )}
               </TabsContent>

@@ -6,6 +6,7 @@ interface SkinRitualFeaturesProps {
   features?: string[];
   images?: string[];
   productName?: string;
+  productSlug?: string;
 }
 
 type ChapterKey = 'formula' | 'effect' | 'ritual';
@@ -23,10 +24,69 @@ type Chapter = {
 const formulaPattern = /acid|ceramid|ulei|oil|unt de|butter|vitamin|retinol|peptid|cafein|caffeine|extract|complex|argil|clay|cărbune|charcoal|niacinamid|panthenol|omega|colagen|collagen|iod|hialuronic|hyaluronic/i;
 const ritualPattern = /textur|formulă non|non-greasy|absorb|fără|free from|potrivit|suitable|testat|tested|oftalmologic|ophthalm|dermatologic|ph |parfum|fragrance|se usucă|dries|săptămân|weekly|rezultate vizibile|visible results/i;
 
+const skincareRitualImages: Record<string, Record<ChapterKey, string>> = {
+  'crema-hidratanta-luxury': {
+    formula: '/products/skincare/rituals/luxury-face-cream-formula.jpg',
+    effect: '/products/skincare/rituals/luxury-face-cream-effect.jpg',
+    ritual: '/products/skincare/rituals/luxury-face-cream-ritual.jpg',
+  },
+  'crema-contur-ochi-anti-age': {
+    formula: '/products/skincare/rituals/eye-cream-formula.jpg',
+    effect: '/products/skincare/rituals/eye-cream-effect.jpg',
+    ritual: '/products/skincare/rituals/eye-cream-ritual.jpg',
+  },
+  'crema-de-maini-silk': {
+    formula: '/products/skincare/rituals/hand-cream-formula.jpg',
+    effect: '/products/skincare/rituals/hand-cream-effect.jpg',
+    ritual: '/products/skincare/rituals/hand-cream-ritual.jpg',
+  },
+  'crema-de-corp-intense': {
+    formula: '/products/skincare/rituals/body-cream-formula.jpg',
+    effect: '/products/skincare/rituals/body-cream-effect.jpg',
+    ritual: '/products/skincare/rituals/body-cream-ritual.jpg',
+  },
+  'crema-nutritiva-de-noapte': {
+    formula: '/products/skincare/rituals/night-cream-formula.jpg',
+    effect: '/products/skincare/rituals/night-cream-effect.jpg',
+    ritual: '/products/skincare/rituals/night-cream-ritual.jpg',
+  },
+  'crema-anticelulitică': {
+    formula: '/products/skincare/rituals/anti-cellulite-formula.jpg',
+    effect: '/products/skincare/rituals/anti-cellulite-effect.jpg',
+    ritual: '/products/skincare/rituals/anti-cellulite-ritual.jpg',
+  },
+  'ser-facial-radiance': {
+    formula: '/products/skincare/rituals/face-serum-formula.jpg',
+    effect: '/products/skincare/rituals/face-serum-effect.jpg',
+    ritual: '/products/skincare/rituals/face-serum-ritual.jpg',
+  },
+  'masca-faciala-detox': {
+    formula: '/products/skincare/rituals/detox-mask-formula.jpg',
+    effect: '/products/skincare/rituals/detox-mask-effect.jpg',
+    ritual: '/products/skincare/rituals/detox-mask-ritual.jpg',
+  },
+  'spuma-de-curatare': {
+    formula: '/products/skincare/rituals/cleansing-foam-formula.jpg',
+    effect: '/products/skincare/rituals/cleansing-foam-effect.jpg',
+    ritual: '/products/skincare/rituals/cleansing-foam-ritual.jpg',
+  },
+  'tonic-purificator': {
+    formula: '/products/skincare/rituals/toner-formula.jpg',
+    effect: '/products/skincare/rituals/toner-effect.jpg',
+    ritual: '/products/skincare/rituals/toner-ritual.jpg',
+  },
+  'ulei-de-fata-nutritiv': {
+    formula: '/products/skincare/rituals/face-oil-formula.jpg',
+    effect: '/products/skincare/rituals/face-oil-effect.jpg',
+    ritual: '/products/skincare/rituals/face-oil-ritual.jpg',
+  },
+};
+
 const SkinRitualFeatures: React.FC<SkinRitualFeaturesProps> = ({
   features = [],
   images = [],
   productName = '',
+  productSlug,
 }) => {
   const { language } = useLanguage();
   const [activeKey, setActiveKey] = useState<ChapterKey>('formula');
@@ -59,10 +119,13 @@ const SkinRitualFeatures: React.FC<SkinRitualFeaturesProps> = ({
     return groups;
   }, [localizedFeatures]);
 
-  const visualImages = useMemo(
-    () => Array.from(new Set(images.filter(Boolean))),
-    [images],
-  );
+  const visualImages = useMemo(() => {
+    const generatedWorlds = productSlug ? skincareRitualImages[productSlug] : undefined;
+    const preferredImages = generatedWorlds
+      ? [generatedWorlds.formula, generatedWorlds.effect, generatedWorlds.ritual]
+      : images;
+    return Array.from(new Set(preferredImages.filter(Boolean)));
+  }, [images, productSlug]);
 
   const chapters: Chapter[] = [
     {
