@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FragranceNotesProps {
@@ -49,6 +49,7 @@ const noteDescriptor = (note: string, language: 'ro' | 'en') => {
 
 const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
   const { language } = useLanguage();
+  const [activeKey, setActiveKey] = useState<NoteGroup['key']>('top');
   const noteGroups: NoteGroup[] = [
     {
       key: 'top',
@@ -71,6 +72,7 @@ const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
   ];
 
   const supportingDetails = features.filter((feature) => !/^Note de (vârf|mijloc|bază):/i.test(feature));
+  const activeGroup = noteGroups.find((group) => group.key === activeKey) || noteGroups[0];
 
   return (
     <div className="relative overflow-hidden rounded-[1.5rem] bg-[#241820] p-6 text-white shadow-[0_24px_70px_rgba(40,25,34,.16)] md:p-10">
@@ -83,34 +85,49 @@ const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
           <p className="text-[10px] font-semibold uppercase tracking-[.24em] text-[#d9aebb]">{language === 'ro' ? 'Compoziția parfumului' : 'Fragrance composition'}</p>
           <h3 className="mt-4 font-serif text-4xl leading-none tracking-[-.04em] sm:text-5xl">{language === 'ro' ? 'Piramida olfactivă' : 'The scent pyramid'}</h3>
         </div>
-        <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'O evoluție în trei acte: prima impresie, inima parfumului și amprenta care rămâne.' : 'A three-act evolution: first impression, the heart of the scent and the trace it leaves behind.'}</p>
+        <p className="max-w-sm text-sm leading-6 text-white/55">{language === 'ro' ? 'Explorează cele trei acte ale parfumului. Treci peste un nivel pentru a-i schimba atmosfera.' : 'Explore the three acts of the fragrance. Hover a chapter to shift its atmosphere.'}</p>
       </div>
 
-      <div className="relative mt-8 space-y-8">
-        <div className="pointer-events-none absolute bottom-8 left-[1.15rem] top-8 w-px bg-gradient-to-b from-[#d9aebb]/70 via-[#b87488]/50 to-[#d9aebb]/20 sm:left-[1.45rem]" />
-        {noteGroups.map((group, groupIndex) => (
-          <section key={group.key} className="relative grid gap-5 sm:grid-cols-[minmax(9.5rem,.48fr)_minmax(0,1fr)] sm:items-center">
-            <div className="relative z-10 flex items-center gap-4 bg-[#241820] pr-2 sm:block sm:bg-transparent sm:pr-0">
-              <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-[#d9aebb]/55 bg-[#3b2732] font-serif text-sm italic text-[#f4dbe1] sm:h-11 sm:w-11">0{groupIndex + 1}</span>
-              <div className="sm:mt-4">
-                <p className="text-[10px] font-semibold uppercase tracking-[.2em] text-[#d9aebb]">{group.label}</p>
-                <p className="mt-1 font-serif text-xl text-white/90">{group.title}</p>
-              </div>
+      <div className="relative mt-8 grid gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(17rem,.9fr)] lg:items-stretch">
+        <div key={activeGroup.key} className={`relative isolate flex min-h-[22rem] flex-col justify-between overflow-hidden rounded-[1.35rem] border border-white/15 bg-gradient-to-br p-6 shadow-2xl transition-all duration-700 ${activeGroup.key === 'top' ? 'from-[#406c70] via-[#2c343f] to-[#241820]' : activeGroup.key === 'heart' ? 'from-[#92556d] via-[#422535] to-[#241820]' : 'from-[#aa704d] via-[#422a2d] to-[#241820]'}`}>
+          <div className="pointer-events-none absolute -right-16 -top-14 h-52 w-52 rounded-full border border-white/15 opacity-60" />
+          <div className="pointer-events-none absolute -bottom-24 -left-10 h-56 w-56 rounded-full border border-white/10 opacity-50" />
+          <div className="glam-grain absolute inset-0" />
+          <div className="relative flex items-start justify-between">
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[.25em] text-white/55">{activeGroup.label}</p>
+              <p className="mt-3 max-w-xs font-serif text-4xl leading-[.94] tracking-[-.04em] sm:text-5xl">{activeGroup.title}</p>
             </div>
+            <span className="font-serif text-7xl italic leading-none text-white/15">0{noteGroups.findIndex((group) => group.key === activeGroup.key) + 1}</span>
+          </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
-              {group.notes.length > 0 ? group.notes.map((note) => {
-                const { tint, ring, texture } = noteVisual(note);
-                return (
-                  <div key={note} title={`${note} · ${noteDescriptor(note, language)}`} className="group/note flex min-w-[7.5rem] items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-3 py-3 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[.11] sm:min-w-0 sm:flex-1 sm:basis-[9rem]">
-                    <span className={`relative grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-gradient-to-br ${tint} ${ring} shadow-inner`} style={{ backgroundImage: texture }}><span className="h-3 w-3 rounded-full border border-white/45 bg-white/15 shadow-[0_0_14px_rgba(255,255,255,.28)] transition duration-500 group-hover/note:scale-150 group-hover/note:bg-white/30" /><span className="absolute inset-1 rounded-full border border-white/20 opacity-0 transition group-hover/note:opacity-100" /></span>
-                    <span className="min-w-0"><span className="block truncate text-sm font-medium leading-5 text-white/80">{note}</span><span className="mt-0.5 block text-[9px] uppercase tracking-[.16em] text-white/35">{noteDescriptor(note, language)}</span></span>
-                  </div>
-                );
-              }) : <p className="text-sm text-white/45">{language === 'ro' ? 'Note în curs de compunere.' : 'Notes are being composed.'}</p>}
-            </div>
-          </section>
-        ))}
+          <div className="relative mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {activeGroup.notes.map((note) => {
+              const { tint, ring, texture } = noteVisual(note);
+              return (
+                <div key={note} className="rounded-2xl border border-white/15 bg-black/10 p-3 backdrop-blur-sm transition duration-500 hover:-translate-y-1 hover:bg-white/10">
+                  <span className={`relative mb-3 block aspect-square rounded-[.9rem] border bg-gradient-to-br ${tint} ${ring} overflow-hidden`} style={{ backgroundImage: texture }}><span className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" /><span className="absolute bottom-2 left-2 h-2 w-2 rounded-full bg-white/75 shadow-[0_0_15px_rgba(255,255,255,.6)]" /></span>
+                  <span className="block truncate text-xs font-medium text-white/85">{note}</span>
+                  <span className="mt-1 block text-[9px] uppercase tracking-[.15em] text-white/40">{noteDescriptor(note, language)}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="relative flex flex-col gap-3">
+          {noteGroups.map((group, groupIndex) => {
+            const isActive = group.key === activeKey;
+            return (
+              <button key={group.key} type="button" onMouseEnter={() => setActiveKey(group.key)} onFocus={() => setActiveKey(group.key)} onClick={() => setActiveKey(group.key)} className={`group/level relative flex flex-1 items-center gap-4 overflow-hidden rounded-[1.15rem] border p-5 text-left transition-all duration-500 ${isActive ? 'border-[#d9aebb]/55 bg-white/[.12] shadow-lg' : 'border-white/10 bg-white/[.035] hover:border-white/25 hover:bg-white/[.08]'}`}>
+                <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border font-serif text-sm italic transition ${isActive ? 'border-[#f1d5dd] bg-[#d9aebb] text-[#281922]' : 'border-white/20 bg-[#3b2732] text-[#f4dbe1]'}`}>0{groupIndex + 1}</span>
+                <span className="min-w-0 flex-1"><span className="block text-[10px] font-semibold uppercase tracking-[.2em] text-[#d9aebb]">{group.label}</span><span className="mt-1 block font-serif text-2xl text-white/90">{group.title}</span><span className="mt-2 block text-xs text-white/45">{group.notes.length} {language === 'ro' ? 'note' : 'notes'}</span></span>
+                <span className={`text-2xl font-light transition duration-500 ${isActive ? 'translate-x-0 text-[#f1d5dd]' : '-translate-x-2 text-white/20 group-hover/level:translate-x-0 group-hover/level:text-white/60'}`}>↗</span>
+              </button>
+            );
+          })}
+          <p className="mt-auto px-1 pt-3 text-[10px] uppercase tracking-[.18em] text-white/35">{language === 'ro' ? 'Hover sau click pentru a explora' : 'Hover or click to explore'}</p>
+        </div>
       </div>
 
       {supportingDetails.length > 0 && (
