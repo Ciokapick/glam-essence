@@ -1,5 +1,4 @@
 import React from 'react';
-import { Flame, Gem, Leaf, MoonStar, Sparkles, Waves } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FragranceNotesProps {
@@ -16,21 +15,21 @@ type NoteGroup = {
 const noteVisual = (note: string) => {
   const normalized = note.toLowerCase();
   if (/piper|nucșoară|scorțișoară|cuișoare|pepper|nutmeg|cinnamon|clove|spicy/.test(normalized)) {
-    return { Icon: Flame, tint: 'from-[#bb6d42] via-[#8d3d46] to-[#321c28]', ring: 'border-[#db9a77]/45' };
+    return { tint: 'from-[#bb6d42] via-[#8d3d46] to-[#321c28]', ring: 'border-[#db9a77]/45', texture: 'radial-gradient(circle at 28% 25%, rgba(255,208,155,.85) 0 7%, transparent 8%), radial-gradient(circle at 72% 68%, rgba(255,186,120,.45) 0 11%, transparent 12%), linear-gradient(145deg, #bb6d42, #321c28)' };
   }
   if (/oud|tabac|cedru|santal|lemn|patchouli|vetiver|woody|tobacco|wood/.test(normalized)) {
-    return { Icon: Gem, tint: 'from-[#9e6b50] via-[#4c302c] to-[#211720]', ring: 'border-[#cda27f]/40' };
+    return { tint: 'from-[#9e6b50] via-[#4c302c] to-[#211720]', ring: 'border-[#cda27f]/40', texture: 'repeating-linear-gradient(115deg, rgba(226,184,138,.26) 0 2px, transparent 2px 9px), linear-gradient(145deg, #9e6b50, #211720)' };
   }
   if (/vanilie|ambră|musc|amber|vanilla|musk/.test(normalized)) {
-    return { Icon: MoonStar, tint: 'from-[#e5bb75] via-[#9a6249] to-[#402530]', ring: 'border-[#f0d095]/45' };
+    return { tint: 'from-[#e5bb75] via-[#9a6249] to-[#402530]', ring: 'border-[#f0d095]/45', texture: 'radial-gradient(ellipse at 62% 32%, rgba(255,234,181,.75) 0 10%, transparent 11%), linear-gradient(145deg, #e5bb75, #402530)' };
   }
   if (/lămâie|lime|grapefruit|bergamotă|citr|lemon|citrus/.test(normalized)) {
-    return { Icon: Waves, tint: 'from-[#c9e2d0] via-[#76aaa6] to-[#27505b]', ring: 'border-[#b9e2dc]/45' };
+    return { tint: 'from-[#c9e2d0] via-[#76aaa6] to-[#27505b]', ring: 'border-[#b9e2dc]/45', texture: 'radial-gradient(circle at 35% 38%, rgba(241,255,214,.7) 0 9%, transparent 10%), radial-gradient(circle at 68% 62%, rgba(190,242,207,.45) 0 13%, transparent 14%), linear-gradient(145deg, #c9e2d0, #27505b)' };
   }
   if (/trandafir|iasomie|iris|flor|rose|jasmine|floral/.test(normalized)) {
-    return { Icon: Leaf, tint: 'from-[#e4acba] via-[#92556d] to-[#3c2032]', ring: 'border-[#f1cbd3]/45' };
+    return { tint: 'from-[#e4acba] via-[#92556d] to-[#3c2032]', ring: 'border-[#f1cbd3]/45', texture: 'radial-gradient(circle at 35% 32%, rgba(255,221,227,.75) 0 12%, transparent 13%), radial-gradient(circle at 70% 65%, rgba(248,174,201,.4) 0 17%, transparent 18%), linear-gradient(145deg, #e4acba, #3c2032)' };
   }
-  return { Icon: Sparkles, tint: 'from-[#d4c1d8] via-[#7b627f] to-[#302337]', ring: 'border-[#d9c9df]/40' };
+  return { tint: 'from-[#d4c1d8] via-[#7b627f] to-[#302337]', ring: 'border-[#d9c9df]/40', texture: 'radial-gradient(circle at 38% 30%, rgba(246,226,255,.7) 0 8%, transparent 9%), linear-gradient(145deg, #d4c1d8, #302337)' };
 };
 
 const noteDescriptor = (note: string, language: 'ro' | 'en') => {
@@ -101,10 +100,10 @@ const FragranceNotes: React.FC<FragranceNotesProps> = ({ features = [] }) => {
 
             <div className="flex gap-3 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
               {group.notes.length > 0 ? group.notes.map((note) => {
-                const { Icon, tint, ring } = noteVisual(note);
+                const { tint, ring, texture } = noteVisual(note);
                 return (
                   <div key={note} title={`${note} · ${noteDescriptor(note, language)}`} className="group/note flex min-w-[7.5rem] items-center gap-3 rounded-2xl border border-white/10 bg-white/[.06] px-3 py-3 transition duration-300 hover:-translate-y-1 hover:border-white/20 hover:bg-white/[.11] sm:min-w-0 sm:flex-1 sm:basis-[9rem]">
-                    <span className={`relative grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-gradient-to-br ${tint} ${ring} shadow-inner`}><span className="absolute inset-1 rounded-full border border-white/20 opacity-0 transition group-hover/note:opacity-100" /><Icon className="relative h-5 w-5 text-white/85" strokeWidth={1.35} /></span>
+                    <span className={`relative grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-gradient-to-br ${tint} ${ring} shadow-inner`} style={{ backgroundImage: texture }}><span className="h-3 w-3 rounded-full border border-white/45 bg-white/15 shadow-[0_0_14px_rgba(255,255,255,.28)] transition duration-500 group-hover/note:scale-150 group-hover/note:bg-white/30" /><span className="absolute inset-1 rounded-full border border-white/20 opacity-0 transition group-hover/note:opacity-100" /></span>
                     <span className="min-w-0"><span className="block truncate text-sm font-medium leading-5 text-white/80">{note}</span><span className="mt-0.5 block text-[9px] uppercase tracking-[.16em] text-white/35">{noteDescriptor(note, language)}</span></span>
                   </div>
                 );
