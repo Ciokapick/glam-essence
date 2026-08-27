@@ -1,11 +1,4 @@
-
-import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import ProductCard from '@/components/ProductCard';
-import { Button } from '@/components/ui/button';
-import { Filter, SlidersHorizontal } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import EditorialCollectionPage, { type EditorialCollectionConfig } from '@/components/EditorialCollectionPage';
 import { products } from '@/data/products';
 
 const BODY_CARE_SLUGS = [
@@ -14,74 +7,67 @@ const BODY_CARE_SLUGS = [
   'crema-anticelulitică',
 ] as const;
 
-const BodyCare = () => {
-  const { t } = useLanguage();
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+const bodyProducts = BODY_CARE_SLUGS.map((slug) => products[slug]);
 
-  const displayProducts = BODY_CARE_SLUGS.map((slug) => products[slug]);
-
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Hero Banner */}
-          <div className="mb-12 grid overflow-hidden rounded-3xl border border-[#281922]/10 bg-[#f4eee9] animate-fade-in md:grid-cols-[0.95fr_1.05fr]">
-            <div className="flex max-w-2xl flex-col justify-center p-8 md:p-12">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('ingrijire.title')}</h1>
-              <p className="text-lg text-gray-700 mb-6">
-                {t('ingrijire.subtitle')}
-              </p>
-              <Button
-                className="w-fit bg-[#7b263d] text-white hover:bg-[#641d31]"
-                onClick={() => document.getElementById('body-care-collection')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                {t('ingrijire.discover_collection')}
-              </Button>
-            </div>
-            <div className="grid min-h-[330px] grid-cols-2 bg-[#281922]">
-              <img src="/products/skincare/campaign/hand-cream.webp" alt="Hand care" className="h-full w-full object-cover" />
-              <img src="/products/skincare/campaign/body-cream.webp" alt="Body care" className="h-full w-full object-cover" />
-            </div>
-          </div>
-          
-          {/* Filter section */}
-          <div id="body-care-collection" className="flex scroll-mt-28 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">{t('ingrijire.skincare_products')}</h2>
-              <p className="text-muted-foreground">{t('ingrijire.complete_routine')}</p>
-            </div>
-            
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                {t('ingrijire.filter')}
-              </Button>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4" />
-                {t('ingrijire.sort')}
-              </Button>
-            </div>
-          </div>
-          
-          {/* Products grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {displayProducts.map((product) => (
-              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
-                <ProductCard {...product} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
-  );
+const config: EditorialCollectionConfig = {
+  theme: 'body',
+  products: bodyProducts,
+  collectionId: 'body-collection',
+  heroImage: '/products/skincare/campaign/body-cream.webp',
+  heroImageAlt: 'Crema de corp Intense într-un decor cald și tactil',
+  floatingImage: '/products/skincare/campaign/hand-cream.webp',
+  floatingImageAlt: 'Crema de mâini Silk pe texturi naturale',
+  closingImage: '/products/skincare/campaign/body-treatment.webp',
+  closingImageAlt: 'Tratamentul pentru corp în univers mineral',
+  closingHref: '/product/crema-anticelulitică',
+  copy: {
+    ro: {
+      eyebrow: 'Glam Essence · Îngrijirea corpului',
+      title: 'Un ritual care nu se oprește la linia maxilarului.',
+      intro: 'Texturi bogate, gesturi lente și câteva minute în care îngrijirea corpului devine parte din starea ta, nu încă o obligație.',
+      cta: 'Încetinește ritmul',
+      manifesto: ['CATIFELARE', 'CONFORT', 'MASAJ', 'TEXTURĂ', 'PREZENȚĂ'],
+      storyLabel: 'Dincolo de rutină',
+      storyTitle: 'Corpul simte diferența dintre un pas făcut repede și un gest făcut cu atenție.',
+      storyText: 'Am păstrat colecția intenționat concentrată: o textură pentru mâini, una pentru confortul întregului corp și un tratament dedicat masajului.',
+      gestures: [
+        { number: '01', title: 'Mâinile', text: 'Primul gest al zilei și cel mai ușor de repetat — o textură care intră repede în piele.' },
+        { number: '02', title: 'Corpul', text: 'O cremă generoasă pentru după duș, când pielea este încă ușor umedă și receptivă.' },
+        { number: '03', title: 'Masajul', text: 'Un tratament aplicat lent, prin mișcări ferme, acolo unde corpul cere mai multă atenție.' },
+      ],
+      collectionLabel: 'Colecția pentru corp',
+      collectionTitle: 'Trei produse. Trei gesturi care chiar au loc în viața reală.',
+      collectionText: 'Fără o listă artificial de lungă: doar texturi distincte, cu roluri clare și universuri vizuale proprii.',
+      closingLabel: 'Timp pentru tine',
+      closingTitle: 'Masajul schimbă produsul într-o experiență.',
+      closingText: 'Tratamentul pentru corp este construit în jurul mișcării, texturii și acelui moment rar în care încetinești intenționat.',
+      closingCta: 'Descoperă tratamentul',
+    },
+    en: {
+      eyebrow: 'Glam Essence · Body care',
+      title: 'A ritual that does not stop at the jawline.',
+      intro: 'Rich textures, slower gestures and a few minutes in which body care becomes part of your mood, not another obligation.',
+      cta: 'Slow the rhythm',
+      manifesto: ['SOFTNESS', 'COMFORT', 'MASSAGE', 'TEXTURE', 'PRESENCE'],
+      storyLabel: 'Beyond routine',
+      storyTitle: 'The body feels the difference between a rushed step and a gesture made with attention.',
+      storyText: 'We kept the collection intentionally focused: one texture for hands, one for full-body comfort and one treatment dedicated to massage.',
+      gestures: [
+        { number: '01', title: 'The hands', text: 'The first gesture of the day and the easiest to repeat — a texture that absorbs quickly.' },
+        { number: '02', title: 'The body', text: 'A generous cream for after the shower, while skin is still slightly damp and receptive.' },
+        { number: '03', title: 'The massage', text: 'A treatment applied slowly, with deliberate movement, wherever the body asks for more attention.' },
+      ],
+      collectionLabel: 'The body collection',
+      collectionTitle: 'Three products. Three gestures that fit real life.',
+      collectionText: 'No artificially long list: only distinct textures with clear roles and visual worlds of their own.',
+      closingLabel: 'Time for yourself',
+      closingTitle: 'Massage turns the product into an experience.',
+      closingText: 'The body treatment is built around movement, texture and that rare moment when you intentionally slow down.',
+      closingCta: 'Discover the treatment',
+    },
+  },
 };
+
+const BodyCare = () => <EditorialCollectionPage config={config} />;
 
 export default BodyCare;

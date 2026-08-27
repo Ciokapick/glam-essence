@@ -1,74 +1,67 @@
-
-import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import ProductCard from '@/components/ProductCard';
-import { Button } from '@/components/ui/button';
-import { Filter, SlidersHorizontal } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import EditorialCollectionPage, { type EditorialCollectionConfig } from '@/components/EditorialCollectionPage';
 import { products } from '@/data/products';
 
-const Parfumuri = () => {
-  const { t } = useLanguage();
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+const perfumeProducts = Object.values(products).filter((product) => product.category.startsWith('parfumuri.'));
 
-  const perfumeProducts = Object.values(products).filter(p => p.category.startsWith('parfumuri.'));
-
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Hero Banner */}
-          <div className="rounded-2xl bg-gradient-to-r from-beauty-magenta/30 to-beauty-hotpink/30 p-8 md:p-12 mb-12 animate-fade-in">
-            <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('parfumuri.title')}</h1>
-              <p className="text-lg text-gray-700 mb-6">
-                {t('parfumuri.subtitle')}
-              </p>
-              <Button className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white">
-                {t('parfumuri.discover_collection')}
-              </Button>
-            </div>
-          </div>
-          
-          {/* Filter section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">{t('parfumuri.all_perfumes')}</h2>
-              <p className="text-muted-foreground">{t('parfumuri.find_perfect')}</p>
-            </div>
-            
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                {t('parfumuri.filter')}
-              </Button>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4" />
-                {t('parfumuri.sort')}
-              </Button>
-            </div>
-          </div>
-          
-          {/* Products grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {perfumeProducts.map((product) => (
-              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
-                <ProductCard {...product} name={t(product.name)} category={t(product.category)} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
-  );
+const config: EditorialCollectionConfig = {
+  theme: 'perfume',
+  products: perfumeProducts,
+  collectionId: 'perfume-collection',
+  heroImage: '/products/perfumes/editorial/oriental-mystique.webp',
+  heroImageAlt: 'Oriental Mystique în universul său nocturn',
+  floatingImage: '/products/perfumes/editorial/fresh-citrus.webp',
+  floatingImageAlt: 'Fresh Citrus în lumină solară',
+  closingImage: '/products/perfumes/editorial/spicy-noir.webp',
+  closingImageAlt: 'Spicy Noir, parfumul serilor târzii',
+  closingHref: '/product/parfum-spicy-noir',
+  copy: {
+    ro: {
+      eyebrow: 'Glam Essence · Atlas olfactiv',
+      title: 'Parfumul intră în încăpere înaintea ta.',
+      intro: 'Șase compoziții, fiecare construită ca un univers complet — de la transparența citrică la profunzimea condimentelor întunecate.',
+      cta: 'Alege-ți prezența',
+      manifesto: ['FLORAL', 'ORIENTAL', 'CITRIC', 'LEMNOS', 'ACVATIC', 'CONDIMENTAT'],
+      storyLabel: 'Cum alegi un parfum',
+      storyTitle: 'Nu porni de la note. Pornește de la starea pe care vrei să o lași în urmă.',
+      storyText: 'Un parfum bun nu este doar plăcut. Are temperatură, ritm și o anumită distanță față de piele. Colecția noastră trece de la compoziții luminoase și apropiate la prezențe dense, create pentru seară.',
+      gestures: [
+        { number: '01', title: 'Lumina', text: 'Citric și acvatic pentru zile deschise, dimineți rapide și o prezență care respiră.' },
+        { number: '02', title: 'Textura', text: 'Floral și oriental când vrei profunzime, detaliu și o evoluție lentă pe piele.' },
+        { number: '03', title: 'Umbra', text: 'Lemnos și condimentat pentru seri târzii, contrast și o amprentă care rămâne.' },
+      ],
+      collectionLabel: 'Colecția completă',
+      collectionTitle: 'Șase personalități. Nicio alegere generică.',
+      collectionText: 'Explorează fiecare lume vizuală și deschide produsul pentru note, persistență și povestea completă a compoziției.',
+      closingLabel: 'După lăsarea serii',
+      closingTitle: 'Unele parfumuri nu cer atenție. O schimbă.',
+      closingText: 'Spicy Noir unește condimente calde, lemn întunecat și o urmă de vanilie într-o compoziție construită pentru noapte.',
+      closingCta: 'Descoperă Spicy Noir',
+    },
+    en: {
+      eyebrow: 'Glam Essence · Fragrance atlas',
+      title: 'Fragrance enters the room before you do.',
+      intro: 'Six compositions, each built as a complete world — from citrus transparency to the depth of dark spices.',
+      cta: 'Choose your presence',
+      manifesto: ['FLORAL', 'ORIENTAL', 'CITRUS', 'WOODY', 'AQUATIC', 'SPICY'],
+      storyLabel: 'How to choose a fragrance',
+      storyTitle: 'Do not begin with notes. Begin with the feeling you want to leave behind.',
+      storyText: 'A beautiful fragrance is more than pleasant. It has temperature, rhythm and a certain distance from skin. Our collection moves from bright, intimate compositions to dense presences made for evening.',
+      gestures: [
+        { number: '01', title: 'The light', text: 'Citrus and aquatic for open days, fast mornings and a presence that breathes.' },
+        { number: '02', title: 'The texture', text: 'Floral and oriental when you want depth, detail and a slow evolution on skin.' },
+        { number: '03', title: 'The shadow', text: 'Woody and spicy for late evenings, contrast and a signature that lingers.' },
+      ],
+      collectionLabel: 'The complete collection',
+      collectionTitle: 'Six personalities. Nothing generic.',
+      collectionText: 'Explore each visual world and open a product to discover its notes, longevity and full composition story.',
+      closingLabel: 'After dark',
+      closingTitle: 'Some fragrances do not ask for attention. They change it.',
+      closingText: 'Spicy Noir brings warm spices, dark woods and a trace of vanilla into a composition created for the night.',
+      closingCta: 'Discover Spicy Noir',
+    },
+  },
 };
+
+const Parfumuri = () => <EditorialCollectionPage config={config} />;
 
 export default Parfumuri;

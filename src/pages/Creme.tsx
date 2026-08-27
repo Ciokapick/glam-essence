@@ -1,11 +1,4 @@
-
-import React, { useEffect } from 'react';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import ProductCard from '@/components/ProductCard';
-import { Button } from '@/components/ui/button';
-import { Filter, SlidersHorizontal } from 'lucide-react';
-import { useLanguage } from '@/contexts/LanguageContext';
+import EditorialCollectionPage, { type EditorialCollectionConfig } from '@/components/EditorialCollectionPage';
 import { products } from '@/data/products';
 
 const FACE_CARE_SLUGS = [
@@ -19,81 +12,67 @@ const FACE_CARE_SLUGS = [
   'ulei-de-fata-nutritiv',
 ] as const;
 
-const FaceCare = () => {
-  const { t } = useLanguage();
-  
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+const faceProducts = FACE_CARE_SLUGS.map((slug) => products[slug]);
 
-  const displayProducts = FACE_CARE_SLUGS.map((slug) => products[slug]);
-
-  return (
-    <div className="min-h-screen">
-      <Navbar />
-      
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Hero Banner */}
-          <div className="grid overflow-hidden rounded-3xl border border-beauty-coral/20 bg-[#f6e9e5] md:grid-cols-[0.95fr_1.05fr] mb-12 animate-fade-in">
-            <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.28em] text-[#7b263d]">Glam Essence · Face Care</p>
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{t('creme.title')}</h1>
-              <p className="text-lg text-gray-700 mb-6">
-                {t('creme.subtitle')}
-              </p>
-              <Button className="w-fit bg-[#7b263d] text-white hover:bg-[#641d31]" onClick={() => document.getElementById('skincare-collection')?.scrollIntoView({ behavior: 'smooth' })}>
-                {t('creme.discover_collection')}
-              </Button>
-            </div>
-            <div className="grid min-h-[340px] grid-cols-2 bg-[#281922]" aria-label="Lumile cromatice Glam Essence">
-              {[
-                ['/products/skincare/campaign/face-cream.webp', 'Hydrate'],
-                ['/products/skincare/campaign/face-serum.webp', 'Radiance'],
-                ['/products/skincare/campaign/detox-mask.webp', 'Purify'],
-                ['/products/skincare/campaign/night-cream.webp', 'Night Repair'],
-              ].map(([image, label]) => (
-                <div key={label} className="group relative min-h-[170px] overflow-hidden">
-                  <img src={image} alt={label} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
-                  <span className="absolute bottom-3 left-3 text-[9px] font-semibold uppercase tracking-[.22em] text-white drop-shadow">{label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-          
-          {/* Filter section */}
-          <div id="skincare-collection" className="flex scroll-mt-28 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-            <div>
-              <h2 className="text-2xl font-bold">{t('creme.all_creams')}</h2>
-              <p className="text-muted-foreground">{t('creme.hydration_solutions')}</p>
-            </div>
-            
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <Filter className="h-4 w-4" />
-                {t('creme.filter')}
-              </Button>
-              <Button variant="outline" size="sm" className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4" />
-                {t('creme.sort')}
-              </Button>
-            </div>
-          </div>
-          
-          {/* Products grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
-            {displayProducts.map((product) => (
-              <div key={product.id} className="animate-fade-in" style={{ animationDelay: `${parseInt(product.id) * 0.1}s` }}>
-                <ProductCard {...product} />
-              </div>
-            ))}
-          </div>
-        </div>
-      </main>
-      
-      <Footer />
-    </div>
-  );
+const config: EditorialCollectionConfig = {
+  theme: 'face',
+  products: faceProducts,
+  collectionId: 'face-collection',
+  heroImage: '/products/skincare/campaign/face-serum.webp',
+  heroImageAlt: 'Serul Radiance într-un univers de lumină aurie',
+  floatingImage: '/products/skincare/campaign/toner.webp',
+  floatingImageAlt: 'Tonicul purificator în lumină acvatică',
+  closingImage: '/products/skincare/campaign/night-cream.webp',
+  closingImageAlt: 'Crema nutritivă de noapte în decor nocturn',
+  closingHref: '/product/crema-nutritiva-de-noapte',
+  copy: {
+    ro: {
+      eyebrow: 'Glam Essence · Ritualuri pentru ten',
+      title: 'Pielea nu cere perfecțiune. Cere consecvență.',
+      intro: 'Opt texturi construite pentru momente diferite ale zilei — curățare, echilibru, tratament, hidratare și refacere.',
+      cta: 'Construiește ritualul',
+      manifesto: ['CURĂȚĂ', 'ECHILIBREAZĂ', 'TRATEAZĂ', 'HIDRATEAZĂ', 'PROTEJEAZĂ'],
+      storyLabel: 'Un ritual clar',
+      storyTitle: 'Mai puține produse alese la întâmplare. Mai multă logică între pași.',
+      storyText: 'O rutină bună nu trebuie să fie lungă. Trebuie să aibă un început blând, un tratament potrivit și o textură care închide ritualul fără să încarce pielea.',
+      gestures: [
+        { number: '01', title: 'Pregătește', text: 'Spuma și tonicul îndepărtează surplusul și aduc pielea într-un punct calm, receptiv.' },
+        { number: '02', title: 'Concentrează', text: 'Serul, uleiul și îngrijirea ochilor aduc texturi țintite exact acolo unde ai nevoie.' },
+        { number: '03', title: 'Păstrează', text: 'Crema de zi sau de noapte sigilează confortul și transformă pașii într-un ritual complet.' },
+      ],
+      collectionLabel: 'Îngrijirea tenului',
+      collectionTitle: 'De la prima atingere de apă până la ultima textură a serii.',
+      collectionText: 'Produsele sunt separate clar pe roluri, astfel încât să poți construi o rutină scurtă sau una completă fără redundanță.',
+      closingLabel: 'Ritualul de seară',
+      closingTitle: 'Noaptea este momentul în care rutina încetinește.',
+      closingText: 'Crema nutritivă de noapte încheie ziua cu o textură bogată, reconfortantă, creată pentru momentul în care nu te mai grăbești nicăieri.',
+      closingCta: 'Descoperă ritualul de noapte',
+    },
+    en: {
+      eyebrow: 'Glam Essence · Face rituals',
+      title: 'Skin does not ask for perfection. It asks for consistency.',
+      intro: 'Eight textures created for different moments of the day — cleansing, balance, treatment, hydration and repair.',
+      cta: 'Build the ritual',
+      manifesto: ['CLEANSE', 'BALANCE', 'TREAT', 'HYDRATE', 'PROTECT'],
+      storyLabel: 'A clear ritual',
+      storyTitle: 'Fewer products chosen at random. More logic between steps.',
+      storyText: 'A good routine does not need to be long. It needs a gentle beginning, the right treatment and a texture that closes the ritual without weighing skin down.',
+      gestures: [
+        { number: '01', title: 'Prepare', text: 'Foam and toner remove excess and bring skin to a calm, receptive starting point.' },
+        { number: '02', title: 'Concentrate', text: 'Serum, oil and eye care bring targeted textures exactly where you need them.' },
+        { number: '03', title: 'Preserve', text: 'Day or night cream seals in comfort and turns the steps into a complete ritual.' },
+      ],
+      collectionLabel: 'Face care',
+      collectionTitle: 'From the first touch of water to the final texture of the evening.',
+      collectionText: 'Products are clearly separated by role, so you can build a concise or complete routine without redundancy.',
+      closingLabel: 'The evening ritual',
+      closingTitle: 'Night is when the routine slows down.',
+      closingText: 'The nourishing night cream closes the day with a rich, comforting texture made for the moment when there is nowhere left to rush.',
+      closingCta: 'Discover the night ritual',
+    },
+  },
 };
+
+const FaceCare = () => <EditorialCollectionPage config={config} />;
 
 export default FaceCare;
