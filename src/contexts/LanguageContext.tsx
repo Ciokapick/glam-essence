@@ -339,6 +339,12 @@ const translations: Translations = {
   // Wishlist translations
   'wishlist.title': { en: 'My Favorites List', ro: 'Lista mea de favorite' },
   'wishlist.subtitle': { en: 'Your favorite products are saved here for easy reference.', ro: 'Produsele tale favorite sunt salvate aici pentru referință ușoară.' },
+  'wishlist.eyebrow': { en: 'Your personal edit', ro: 'Selecția ta personală' },
+  'wishlist.editorial_title': { en: 'The pieces you keep coming back to.', ro: 'Lucrurile la care te întorci mereu.' },
+  'wishlist.editorial_subtitle': { en: 'A considered collection of textures, scents and small rituals worth remembering.', ro: 'O colecție aleasă de texturi, parfumuri și mici ritualuri care merită păstrate.' },
+  'wishlist.saved_label': { en: 'saved pieces', ro: 'alegeri salvate' },
+  'wishlist.remove_item': { en: 'Remove from favorites', ro: 'Elimină de la favorite' },
+  'wishlist.empty_eyebrow': { en: 'Your edit is waiting', ro: 'Selecția ta te așteaptă' },
   'wishlist.favorite_products': { en: 'favorite products', ro: 'produse favorite' },
   'wishlist.clear_list': { en: 'Clear List', ro: 'Șterge lista' },
   'wishlist.empty_title': { en: 'Your favorites list is empty', ro: 'Lista ta de favorite este goală' },
