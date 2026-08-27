@@ -69,7 +69,17 @@ export const api = {
   login: (email: string, password: string) => request<{ authenticated: true }>('/api/admin/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
   session: () => request<{ authenticated: boolean }>('/api/admin/session'),
   logout: () => request<{ authenticated: false }>('/api/admin/logout', { method: 'POST' }),
-  orders: () => request<Order[]>('/api/admin/orders'),
+  orders: async () => {
+    try {
+      // Static hosts answer unknown /api routes with the SPA document. The
+      // parsed payload is therefore null instead of an orders array; keep the
+      // portfolio admin usable by treating that state as an empty collection.
+      const list = await request<Order[]>('/api/admin/orders');
+      return Array.isArray(list) ? list : [];
+    } catch {
+      return [];
+    }
+  },
   updateOrderStatus: (id: string, status: OrderStatus) => request<Order>(`/api/admin/orders/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify({ status }) }),
   deleteOrder: (id: string) => request<void>(`/api/admin/orders/${encodeURIComponent(id)}`, { method: 'DELETE' }),
   createProduct: (product: ProductInput) => request<Product>('/api/admin/products', { method: 'POST', body: JSON.stringify(product) }),

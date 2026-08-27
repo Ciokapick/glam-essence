@@ -31,7 +31,7 @@ const AdminOrders = () => {
     
     try {
       const savedOrders = await api.orders();
-      setOrders(savedOrders);
+      setOrders(Array.isArray(savedOrders) ? savedOrders : []);
     } catch (error) {
       console.error('Error loading orders:', error);
       toast({
