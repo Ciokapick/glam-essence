@@ -9,6 +9,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { api } from '@/services/api';
 
 const AdminLogin = () => {
+  const demoCredentials = {
+    email: 'admin@glam-essence.local',
+    password: 'glam-demo-2026',
+  };
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -18,16 +22,26 @@ const AdminLogin = () => {
 
   useEffect(() => { api.session().then(() => navigate('/admin/dashboard')).catch(() => undefined); }, [navigate]);
 
-  const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const authenticate = async (email: string, secret: string) => {
     setIsLoading(true);
     try {
-      await api.login(username, password);
+      await api.login(email, secret);
       toast({ title: t('admin.login.success'), description: t('admin.login.welcome') });
       navigate('/admin/dashboard');
     } catch (error) {
       toast({ title: t('admin.login.failed'), description: error instanceof Error ? error.message : t('admin.login.invalid_credentials'), variant: 'destructive' });
     } finally { setIsLoading(false); }
+  };
+
+  const handleLogin = (event: React.FormEvent) => {
+    event.preventDefault();
+    void authenticate(username, password);
+  };
+
+  const handleDemoLogin = () => {
+    setUsername(demoCredentials.email);
+    setPassword(demoCredentials.password);
+    void authenticate(demoCredentials.email, demoCredentials.password);
   };
 
   return (
@@ -51,6 +65,12 @@ const AdminLogin = () => {
             <div className="space-y-2"><Label htmlFor="password" className="text-xs text-[#67545c]">{t('admin.login.password')}</Label><div className="relative"><LockKeyhole className="absolute left-3.5 top-3.5 h-4 w-4 text-[#a88f96]" /><Input id="password" type="password" autoComplete="current-password" placeholder="••••" className="h-12 rounded-[.8rem] border-[#281922]/12 bg-[#fffaf8] pl-11" value={password} onChange={(event) => setPassword(event.target.value)} required /></div></div>
             <Button type="submit" className="h-12 w-full rounded-full bg-[#281922] text-[10px] font-semibold uppercase tracking-[.16em] text-white hover:bg-[#593044]" disabled={isLoading}>{isLoading ? t('admin.login.logging_in') : t('admin.login.login')}</Button>
           </form>
+          <div className="my-6 flex items-center gap-3 text-[9px] font-semibold uppercase tracking-[.18em] text-[#b29da1]"><span className="h-px flex-1 bg-[#281922]/10" /><span>{language === 'ro' ? 'sau' : 'or'}</span><span className="h-px flex-1 bg-[#281922]/10" /></div>
+          <button type="button" onClick={handleDemoLogin} disabled={isLoading} className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-[#a04e62]/35 bg-[#f8e7e9] px-5 text-[10px] font-semibold uppercase tracking-[.16em] text-[#7e3d50] transition hover:border-[#a04e62] hover:bg-[#f3dce0] disabled:cursor-not-allowed disabled:opacity-50">
+            <Sparkles className="h-4 w-4" strokeWidth={1.5} />
+            {language === 'ro' ? 'Intră în demo' : 'Enter demo'}
+          </button>
+          <p className="mt-3 text-center text-[10px] leading-5 text-[#9c7d87]">{language === 'ro' ? 'Deschide dashboard-ul cu date demo pentru prezentarea portofoliului.' : 'Open the dashboard with demo data for portfolio presentations.'}</p>
         </div>
       </section>
     </main>
