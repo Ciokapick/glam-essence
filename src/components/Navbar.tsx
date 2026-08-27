@@ -30,10 +30,10 @@ export function Navbar() {
     : 'border-[#2a1b23]/10 bg-[#fbf8f5]/92 text-[#271a21] shadow-[0_8px_30px_rgba(39,26,33,.06)] backdrop-blur-xl';
 
   const links = [
-    ['/', t('nav.home')],
     ['/parfumuri', t('nav.perfumes')],
-    ['/creme', t('nav.creams')],
-    ['/ingrijire', t('nav.skincare')],
+    ['/face-care', t('nav.face_care')],
+    ['/body-care', t('nav.body_care')],
+    ['/seturi', language === 'ro' ? 'Seturi cadou' : 'Gift sets'],
     ['/about', language === 'ro' ? 'Povestea noastră' : 'Our story'],
   ];
 

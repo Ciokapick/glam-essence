@@ -63,7 +63,7 @@ const Hero = () => {
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
-              to="/ingrijire"
+              to="/face-care"
               className="inline-flex min-h-12 items-center justify-center border border-white/45 bg-white/5 px-6 text-xs font-semibold uppercase tracking-[.16em] text-white backdrop-blur-sm transition hover:bg-white/12"
             >
               {copy.secondary}

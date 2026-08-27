@@ -10,21 +10,28 @@ const Categories = () => {
       name: t('nav.perfumes'),
       kicker: language === 'ro' ? 'Semnătura ta invizibilă' : 'Your invisible signature',
       description: t('categories.perfumes_desc'),
-      image: '/ParfumFloralExtravagance.jpg',
+      image: '/products/perfumes/editorial/floral-extravagance.webp',
     },
     {
-      id: 'creme',
-      name: t('nav.creams'),
-      kicker: language === 'ro' ? 'Texturi care îngrijesc' : 'Textures that care',
-      description: t('categories.creams_desc'),
+      id: 'face-care',
+      name: t('nav.face_care'),
+      kicker: language === 'ro' ? 'Ritualul tenului' : 'The face ritual',
+      description: language === 'ro' ? 'Curățare, hidratare și tratament' : 'Cleanse, hydrate and treat',
+      image: '/products/skincare/campaign/face-serum.webp',
+    },
+    {
+      id: 'body-care',
+      name: t('nav.body_care'),
+      kicker: language === 'ro' ? 'Confort pentru piele' : 'Comfort for skin',
+      description: language === 'ro' ? 'Texturi pentru mâini și corp' : 'Textures for hands and body',
+      image: '/products/skincare/campaign/body-cream.webp',
+    },
+    {
+      id: 'seturi',
+      name: language === 'ro' ? 'Seturi cadou' : 'Gift sets',
+      kicker: language === 'ro' ? 'Gesturi atent alese' : 'Considered gestures',
+      description: language === 'ro' ? 'Colecții pregătite pentru a fi oferite' : 'Collections ready to be gifted',
       image: '/products/skincare/family-reference.webp',
-    },
-    {
-      id: 'ingrijire',
-      name: t('nav.skincare'),
-      kicker: language === 'ro' ? 'Ritualuri pentru fiecare zi' : 'Everyday rituals',
-      description: t('categories.skincare_desc'),
-      image: '/products/skincare/editorial/face-serum.webp',
     },
   ];
 
@@ -42,17 +49,17 @@ const Categories = () => {
           </div>
           <p className="max-w-xl text-sm leading-7 text-[#6f6268] md:justify-self-end md:text-base">
             {language === 'ro'
-              ? 'Trei colecții, o singură idee: produse pe care abia aștepți să le folosești și pe care îți place să le păstrezi aproape.'
-              : 'Three collections, one idea: products you look forward to using and love keeping close.'}
+              ? 'Patru colecții, o singură idee: produse pe care abia aștepți să le folosești și pe care îți place să le păstrezi aproape.'
+              : 'Four collections, one idea: products you look forward to using and love keeping close.'}
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-12 md:auto-rows-[520px]">
-          {categories.map((category, index) => (
+        <div className="grid gap-4 md:grid-cols-2 md:auto-rows-[500px]">
+          {categories.map((category) => (
             <Link
               to={`/${category.id}`}
               key={category.id}
-              className={`group relative min-h-[440px] overflow-hidden bg-[#2b2025] ${index === 0 ? 'md:col-span-5' : index === 1 ? 'md:col-span-4' : 'md:col-span-3'}`}
+              className="group relative min-h-[440px] overflow-hidden bg-[#2b2025]"
             >
               <img
                 src={category.image}

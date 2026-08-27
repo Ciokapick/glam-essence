@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import HomePage from '@/pages/Index';
 import ParfumuriPage from '@/pages/Parfumuri';
 import CremePage from '@/pages/Creme';
@@ -36,8 +36,10 @@ function App() {
             <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/parfumuri" element={<ParfumuriPage />} />
-            <Route path="/creme" element={<CremePage />} />
-            <Route path="/ingrijire" element={<IngrijirePage />} />
+            <Route path="/face-care" element={<CremePage />} />
+            <Route path="/body-care" element={<IngrijirePage />} />
+            <Route path="/creme" element={<Navigate to="/face-care" replace />} />
+            <Route path="/ingrijire" element={<Navigate to="/body-care" replace />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/account" element={<AccountPage />} />

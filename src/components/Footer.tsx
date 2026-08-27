@@ -26,8 +26,8 @@ const Footer = () => {
 
           <FooterColumn title={copy.shop} links={[
             ['/parfumuri', language === 'ro' ? 'Parfumuri' : 'Perfumes'],
-            ['/creme', language === 'ro' ? 'Creme' : 'Creams'],
-            ['/ingrijire', language === 'ro' ? 'Îngrijire' : 'Skincare'],
+            ['/face-care', 'Face Care'],
+            ['/body-care', 'Body Care'],
             ['/seturi', language === 'ro' ? 'Seturi cadou' : 'Gift sets'],
           ]} />
           <FooterColumn title={copy.info} links={[

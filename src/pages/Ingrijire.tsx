@@ -8,24 +8,20 @@ import { Filter, SlidersHorizontal } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { products } from '@/data/products';
 
-const Ingrijire = () => {
+const BODY_CARE_SLUGS = [
+  'crema-de-maini-silk',
+  'crema-de-corp-intense',
+  'crema-anticelulitică',
+] as const;
+
+const BodyCare = () => {
   const { t } = useLanguage();
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Filter skincare products from the main products data
-  const skincareProducts = Object.values(products).filter(product =>
-    product.category.includes('Ser') ||
-    product.category.includes('Mască') ||
-    product.category.includes('Curățare') ||
-    product.category.includes('Tonic') ||
-    product.category.includes('Ulei')
-  );
-  
-  // Take first 6 products for display
-  const displayProducts = skincareProducts.slice(0, 6);
+  const displayProducts = BODY_CARE_SLUGS.map((slug) => products[slug]);
 
   return (
     <div className="min-h-screen">
@@ -40,18 +36,21 @@ const Ingrijire = () => {
               <p className="text-lg text-gray-700 mb-6">
                 {t('ingrijire.subtitle')}
               </p>
-              <Button className="bg-beauty-hotpink text-white hover:bg-beauty-hotpink/90">
+              <Button
+                className="w-fit bg-[#7b263d] text-white hover:bg-[#641d31]"
+                onClick={() => document.getElementById('body-care-collection')?.scrollIntoView({ behavior: 'smooth' })}
+              >
                 {t('ingrijire.discover_collection')}
               </Button>
             </div>
             <div className="grid min-h-[330px] grid-cols-2 bg-[#281922]">
-              <img src="/products/skincare/editorial/toner.webp" alt="Hydrate and cleanse" className="h-full w-full object-cover" />
-              <img src="/products/skincare/editorial/face-serum.webp" alt="Radiance care" className="h-full w-full object-cover" />
+              <img src="/products/skincare/campaign/hand-cream.webp" alt="Hand care" className="h-full w-full object-cover" />
+              <img src="/products/skincare/campaign/body-cream.webp" alt="Body care" className="h-full w-full object-cover" />
             </div>
           </div>
           
           {/* Filter section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <div id="body-care-collection" className="flex scroll-mt-28 flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
             <div>
               <h2 className="text-2xl font-bold">{t('ingrijire.skincare_products')}</h2>
               <p className="text-muted-foreground">{t('ingrijire.complete_routine')}</p>
@@ -85,4 +84,4 @@ const Ingrijire = () => {
   );
 };
 
-export default Ingrijire;
+export default BodyCare;
