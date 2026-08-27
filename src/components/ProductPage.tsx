@@ -245,7 +245,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-4 w-4 ${i < (product?.rating || 0) ? 'text-beauty-gold fill-beauty-gold' : 'text-gray-300'}`}
+                      className={`h-4 w-4 ${i < (product?.rating || 0) ? 'fill-[#a05a6c] text-[#a05a6c]' : 'text-[#d8c9c5]'}`}
                     />
                   ))}
                 </div>
@@ -441,7 +441,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   <div className="rounded-[1.25rem] bg-[#281922] p-5 text-white shadow-[0_12px_30px_rgba(40,25,34,.12)]">
                     <p className="font-serif text-5xl leading-none">{(product?.rating || 0).toFixed(1)}</p>
                     <div className="mt-3 flex gap-1" aria-label={`${product?.rating || 0} out of 5 stars`}>
-                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-4 w-4 ${i < Math.round(product?.rating || 0) ? 'fill-[#e8c9a1] text-[#e8c9a1]' : 'text-white/25'}`} />)}
+                      {[...Array(5)].map((_, i) => <Star key={i} className={`h-4 w-4 ${i < Math.round(product?.rating || 0) ? 'fill-[#d9aebb] text-[#d9aebb]' : 'text-white/25'}`} />)}
                     </div>
                     <p className="mt-3 text-[10px] font-semibold uppercase tracking-[.18em] text-white/55">{language === 'ro' ? `Din ${product?.reviewCount || 0} recenzii` : `From ${product?.reviewCount || 0} reviews`}</p>
                   </div>
@@ -449,7 +449,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   <div className="space-y-3">
                     {[{ score: '5', width: '84%' }, { score: '4', width: '11%' }, { score: '3', width: '5%' }].map(({ score, width }) => (
                       <div key={score} className="flex items-center gap-3 text-xs text-[#67545c]">
-                        <span className="w-4 font-medium">{score}</span><Star className="h-3.5 w-3.5 fill-[#d5ac72] text-[#d5ac72]" />
+                        <span className="w-4 font-medium">{score}</span><Star className="h-3.5 w-3.5 fill-[#a05a6c] text-[#a05a6c]" />
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#eee5e1]"><div className="h-full rounded-full bg-[#a05a6c]" style={{ width }} /></div>
                         <span className="w-9 text-right text-[11px] text-[#9c7d87]">{width}</span>
                       </div>
@@ -469,7 +469,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                         <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#e7c6cf] font-serif text-lg text-[#281922]">{review.initial}</span><div><h4 className="font-medium text-[#281922]">{review.name}</h4><p className="text-[10px] uppercase tracking-[.14em] text-[#a05a6c]">{language === 'ro' ? 'Achiziție verificată' : 'Verified purchase'}</p></div></div>
                         <span className="text-right text-[10px] uppercase tracking-[.08em] text-[#9c7d87]">{review.date}</span>
                       </div>
-                      <div className="mt-5 flex gap-1">{[...Array(5)].map((_, i) => <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? 'fill-[#d5ac72] text-[#d5ac72]' : 'text-[#d8c9c5]'}`} />)}</div>
+                      <div className="mt-5 flex gap-1">{[...Array(5)].map((_, i) => <Star key={i} className={`h-3.5 w-3.5 ${i < review.rating ? 'fill-[#a05a6c] text-[#a05a6c]' : 'text-[#d8c9c5]'}`} />)}</div>
                       <p className="mt-4 text-sm leading-6 text-[#67545c]">{review.text}</p>
                     </article>
                   ))}
@@ -479,7 +479,12 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
           </div>
           
           <div>
-            <h2 className="text-2xl font-bold mb-6">{t('product.similar_products')}</h2>
+            <div className="mb-7 flex items-end justify-between gap-4 border-b border-[#281922]/10 pb-5">
+              <div>
+                <p className="text-[10px] font-semibold uppercase tracking-[.22em] text-[#a05a6c]">{language === 'ro' ? 'Continuă ritualul' : 'Continue the ritual'}</p>
+                <h2 className="mt-3 font-serif text-4xl leading-none tracking-[-.04em]">{t('product.similar_products')}</h2>
+              </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {similarProducts.map((product) => (
                 <div key={product.id} className="animate-fade-in">

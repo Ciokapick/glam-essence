@@ -20,13 +20,17 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     }
   }, [navigate, location.pathname]);
 
-  if (!verified) return <div className="grid min-h-screen place-items-center bg-gray-50 text-sm text-gray-500">Se verifică sesiunea…</div>;
+  if (!verified) return (
+    <div className="grid min-h-screen place-items-center bg-[#f6efec] text-[#806d74]">
+      <div className="text-center"><div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-full bg-[#281922] font-serif text-lg text-white">GE</div><p className="text-[10px] font-semibold uppercase tracking-[.2em]">Se verifică sesiunea…</p></div>
+    </div>
+  );
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#f6efec] text-[#281922] md:flex">
       <AdminSidebar />
-      <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">
-        <div className="container mx-auto px-6 py-8">
+      <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
+        <div className="mx-auto max-w-[1500px] px-5 py-7 sm:px-8 sm:py-10 lg:px-12">
           {children}
         </div>
       </main>

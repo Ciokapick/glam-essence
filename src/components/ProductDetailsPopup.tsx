@@ -115,7 +115,7 @@ const ProductDetailsPopup: React.FC<ProductDetailsPopupProps> = ({
           </div>
 
           <div className="mt-7 grid gap-3 sm:grid-cols-[1fr_auto]">
-            <button type="button" onClick={handleAddToCart} disabled={stock <= 0} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#c43de3] px-6 text-[10px] font-semibold uppercase tracking-[.15em] text-white transition hover:bg-[#a928c3] disabled:cursor-not-allowed disabled:opacity-45"><ShoppingBag className="h-4 w-4" />{stock > 0 ? t('common.add_to_cart') : t('product.out_of_stock')}</button>
+            <button type="button" onClick={handleAddToCart} disabled={stock <= 0} className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[#281922] px-6 text-[10px] font-semibold uppercase tracking-[.15em] text-white transition hover:bg-[#432d37] disabled:cursor-not-allowed disabled:opacity-45"><ShoppingBag className="h-4 w-4" />{stock > 0 ? t('common.add_to_cart') : t('product.out_of_stock')}</button>
             <button type="button" onClick={handleAddToWishlist} className={`inline-flex h-12 items-center justify-center gap-2 rounded-full border px-5 text-[10px] font-semibold uppercase tracking-[.12em] transition ${isFavorite ? 'border-[#a04e62] bg-[#f8e7e9] text-[#a04e62]' : 'border-[#281922]/15 hover:bg-[#f8eeec]'}`}><Heart className={`h-4 w-4 ${isFavorite ? 'fill-current' : ''}`} />{language === 'ro' ? 'Favorite' : 'Wishlist'}</button>
           </div>
         </div>

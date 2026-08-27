@@ -39,27 +39,27 @@ const RecentOrders = () => {
   
   return (
     <>
-      <div className="space-y-4">
+      <div className="space-y-3">
         {recentOrders.map(order => (
-          <div key={order.id} className="flex justify-between items-center border-b pb-4">
+          <div key={order.id} className="flex flex-col gap-3 border-b border-[#281922]/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <p className="font-medium">{t('admin.orders.order_id')} #{order.id}</p>
-              <p className="text-sm text-muted-foreground">
+                <p className="font-medium text-[#281922]">{t('admin.orders.order_id')} #{order.id}</p>
+              <p className="text-xs text-[#9c7d87]">
                 {order.customer.name} • {order.date}
               </p>
             </div>
             <div className="flex items-center gap-4">
-              <span className={`px-2 py-1 text-xs rounded-full ${
-                order.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                order.status === 'processing' ? 'bg-blue-100 text-blue-800' :
-                order.status === 'completed' ? 'bg-green-100 text-green-800' :
-                'bg-red-100 text-red-800'
+                <span className={`rounded-full px-3 py-1 text-[10px] font-medium ${
+                order.status === 'pending' ? 'bg-[#f4e6d5] text-[#8c5a2d]' :
+                order.status === 'processing' ? 'bg-[#e5edf1] text-[#456776]' :
+                order.status === 'completed' ? 'bg-[#e3eee8] text-[#4f7562]' :
+                'bg-[#f3e0e3] text-[#944b5b]'
               }`}>
                 {order.status === 'pending' ? t('admin.orders.pending') :
                  order.status === 'processing' ? t('admin.orders.processing') :
                  order.status === 'completed' ? t('admin.orders.completed') : t('admin.orders.canceled')}
               </span>
-              <span className="font-semibold">{order.total.toFixed(2)} lei</span>
+              <span className="text-sm font-semibold text-[#281922]">{order.total.toFixed(2)} lei</span>
             </div>
           </div>
         ))}
@@ -68,7 +68,7 @@ const RecentOrders = () => {
       {recentOrders.length > 0 && (
         <Button
           variant="outline"
-          className="w-full mt-4"
+          className="mt-4 h-11 w-full rounded-full border-[#281922]/15 text-xs hover:bg-[#f7ece9]"
           onClick={() => navigate('/admin/orders')}
         >
           {t('admin.dashboard.view_all_orders')}
@@ -108,27 +108,28 @@ const Dashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">{t('admin.dashboard.title')}</h1>
-          <p className="text-gray-500 mt-1">{t('admin.dashboard.subtitle')}</p>
+      <div className="space-y-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div><p className="mb-2 text-[10px] font-semibold uppercase tracking-[.22em] text-[#a04e62]">Glam Essence · Admin studio</p><h1 className="font-serif text-4xl tracking-[-.03em] text-[#281922] sm:text-5xl">{t('admin.dashboard.title')}</h1>
+          <p className="mt-2 text-sm text-[#806d74]">{t('admin.dashboard.subtitle')}</p></div>
+          <div className="rounded-full border border-[#281922]/10 bg-[#fffaf8] px-4 py-2 text-[10px] font-medium uppercase tracking-[.14em] text-[#9c7d87]">Live workspace</div>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card>
-            <CardContent className="pt-6">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+            <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-blue-100 rounded-md mr-4">
-                  <ShoppingBag className="h-8 w-8 text-blue-600" />
+                <div className="mr-4 grid h-12 w-12 place-items-center rounded-full bg-[#f3dce0]">
+                  <ShoppingBag className="h-5 w-5 text-[#a04e62]" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.orders')}</p>
-                  <h3 className="text-2xl font-bold">{orderCount}</h3>
+                  <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#9c7d87]">{t('admin.dashboard.orders')}</p>
+                  <h3 className="mt-1 text-3xl font-semibold text-[#281922]">{orderCount}</h3>
                 </div>
               </div>
               <Button 
                 variant="link" 
-                className="w-full mt-4 justify-start p-0 text-blue-600"
+                className="mt-5 h-auto w-full justify-start p-0 text-xs text-[#a04e62] hover:text-[#7e3d50]"
                 onClick={() => navigate('/admin/orders')}
               >
                 {t('admin.dashboard.view_orders')}
@@ -136,20 +137,20 @@ const Dashboard = () => {
             </CardContent>
           </Card>
           
-          <Card>
-            <CardContent className="pt-6">
+          <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+            <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-green-100 rounded-md mr-4">
-                  <Package className="h-8 w-8 text-green-600" />
+                <div className="mr-4 grid h-12 w-12 place-items-center rounded-full bg-[#e4eee9]">
+                  <Package className="h-5 w-5 text-[#56816f]" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.products')}</p>
-                  <h3 className="text-2xl font-bold">{productCount}</h3>
+                  <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#9c7d87]">{t('admin.dashboard.products')}</p>
+                  <h3 className="mt-1 text-3xl font-semibold text-[#281922]">{productCount}</h3>
                 </div>
               </div>
               <Button 
                 variant="link" 
-                className="w-full mt-4 justify-start p-0 text-green-600"
+                className="mt-5 h-auto w-full justify-start p-0 text-xs text-[#56816f] hover:text-[#3d6555]"
                 onClick={() => navigate('/admin/products')}
               >
                 {t('admin.dashboard.view_products')}
@@ -157,25 +158,25 @@ const Dashboard = () => {
             </CardContent>
           </Card>
           
-          <Card>
-            <CardContent className="pt-6">
+          <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+            <CardContent className="p-6">
               <div className="flex items-center">
-                <div className="p-2 bg-purple-100 rounded-md mr-4">
-                  <BarChart className="h-8 w-8 text-purple-600" />
+                <div className="mr-4 grid h-12 w-12 place-items-center rounded-full bg-[#eee6f0]">
+                  <BarChart className="h-5 w-5 text-[#8b5b93]" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium text-gray-500">{t('admin.dashboard.revenue')}</p>
-                  <h3 className="text-2xl font-bold">{revenue.toFixed(2)} lei</h3>
+                  <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#9c7d87]">{t('admin.dashboard.revenue')}</p>
+                  <h3 className="mt-1 text-3xl font-semibold text-[#281922]">{revenue.toFixed(2)} lei</h3>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
         
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('admin.dashboard.recent_orders')}</CardTitle>
-            <CardDescription>{t('admin.dashboard.recent_orders_subtitle')}</CardDescription>
+        <Card className="rounded-[1.25rem] border-[#281922]/10 bg-[#fffaf8] shadow-[0_12px_35px_rgba(40,25,34,.06)]">
+          <CardHeader className="border-b border-[#281922]/10 px-6 py-5">
+            <CardTitle className="font-serif text-2xl font-medium">{t('admin.dashboard.recent_orders')}</CardTitle>
+            <CardDescription className="text-xs text-[#9c7d87]">{t('admin.dashboard.recent_orders_subtitle')}</CardDescription>
           </CardHeader>
           <CardContent>
             <RecentOrders />

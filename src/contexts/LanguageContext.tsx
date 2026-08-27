@@ -293,7 +293,7 @@ const translations: Translations = {
   'product.add_to_wishlist': { en: 'Add to Wishlist', ro: 'Adaugă la favorite' },
   'product.remove_from_wishlist': { en: 'Remove from Wishlist', ro: 'Eliminat de la favorite' },
   'product.share': { en: 'Share', ro: 'Distribuie' },
-  'product.free_shipping': { en: 'Free shipping for orders over 300 lei', ro: 'Livrare gratuită pentru comenzi peste 300 lei' },
+  'product.free_shipping': { en: 'Free shipping for orders over 200 lei', ro: 'Livrare gratuită pentru comenzi peste 200 lei' },
   'product.shipping_24h': { en: 'Shipping within 24 hours', ro: 'Expediere în 24 de ore' },
   'product.authenticity_warranty': { en: '100% authenticity warranty', ro: 'Garanție de autenticitate 100%' },
   'product.product_details': { en: 'Product Details', ro: 'Detalii produs' },
