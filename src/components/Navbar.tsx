@@ -14,7 +14,8 @@ export function Navbar() {
   const { totalItems: wishlistItems } = useWishlist();
   const { t, language } = useLanguage();
   const location = useLocation();
-  const hasDarkHero = location.pathname === '/' || location.pathname === '/about';
+  const darkHeroRoutes = ['/', '/about', '/parfumuri', '/face-care', '/body-care', '/seturi'];
+  const hasDarkHero = darkHeroRoutes.includes(location.pathname);
   const isDarkHeroTop = hasDarkHero && !isScrolled;
 
   useEffect(() => {
