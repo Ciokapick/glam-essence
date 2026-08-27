@@ -154,19 +154,19 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
 
       <main className="pb-20 pt-28 sm:pt-32">
         <div className="container mx-auto max-w-[1440px] px-5 md:px-8">
-          <nav className="flex text-sm text-muted-foreground mb-6">
-            <ol className="flex items-center">
-              <li><a href="/" className="hover:text-foreground">{t('product.breadcrumb.home')}</a></li>
-              <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li><a href={collectionHref} className="hover:text-foreground">{collectionLabel}</a></li>
-              <li><ChevronRight className="h-4 w-4 mx-2" /></li>
-              <li className="text-foreground font-medium truncate">{t(product?.name)}</li>
+          <nav className="mb-8 flex text-[10px] font-semibold uppercase tracking-[.16em] text-[#9c7d87]">
+            <ol className="flex min-w-0 items-center">
+              <li><a href="/" className="transition hover:text-[#a04e62]">{t('product.breadcrumb.home')}</a></li>
+              <li><ChevronRight className="mx-2 h-3.5 w-3.5 text-[#c6aeb5]" /></li>
+              <li><a href={collectionHref} className="transition hover:text-[#a04e62]">{collectionLabel}</a></li>
+              <li><ChevronRight className="mx-2 h-3.5 w-3.5 text-[#c6aeb5]" /></li>
+              <li className="truncate text-[#281922]">{t(product?.name)}</li>
             </ol>
           </nav>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+          <div className="mb-20 grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,.92fr)] lg:gap-14">
             <div>
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+              <div className="relative aspect-[.98] overflow-hidden rounded-[1.75rem] bg-[#f0e8e4] shadow-[0_24px_70px_rgba(40,25,34,.08)]">
                 <img
                   src={selectedImage}
                   alt={product?.name}
@@ -174,13 +174,13 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                 />
                 
                 {product?.isNew && (
-                  <Badge className="absolute top-4 left-4 bg-beauty-mint text-beauty-mint-foreground border-0">
+                  <Badge className="absolute left-5 top-5 rounded-none border-0 bg-[#281922] px-3 py-1 text-[9px] font-semibold uppercase tracking-[.16em] text-white">
                     {t('product.new_badge')}
                   </Badge>
                 )}
                 
                 {product?.isSale && (
-                  <Badge className="absolute top-4 left-4 bg-beauty-rose text-beauty-rose-foreground border-0">
+                  <Badge className="absolute left-5 top-5 rounded-none border-0 bg-[#a04e62] px-3 py-1 text-[9px] font-semibold tracking-[.16em] text-white">
                     -{product.discount}%
                   </Badge>
                 )}
@@ -192,7 +192,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                       key={image}
                       type="button"
                       onClick={() => setSelectedImage(image)}
-                      className={`relative aspect-square overflow-hidden rounded-lg border-2 bg-[#f2ece9] transition ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent hover:border-[#7b263d]/35'}`}
+                      className={`relative aspect-square overflow-hidden rounded-[1.1rem] border-2 bg-[#f2ece9] transition ${selectedImage === image ? 'border-[#7b263d]' : 'border-transparent hover:border-[#7b263d]/35'}`}
                       aria-label={`${t(product.name)} — ${index === 0 ? 'editorial' : 'packshot'}`}
                     >
                       <img src={image} alt="" className="h-full w-full object-cover" />
@@ -202,11 +202,12 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
               )}
             </div>
             
-            <div>
-              <h1 className="text-3xl font-bold mb-2">{t(product?.name)}</h1>
+            <div className="lg:pt-2">
+              <p className="text-[10px] font-semibold uppercase tracking-[.24em] text-[#9c7d87]">{collectionLabel}</p>
+              <h1 className="mt-4 max-w-2xl font-serif text-5xl leading-[.94] tracking-[-.045em] sm:text-6xl">{t(product?.name)}</h1>
               
-              <div className="flex items-center mb-4">
-                <div className="flex mr-2">
+              <div className="mt-5 flex items-center">
+                <div className="mr-3 flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -214,55 +215,55 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     />
                   ))}
                 </div>
-                <span className="text-sm text-muted-foreground">{product?.reviewCount || 0} {t('product.reviews')}</span>
+                <span className="text-xs text-[#806d74]">{product?.reviewCount || 0} {t('product.reviews')}</span>
               </div>
               
-              <div className="flex items-center mb-6">
+              <div className="mt-6 flex items-center border-b border-[#281922]/10 pb-6">
                 {product?.isSale ? (
                   <>
-                    <span className="text-2xl font-bold mr-3">
+                    <span className="mr-3 text-3xl font-semibold tracking-[-.03em]">
                       {((product.price || 0) * (1 - (product.discount || 0) / 100)).toFixed(2)} lei
                     </span>
-                    <span className="text-lg text-muted-foreground line-through">
+                    <span className="text-sm text-[#9b8d92] line-through">
                       {(product.price || 0).toFixed(2)} lei
                     </span>
                   </>
                 ) : (
-                  <span className="text-2xl font-bold mr-3">{(product?.price || 0).toFixed(2)} lei</span>
+                  <span className="mr-3 text-3xl font-semibold tracking-[-.03em]">{(product?.price || 0).toFixed(2)} lei</span>
                 )}
               </div>
               
-              <p className="text-muted-foreground mb-8">
+              <p className="mt-7 max-w-xl text-base leading-8 text-[#67545c]">
                 {t(product?.description)}
               </p>
               
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="font-medium">{t('product.quantity')}</span>
-                <div className="flex items-center border rounded-md">
+              <div className="mt-8 flex flex-wrap items-center gap-4">
+                <span className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#806d74]">{t('product.quantity')}</span>
+                <div className="flex items-center rounded-full border border-[#281922]/15 bg-white">
                   <button
-                    className="px-3 py-2 hover:bg-gray-100"
+                    className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-[#f3e8e6]"
                     onClick={() => setQuantity(q => Math.max(1, q - 1))}
                     disabled={quantity <= 1}
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="px-4 py-2 w-12 text-center">{quantity}</span>
+                  <span className="w-10 text-center text-sm font-medium">{quantity}</span>
                   <button
-                    className="px-3 py-2 hover:bg-gray-100"
+                    className="grid h-10 w-10 place-items-center rounded-full transition hover:bg-[#f3e8e6]"
                     onClick={() => setQuantity(q => Math.min((product?.stock || 0), q + 1))}
                     disabled={quantity >= (product?.stock || 0)}
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs text-[#806d74]">
                   {product?.stock || 0} {t('product.available')}
                 </span>
               </div>
               
-              <div className="flex flex-col sm:flex-row gap-3 mb-8">
+              <div className="mt-7 grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto]">
                 <button
-                  className="bg-beauty-magenta hover:bg-beauty-magenta/90 text-white flex-1 px-4 py-2 rounded flex items-center justify-center"
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-[#281922] px-5 text-[10px] font-semibold uppercase tracking-[.16em] text-white transition hover:bg-[#a04e62]"
                   onClick={() => {
                     if (!product?.stock || product.stock <= 0) {
                       toast({
@@ -290,14 +291,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                   }}
                   disabled={!product?.stock || product.stock <= 0}
                 >
-                  <ShoppingBag className="h-5 w-5 mr-2" />
+                  <ShoppingBag className="mr-2 h-4 w-4" />
                   {product?.stock && product.stock > 0 ? t('product.add_to_cart') : t('product.out_of_stock')}
                 </button>
                 <button
-                  className={`border px-4 py-2 rounded flex items-center justify-center ${
+                  className={`inline-flex min-h-12 items-center justify-center rounded-full border px-5 text-[10px] font-semibold uppercase tracking-[.12em] transition ${
                     isInWishlist(product?.id)
-                      ? "bg-beauty-rose/10 border-beauty-rose text-beauty-rose hover:bg-beauty-rose/20"
-                      : "border-beauty-magenta/30 hover:bg-beauty-magenta/5 hover:border-beauty-magenta/50"
+                      ? "border-[#a04e62] bg-[#f8e7e9] text-[#a04e62] hover:bg-[#f3dce0]"
+                      : "border-[#281922]/15 text-[#67545c] hover:border-[#a04e62] hover:text-[#a04e62]"
                   }`}
                   onClick={() => {
                     if (product) {
@@ -326,28 +327,28 @@ const ProductPage: React.FC<ProductPageProps> = ({ product: initialProduct }) =>
                     }
                   }}
                 >
-                  <Heart className={`h-5 w-5 mr-2 ${isInWishlist(product?.id) ? 'fill-beauty-rose' : ''}`} />
+                  <Heart className={`mr-2 h-4 w-4 ${isInWishlist(product?.id) ? 'fill-current' : ''}`} />
                   {isInWishlist(product?.id) ? t('product.remove_from_wishlist') : t('product.add_to_wishlist')}
                 </button>
               </div>
               
-              <div className="border rounded-lg p-4 space-y-3">
+              <div className="mt-8 space-y-4 rounded-[1.25rem] border border-[#281922]/10 bg-[#e9f1ef] p-5">
                 <div className="flex items-center">
-                  <Truck className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">{t('product.free_shipping')}</span>
+                  <Truck className="mr-3 h-5 w-5 text-[#66858b]" />
+                  <span className="text-sm text-[#49666b]">{t('product.free_shipping')}</span>
                 </div>
                 <div className="flex items-center">
-                  <Clock className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">{t('product.shipping_24h')}</span>
+                  <Clock className="mr-3 h-5 w-5 text-[#66858b]" />
+                  <span className="text-sm text-[#49666b]">{t('product.shipping_24h')}</span>
                 </div>
                 <div className="flex items-center">
-                  <ShieldCheck className="h-5 w-5 text-beauty-magenta mr-3" />
-                  <span className="text-sm">{t('product.authenticity_warranty')}</span>
+                  <ShieldCheck className="mr-3 h-5 w-5 text-[#66858b]" />
+                  <span className="text-sm text-[#49666b]">{t('product.authenticity_warranty')}</span>
                 </div>
               </div>
               
               <div className="mt-6 flex items-center">
-                <button className="inline-flex items-center gap-1 text-sm px-3 py-1 hover:bg-gray-100 rounded-md">
+                <button className="inline-flex items-center gap-2 rounded-full px-1 py-1 text-[10px] font-semibold uppercase tracking-[.16em] text-[#806d74] transition hover:text-[#a04e62]">
                   <Share2 className="h-4 w-4" />
                   {t('product.share')}
                 </button>
