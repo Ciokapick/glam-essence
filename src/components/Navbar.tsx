@@ -14,7 +14,8 @@ export function Navbar() {
   const { totalItems: wishlistItems } = useWishlist();
   const { t, language } = useLanguage();
   const location = useLocation();
-  const isHomeTop = location.pathname === '/' && !isScrolled;
+  const hasDarkHero = location.pathname === '/' || location.pathname === '/about';
+  const isDarkHeroTop = hasDarkHero && !isScrolled;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24);
@@ -25,7 +26,7 @@ export function Navbar() {
 
   useEffect(() => setIsMobileMenuOpen(false), [location.pathname]);
 
-  const navClass = isHomeTop
+  const navClass = isDarkHeroTop
     ? 'border-white/15 bg-transparent text-white'
     : 'border-[#2a1b23]/10 bg-[#fbf8f5]/92 text-[#271a21] shadow-[0_8px_30px_rgba(39,26,33,.06)] backdrop-blur-xl';
 

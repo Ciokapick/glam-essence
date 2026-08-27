@@ -209,6 +209,63 @@
     @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg;
   }
 
+  [data-story-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity .85s cubic-bezier(.2, .7, .2, 1) var(--reveal-delay, 0ms),
+      transform .85s cubic-bezier(.2, .7, .2, 1) var(--reveal-delay, 0ms);
+  }
+
+  [data-story-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .story-hero-image {
+    animation: story-drift 14s ease-in-out infinite alternate;
+    transform-origin: center;
+  }
+
+  .story-floating-card {
+    animation: story-float 6s ease-in-out infinite;
+  }
+
+  .story-marquee {
+    overflow: hidden;
+  }
+
+  .story-marquee-track {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    gap: 2rem;
+    animation: story-marquee 24s linear infinite;
+  }
+
+  .story-orbit {
+    position: absolute;
+    border: 1px solid rgba(40, 25, 34, .16);
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .story-orbit-one {
+    width: 38rem;
+    height: 38rem;
+    left: -14rem;
+    top: -19rem;
+    animation: story-orbit 18s linear infinite;
+  }
+
+  .story-orbit-two {
+    width: 28rem;
+    height: 28rem;
+    right: -9rem;
+    bottom: -15rem;
+    animation: story-orbit 15s linear infinite reverse;
+  }
+
   /* Page transition */
   .page-transition {
     @apply transition-opacity duration-300 ease-in-out;
@@ -231,6 +288,24 @@
   }
 }
 
+@keyframes story-drift {
+  from { transform: scale(1.025) translate3d(0, 0, 0); }
+  to { transform: scale(1.08) translate3d(-1.2%, -1%, 0); }
+}
+
+@keyframes story-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(1.25deg); }
+  50% { transform: translate3d(0, -12px, 0) rotate(-.5deg); }
+}
+
+@keyframes story-marquee {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes story-orbit {
+  to { transform: rotate(360deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -239,5 +314,10 @@
     animation-duration: .01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: .01ms !important;
+  }
+
+  [data-story-reveal] {
+    opacity: 1;
+    transform: none;
   }
 }
