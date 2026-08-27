@@ -218,7 +218,13 @@ const SkinRitualFeatures: React.FC<SkinRitualFeaturesProps> = ({
 
             <div>
               <p className="mb-5 max-w-md text-sm leading-6 text-white/70">{activeChapter.intro}</p>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className={`grid gap-2 ${
+                activeChapter.features.length === 3
+                  ? 'md:grid-cols-3'
+                  : activeChapter.features.length === 2
+                    ? 'sm:grid-cols-2'
+                    : 'grid-cols-1'
+              }`}>
                 {activeChapter.features.map((feature, index) => (
                   <div
                     key={feature}
