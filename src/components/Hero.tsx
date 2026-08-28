@@ -19,8 +19,8 @@ type HeroWorld = {
 const worlds: HeroWorld[] = [
   {
     id: 'perfume',
-    image: '/products/perfumes/editorial/floral-extravagance.webp',
-    imagePosition: 'object-[64%_center] md:object-center',
+    image: '/editorial/home/hero-perfume.png',
+    imagePosition: 'object-center',
     href: '/parfumuri',
     accent: '#e2aebd',
     wash: 'radial-gradient(circle at 78% 34%,rgba(165,74,105,.22),transparent 36%),linear-gradient(90deg,rgba(30,13,22,.94) 0%,rgba(54,23,37,.68) 43%,rgba(40,13,25,.08) 73%)',
@@ -31,8 +31,8 @@ const worlds: HeroWorld[] = [
   },
   {
     id: 'face',
-    image: '/products/skincare/campaign/face-serum.webp',
-    imagePosition: 'object-[62%_center] md:object-center',
+    image: '/editorial/home/hero-face.png',
+    imagePosition: 'object-center',
     href: '/face-care',
     accent: '#acd8e3',
     wash: 'radial-gradient(circle at 74% 30%,rgba(127,197,214,.24),transparent 38%),linear-gradient(90deg,rgba(12,31,42,.95) 0%,rgba(25,60,72,.65) 43%,rgba(22,52,61,.05) 74%)',
@@ -43,7 +43,7 @@ const worlds: HeroWorld[] = [
   },
   {
     id: 'body',
-    image: '/products/skincare/rituals/body-cream-formula.jpg',
+    image: '/editorial/home/hero-body.png',
     imagePosition: 'object-center',
     href: '/body-care',
     accent: '#e0c1a3',

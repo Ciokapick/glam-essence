@@ -23,6 +23,10 @@ const copy = {
     manifesto: ['PARFUM', 'TEXTURĂ', 'PREZENȚĂ', 'RITUAL'],
     chapterLabel: 'Povestea noastră, în trei gesturi',
     chapterTitle: 'Nu am pornit de la o listă de produse. Am pornit de la o stare.',
+    founderLabel: 'O notă de la atelier',
+    founderTitle: 'Un parfum bun nu te anunță. Te face memorabilă.',
+    founderText: 'Glam Essence a pornit din dorința de a crea obiecte mici care schimbă felul în care intri într-o zi. Nu urmărim perfecțiunea, ci acele câteva secunde în care te simți, pur și simplu, mai aproape de tine.',
+    founderName: 'Alexandra',
     chapters: [
       {
         number: '01',
@@ -64,6 +68,10 @@ const copy = {
     manifesto: ['FRAGRANCE', 'TEXTURE', 'PRESENCE', 'RITUAL'],
     chapterLabel: 'Our story, in three gestures',
     chapterTitle: 'We did not begin with a product list. We began with a feeling.',
+    founderLabel: 'A note from the atelier',
+    founderTitle: 'A beautiful fragrance does not announce you. It makes you memorable.',
+    founderText: 'Glam Essence began with the wish to create small objects that change the way you enter a day. We do not chase perfection—only those few seconds in which you feel a little closer to yourself.',
+    founderName: 'Alexandra',
     chapters: [
       { number: '01', title: 'First, the atmosphere', text: 'Cool morning light, the quiet after rain, the warmth of a late evening. Every collection begins with a feeling we want to hold onto for a little longer.' },
       { number: '02', title: 'Then, the object', text: 'Heavy glass, simple shapes and that recognisable burgundy. Packaging does not compete with the ritual; it makes it more intuitive, tactile and personal.' },
@@ -170,6 +178,33 @@ const AboutPage = () => {
                     </div>
                   </article>
                 ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-[#f0e6e0] px-5 py-24 sm:px-8 lg:px-[7vw] lg:py-36">
+          <div className="mx-auto grid max-w-[1440px] gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-center lg:gap-20">
+            <div
+              className="relative overflow-hidden rounded-[2rem] bg-[#c7a99d] shadow-[0_28px_70px_rgba(55,22,30,0.14)]"
+              data-story-reveal
+            >
+              <img
+                src="/editorial/atelier-founder.png"
+                alt={language === 'ro' ? 'Portret editorial al curatoarei Glam Essence' : 'Editorial portrait of the Glam Essence curator'}
+                className="aspect-[4/5] h-full w-full object-cover object-center"
+              />
+            </div>
+
+            <div className="max-w-3xl" data-story-reveal>
+              <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#9c5067]">{content.founderLabel}</p>
+              <blockquote className="mt-6 font-serif text-[clamp(2.8rem,5.2vw,5.8rem)] leading-[0.91] tracking-[-0.055em] text-[#2b1820]">
+                {content.founderTitle}
+              </blockquote>
+              <p className="mt-8 max-w-2xl text-base leading-relaxed text-[#674f57] sm:text-lg">{content.founderText}</p>
+
+              <div className="mt-12 border-t border-[#2b1820]/15 pt-6">
+                <p className="font-serif text-2xl text-[#2b1820]">{content.founderName}</p>
               </div>
             </div>
           </div>
